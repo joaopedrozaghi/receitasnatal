@@ -16,14 +16,14 @@ export interface StoryChapter {
 
 export const story = {
   meta: {
-    title: "A história da Rô",
+    title: "A história da Roseli Monteiro, a Rô",
     description:
-      "Da cozinha da avó ao caderninho de receitas: conheça a história da Roseli, a Rô das Receitinhas.",
+      "Da cozinha da avó ao caderninho de receitas: conheça a história da Roseli Monteiro, a Rô das Receitinhas.",
   },
-  eyebrow: "A história da Rô",
+  eyebrow: "A história da Roseli Monteiro",
   title: "Massa boa não tem pressa. Mas tem método.",
   intro:
-    "Uma história de cozinha de interior, de panetone que virou tijolo e de um caderninho cheio de descobertas.",
+    "Eu sou a Roseli Monteiro, a Rô. Esta é uma história de cozinha de interior, de panetone que virou tijolo e de um caderninho cheio de descobertas.",
 
   character: {
     chapters: [
@@ -31,7 +31,7 @@ export const story = {
         id: "vo-nena",
         title: "Capítulo 1 · A cozinha da vó Nena",
         paragraphs: [
-          "Em toda casa de interior existe uma cozinha que vira o centro do mundo no fim do ano. A da minha vó Nena era assim. Em dezembro, o cheiro de laranja, canela e manteiga tomava a casa inteira, e eu ficava na ponta dos pés, espiando a massa crescer debaixo de um pano. Ela repetia sempre a mesma frase: *'Massa boa não tem pressa, Rô.'* Eu nem entendia direito. Só sabia que ali dentro morava uma mágica.",
+          "Em toda casa de interior existe uma cozinha que vira o centro do mundo no fim do ano. A da minha vó Nena era assim. Em dezembro, o cheiro de laranja, canela e manteiga tomava a casa inteira, e eu ficava na ponta dos pés, espiando a massa crescer debaixo de um pano. Ela repetia sempre a mesma frase: *'Massa boa não tem pressa, Rô.'* (Rô de Roseli: em casa, ninguém nunca me chamou de Roseli Monteiro, só de Rô.) Eu nem entendia direito. Só sabia que ali dentro morava uma mágica.",
         ],
       },
       {
@@ -91,7 +91,7 @@ export const story = {
 
   /** Bio curta para Instagram, TikTok e WhatsApp Business. */
   shortBio:
-    "Roseli, a Rô 🎄 Receitinhas da Rô: panetones, docinhos, salgados e ceia em passo a passo, para quem nunca fez. 👇 Especial de Natal",
+    "Roseli Monteiro, a Rô 🎄 Receitinhas da Rô: panetones, docinhos, salgados e ceia em passo a passo, para quem nunca fez. 👇 Especial de Natal",
 
   /**
    * Somente para chef.mode = "real". Preencha com dados REAIS e COMPROVÁVEIS.

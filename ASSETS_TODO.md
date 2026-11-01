@@ -37,6 +37,11 @@ Tudo o que a página promete precisa existir no app no dia da venda.
 
 ## 4. Fotos
 
+⚠️ **Direito de uso das fotos de comida:** as 5 fotos em `public/images/receitas/` foram enviadas sem origem.
+Se vieram do Pinterest/Google, são de outras pessoas e podem gerar denúncia de direito autoral (e reprovação de anúncio).
+Use fotos suas, de banco de imagens com licença, ou com autorização do autor. Uma sexta foto (panetone salgado com
+marca d'água "@Cozinha Legal") **não foi usada** por ser claramente de terceiros.
+
 | Foto | Situação | Arquivo |
 | --- | --- | --- |
 | Roseli de dólmã (retrato) | ✅ seção "Prazer, eu sou a Roseli", /sobre e avatar | `public/images/ro-retrato.jpg` |
@@ -44,7 +49,8 @@ Tudo o que a página promete precisa existir no app no dia da venda.
 | Roseli mexendo a panela | ✅ foto redonda na seção da Roseli | `public/images/ro-panela.jpg` |
 | Roseli cozinhando (outro ângulo) | ✅ "Agora imagine outra cena" e /sobre | `public/images/ro-cozinha.jpg` |
 | Extras | não usadas: `ro-varanda.jpg`, `ro-preparo.jpg` | `public/images/` |
-| Fotos reais das receitas (docinhos, salgados, ceia) | ⬜ ideal para trocar nas telas do iPhone quando o app existir | — |
+| Panetones trufados, ceia, biscoitos (2), panetone salgado | ✅ galeria, cardápio, "outra cena" e telas do iPhone | `public/images/receitas/` |
+| Fotos de docinhos e salgados de festa | ⬜ faltam (cards usam ícone por enquanto) | — |
 | Prints reais do app | ⬜ quando o app estiver pronto, substitua as telas de exemplo (`components/phone/Screens.tsx`) | — |
 
 ## 5. Opcional

@@ -7,7 +7,7 @@ export const copy = {
   meta: {
     title: "Especial de Natal {{year}} da Rô: panetones, docinhos, salgados e ceia num app passo a passo",
     description:
-      "Mais de {{recipesCount}} receitas de Natal com a Roseli: panetones, chocotones, docinhos, salgados de festa e ceia completa, num app com medidas em gramas, timer e Guia SOS. Garantia de {{guaranteeDays}} dias.",
+      "Mais de {{recipesCount}} receitas de Natal com a Roseli Monteiro: panetones, chocotones, docinhos, salgados de festa e ceia completa, num app com medidas em gramas, timer e Guia SOS. Garantia de {{guaranteeDays}} dias.",
   },
 
   topBar: {
@@ -16,7 +16,7 @@ export const copy = {
   },
 
   hero: {
-    pill: "Com a Roseli, a Rô",
+    pill: "Com a Roseli Monteiro, a Rô",
     eyebrow: "{{edition}} {{year}}",
     headlines: {
       A: "Panetone fofinho, docinhos e salgados de festa: *o Natal inteiro* na palma da sua mão.",
@@ -61,6 +61,39 @@ export const copy = {
     turn: "Não é falta de talento. É falta de um passo a passo que explique *o que ninguém explica*.",
   },
 
+  gallery: {
+    kicker: "Direto do forno",
+    title: "Receitas que *enchem os olhos* (e a mesa).",
+    // CONFIRMAR: fotos com direito de uso; receitas que estarão no app
+    items: [
+      {
+        src: "/images/receitas/panetones-trufados.jpg",
+        alt: "Panetones trufados decorados com chocolate, morangos e castanhas",
+        caption: "Panetones trufados",
+      },
+      {
+        src: "/images/receitas/mesa-ceia.jpg",
+        alt: "Mesa de ceia de Natal com pernil, aves assadas, panetone e tábua de frios",
+        caption: "Ceia completa",
+      },
+      {
+        src: "/images/receitas/biscoitos-papai-noel.jpg",
+        alt: "Biscoitos decorados de Papai Noel e boneco de gengibre",
+        caption: "Biscoitos decorados",
+      },
+      {
+        src: "/images/receitas/panetone-salgado.jpg",
+        alt: "Panetone salgado dourado com queijo e calabresa",
+        caption: "Panetone salgado",
+      },
+      {
+        src: "/images/receitas/biscoitos-arvore.jpg",
+        alt: "Biscoitos em formato de árvore de Natal decorados com glacê",
+        caption: "Árvores de biscoito",
+      },
+    ],
+  },
+
   menu: {
     kicker: "O cardápio completo",
     title: "Tudo o que vai para a mesa de Natal. *E para a vitrine também.*",
@@ -70,6 +103,7 @@ export const copy = {
       {
         icon: "panettone",
         title: "Panetones e chocotones",
+        photo: "/images/receitas/panetones-trufados.jpg",
         examples: "Clássico de frutas, chocotone, trufado, recheado de doce de leite, versão de travessa.",
         tag: "O carro-chefe",
       },
@@ -86,6 +120,7 @@ export const copy = {
       {
         icon: "roast",
         title: "Ceia completa",
+        photo: "/images/receitas/mesa-ceia.jpg",
         examples: "Pernil, ave assada, arroz natalino, farofa de frutas, salpicão e acompanhamentos.",
       },
       {
@@ -101,6 +136,7 @@ export const copy = {
       {
         icon: "cookie",
         title: "Biscoitos decorados",
+        photo: "/images/receitas/biscoitos-papai-noel.jpg",
         examples: "Amanteigados, biscoitos de gengibre e pão de mel decorado para presentear.",
       },
       {
@@ -159,45 +195,56 @@ export const copy = {
   // Conteúdo de EXEMPLO das telas do iPhone (ilustrativo do app)
   phones: {
     home: {
-      hello: "Boa noite!",
+      label: "Especial de Natal",
       question: "O que vamos fazer hoje?",
-      search: "Buscar receita ou ingrediente",
+      featuredTag: "Destaque",
+      featuredTitle: "Panetones trufados",
+      featuredCta: "Ver receitas",
       categoriesTitle: "Categorias",
-      categories: ["Panetones", "Docinhos", "Salgados", "Ceia", "Sobremesas", "Biscoitos"],
+      categories: [
+        { name: "Panetones", photo: "/images/receitas/panetones-trufados.jpg", focus: "30% 70%" },
+        { name: "Salgados", photo: "/images/receitas/panetone-salgado.jpg", focus: "50% 45%" },
+        { name: "Biscoitos", photo: "/images/receitas/biscoitos-papai-noel.jpg", focus: "50% 60%" },
+        { name: "Ceia", photo: "/images/receitas/mesa-ceia.jpg", focus: "40% 30%" },
+      ],
       continueTitle: "Continuar de onde parou",
-      continueRecipe: "Panetone Clássico",
-      continueMeta: "Passo 3 de 8",
+      continueRecipe: "Biscoitos decorados",
+      continueMeta: "Passo 3 de 6",
+      continuePhoto: "/images/receitas/biscoitos-arvore.jpg",
       nav: ["Início", "Buscar", "Lista", "Favoritos"],
     },
     recipe: {
-      title: "Panetone Clássico de Frutas",
-      meta: ["2 de 500 g", "Médio", "24 h"],
+      photo: "/images/receitas/panetones-trufados.jpg",
+      tag: "Panetones",
+      title: "Panetone Trufado",
+      meta: ["Rende 2", "Médio", "24 h"],
       servingsLabel: "Rendimento",
-      servings: "2 panetones",
+      servings: "2 de 500 g",
       ingredientsTitle: "Ingredientes",
       ingredients: [
         ["Farinha de trigo", "500 g"],
         ["Açúcar", "150 g"],
         ["Manteiga sem sal", "150 g"],
         ["Gemas", "120 g"],
-        ["Fermento biológico seco", "10 g"],
-        ["Frutas cristalizadas", "200 g"],
+        ["Gotas de chocolate", "200 g"],
+        ["Ganache de chocolate", "300 g"],
       ],
       start: "Começar no modo cozinha",
     },
     cook: {
       badge: "Modo cozinha",
       step: "Passo 4 de 8",
-      instruction: "Sove até a massa ficar lisa, elástica e soltar das mãos (ponto de véu).",
+      instruction: "Sove até a massa ficar lisa, elástica e soltar das mãos.",
       timer: "12:00",
       timerLabel: "Iniciar timer",
       whyTitle: "Por quê?",
-      why: "O ponto de véu mostra que o glúten está bem formado. É ele que segura o ar e deixa o miolo fofinho.",
+      why: "O ponto de véu mostra que o glúten está formado. É ele que deixa o miolo fofinho.",
       next: "Próximo passo",
     },
     pricing: {
       title: "Calculadora de preço",
-      item: "Panetone de 500 g",
+      item: "Panetone trufado 500 g",
+      photo: "/images/receitas/panetones-trufados.jpg",
       rows: [
         ["Ingredientes", "R$ 14,80"],
         ["Embalagem", "R$ 3,50"],
@@ -226,7 +273,7 @@ export const copy = {
 
   chef: {
     kicker: "Quem está do outro lado da receita",
-    title: "Prazer, eu sou a Roseli. *Mas pode me chamar de Rô.*",
+    title: "Prazer, eu sou a Roseli Monteiro. *Mas pode me chamar de Rô.*",
     // CONFIRMAR: a história precisa ser verdadeira (Roseli é pessoa real)
     p1: "Meu amor pelo Natal nasceu na cozinha da minha avó, entre cheiro de laranja, canela e manteiga derretida. O primeiro panetone que fiz sozinha? Saiu duro como um tijolo. Eu ri, chorei e anotei tudo num caderninho.",
     p2: "Daquele caderninho nasceram as Receitinhas da Rô. Minha regra é simples: nada de receita sem explicação. Quando você entende por que a massa precisa descansar, ela deixa de ser um mistério e vira rotina.",
@@ -235,7 +282,7 @@ export const copy = {
       { title: "Cada passo com o porquê", text: "Você entende e para de decorar." },
       { title: "Receita boa é a que você repete", text: "Simples de fazer, linda de servir." },
     ],
-    signature: "Roseli",
+    signature: "Roseli Monteiro",
     signatureRole: "a Rô das Receitinhas",
     cta: "QUERO COZINHAR COM A RÔ",
     storyLink: "Conheça a minha história",

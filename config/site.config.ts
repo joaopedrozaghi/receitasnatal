@@ -143,25 +143,28 @@ export const rawConfig = {
 
   chef: {
     mode: "real", // "real" = Roseli, pessoa real (história e fotos precisam ser verdadeiras)
-    name: "Roseli",
+    name: "Roseli Monteiro",
     nickname: "Rô",
     photoMain: {
       src: "/images/ro-retrato.jpg",
-      alt: "Roseli, a Rô, sorrindo de dólmã branco e braços cruzados em uma cozinha clara com plantas",
+      alt: "Roseli Monteiro, a Rô, sorrindo de dólmã branco e braços cruzados em uma cozinha clara com plantas",
     },
     photoSecondary: {
       src: "/images/ro-panela.jpg",
-      alt: "Roseli mexendo uma panela vermelha no fogão com colher de pau",
+      alt: "Roseli Monteiro mexendo uma panela vermelha no fogão com colher de pau",
     },
     photoHero: {
       src: "/images/ro-panetone.jpg",
-      alt: "Roseli sorrindo e mostrando um panetone caseiro recém-assado",
+      alt: "Roseli Monteiro sorrindo e mostrando um panetone caseiro recém-assado",
     },
     photosAbout: [
-      { src: "/images/ro-cozinha.jpg", alt: "Roseli cozinhando, sorridente, em uma cozinha com plantas" },
+      {
+        src: "/images/ro-cozinha.jpg",
+        alt: "Roseli Monteiro cozinhando, sorridente, em uma cozinha com plantas",
+      },
     ],
     avatarFocus: "50% 20%", // enquadramento do rosto no avatar redondo (sobre photoMain)
-    caption: "Roseli, a Rô das Receitinhas.",
+    caption: "Roseli Monteiro, a Rô das Receitinhas.",
     disclosure: "",
     showDisclosure: false,
     aiGeneratedImages: false,

@@ -1,18 +1,13 @@
-import Link from "next/link";
 import { legalWarning, type LegalDoc } from "@/content/legal.ptBR";
 import { t } from "@/lib/offer";
 import { Footer } from "@/components/sections/Closing";
-import { SiteLogo } from "@/components/sections/Hero";
+import { SubpageHeader } from "@/components/SubpageHeader";
 
 export function LegalPage({ doc }: { doc: LegalDoc }) {
   return (
     <>
-      <main id="conteudo" className="container-page max-w-3xl pb-20">
-        <header className="py-5">
-          <Link href="/">
-            <SiteLogo tone="light" />
-          </Link>
-        </header>
+      <SubpageHeader tone="light" />
+      <main id="conteudo" className="container-page max-w-3xl pb-20 pt-6">
         <p
           role="note"
           className="mt-4 rounded-2xl border border-berry/30 bg-berry/5 p-4 text-sm font-semibold text-berry-hover"

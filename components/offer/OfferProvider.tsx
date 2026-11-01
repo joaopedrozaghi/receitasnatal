@@ -52,7 +52,8 @@ export function OfferProvider({
     () => ({
       offer,
       now,
-      checkoutUrl: appendParams(checkoutUrl, utms) || "#oferta",
+      // sem link de checkout configurado, os botões levam à oferta da página principal
+      checkoutUrl: appendParams(checkoutUrl, utms) || "/#oferta",
       checkoutUrlWithBump: appendParams(checkoutUrlWithBump, utms),
     }),
     [offer, now, checkoutUrl, checkoutUrlWithBump, utms],

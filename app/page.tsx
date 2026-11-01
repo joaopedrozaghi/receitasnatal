@@ -3,9 +3,9 @@ import { getOfferState, t } from "@/lib/offer";
 import { siteUrl } from "@/lib/seo";
 import { copy } from "@/content/copy.ptBR";
 import { OfferShell } from "@/components/offer/OfferShell";
-import { StickyCta, TopBar } from "@/components/offer/OfferBits";
+import { StickyCta } from "@/components/offer/OfferBits";
 import { Hero } from "@/components/sections/Hero";
-import { AppShowcase, Desire, Marquee, Menu, Pain } from "@/components/sections/Body";
+import { AppShowcase, Desire, Gallery, Marquee, Menu, Pain } from "@/components/sections/Body";
 import { Chef } from "@/components/sections/Chef";
 import { Audience, Bonus, Income, Testimonials } from "@/components/sections/Value";
 import { Faq, FinalCta, Footer, Guarantee, Offer, getFaqItems } from "@/components/sections/Closing";
@@ -54,6 +54,7 @@ function JsonLd() {
 
 const below = [
   Pain,
+  Gallery,
   Menu,
   AppShowcase,
   Desire,
@@ -72,7 +73,6 @@ export default function Home() {
   return (
     <OfferShell>
       <JsonLd />
-      <TopBar />
       <main id="conteudo">
         <Hero />
         <Marquee />

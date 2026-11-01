@@ -2,35 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { copy } from "@/content/copy.ptBR";
-import { formatCountdown, getCountdown, pad2 } from "@/lib/countdown";
+import { formatCountdown, getCountdown } from "@/lib/countdown";
 import { getPriceVars } from "@/lib/offer-state";
 import { interpolate } from "@/lib/template";
 import { track } from "@/lib/track";
 import { CtaLink } from "@/components/ui/CtaButton";
 import { Rich } from "@/components/ui/Rich";
 import { useOffer } from "@/components/offer/OfferProvider";
-
-/** 5.0 Barra de topo com contagem regressiva real. Escondida na fase sem prazo (preço cheio). */
-export function TopBar() {
-  const { offer, now } = useOffer();
-  if (!offer.endsAt) return null;
-  const p = getCountdown(offer.endsAt, now);
-  const vars = getPriceVars(offer);
-  const text = interpolate(offer.showAnchor ? copy.topBar.withAnchor : copy.topBar.withoutAnchor, vars);
-  return (
-    <div className="relative z-40 bg-berry text-white">
-      <p className="container-page flex min-h-[44px] flex-wrap items-center justify-center gap-x-2 py-2 text-center text-[13px] font-medium leading-snug sm:text-sm">
-        <span>{text}</span>
-        <span
-          className="rounded-md bg-black/20 px-2 py-0.5 font-bold tabular-nums text-white"
-          aria-label={`${p.days} dias, ${p.hours} horas, ${p.minutes} minutos`}
-        >
-          {p.days}d {pad2(p.hours)}h {pad2(p.minutes)}m {pad2(p.seconds)}s
-        </span>
-      </p>
-    </div>
-  );
-}
 
 function useCheckoutClick(value: number) {
   return () => track("InitiateCheckout", { value });

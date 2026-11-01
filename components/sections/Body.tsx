@@ -1,4 +1,4 @@
-import { siteConfig } from "@/config/site.config";
+import Image from "next/image";
 import { copy } from "@/content/copy.ptBR";
 import { t } from "@/lib/offer";
 import { ArchPhoto } from "@/components/chef/ChefPhotos";
@@ -97,37 +97,90 @@ export function Menu() {
         <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {c.items.map((item, i) => {
             const featured = "tag" in item;
+            const photo = "photo" in item ? item.photo : null;
             return (
               <Reveal
                 as="li"
                 key={item.title}
                 delay={(i % 4) * 0.05}
-                className={`relative flex flex-col rounded-[1.75rem] p-6 ${
+                className={`relative flex flex-col overflow-hidden rounded-[1.75rem] ${
                   featured ? "bg-pine text-snow shadow-lift" : "bg-ivory ring-1 ring-cocoa/5"
                 }`}
               >
+                {photo ? (
+                  <span className="relative block h-40">
+                    <Image
+                      src={photo}
+                      alt=""
+                      fill
+                      sizes="(min-width: 1024px) 280px, (min-width: 640px) 45vw, 90vw"
+                      className="object-cover"
+                    />
+                  </span>
+                ) : (
+                  <span className={`grid h-40 place-items-center ${menuTints[i]}`}>
+                    <Icon name={item.icon} className="h-14 w-14" strokeWidth={1.3} />
+                  </span>
+                )}
                 {featured ? (
-                  <span className="absolute right-5 top-5 rounded-full bg-gold px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-pine-deep">
+                  <span className="absolute right-4 top-4 rounded-full bg-gold px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-pine-deep">
                     {item.tag}
                   </span>
                 ) : null}
-                <span
-                  className={`grid h-14 w-14 place-items-center rounded-2xl ${featured ? "bg-white/10 text-gold-light" : menuTints[i]}`}
-                >
-                  <Icon name={item.icon} className="h-7 w-7" strokeWidth={1.6} />
+                <span className="flex flex-1 flex-col p-6">
+                  <h3 className={`text-[1.45rem] leading-tight ${featured ? "!text-snow" : ""}`}>
+                    {item.title}
+                  </h3>
+                  <span
+                    className={`mt-2 block text-[15px] leading-relaxed ${featured ? "text-snow/80" : ""}`}
+                  >
+                    {item.examples}
+                  </span>
                 </span>
-                <h3 className={`mt-5 text-[1.45rem] leading-tight ${featured ? "!text-snow" : ""}`}>
-                  {item.title}
-                </h3>
-                <p className={`mt-2 text-[15px] leading-relaxed ${featured ? "text-snow/80" : ""}`}>
-                  {item.examples}
-                </p>
               </Reveal>
             );
           })}
         </ul>
         <div className="mt-12 flex justify-center">
           <CheckoutCta block>{c.cta}</CheckoutCta>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** Galeria de receitas (fotos reais de comida) */
+export function Gallery() {
+  const c = copy.gallery;
+  const [a, b, d, e, f] = c.items;
+  const tile = (item: (typeof c.items)[number] | undefined, cls: string, sizes: string) =>
+    item ? (
+      <figure className={`group relative overflow-hidden rounded-[1.5rem] bg-ivory-deep ${cls}`}>
+        <Image
+          src={item.src}
+          alt={item.alt}
+          fill
+          sizes={sizes}
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 pt-10 font-display text-lg text-white sm:text-xl">
+          {item.caption}
+        </figcaption>
+      </figure>
+    ) : null;
+  return (
+    <section className="section bg-ivory">
+      <div className="container-page">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <Kicker>{c.kicker}</Kicker>
+          <Title text={c.title} className="h2 mt-5" />
+        </Reveal>
+        <div className="mt-12 grid auto-rows-[160px] grid-cols-2 gap-3 sm:auto-rows-[200px] sm:gap-4 lg:grid-cols-4">
+          {tile(a, "col-span-2 row-span-2", "(min-width: 1024px) 560px, 92vw")}
+          {tile(b, "row-span-2", "(min-width: 1024px) 280px, 46vw")}
+          {tile(d, "row-span-2", "(min-width: 1024px) 280px, 46vw")}
+          {tile(e, "col-span-2 lg:col-span-2", "(min-width: 1024px) 560px, 92vw")}
+          {tile(f, "col-span-2 lg:col-span-2", "(min-width: 1024px) 560px, 92vw")}
         </div>
       </div>
     </section>
@@ -153,14 +206,15 @@ export function AppShowcase() {
         {/* desktop: 3 aparelhos em leque · mobile: carrossel com rolagem */}
         <div className="-mx-5 mt-14 flex snap-x snap-mandatory gap-6 overflow-x-auto px-5 pb-6 sm:mx-0 sm:justify-center sm:overflow-visible sm:px-0 lg:items-center lg:gap-0">
           <IPhone
-            label="Tela de receita: Panetone Clássico com ingredientes em gramas"
+            overlayStatus
+            label="Tela de receita: Panetone Trufado com ingredientes em gramas"
             className="w-[68vw] max-w-[270px] shrink-0 snap-center sm:w-[30%] lg:translate-x-6 lg:-rotate-6"
           >
             <RecipeScreen />
           </IPhone>
           <IPhone
             label="Tela inicial do app com categorias"
-            className="z-10 w-[68vw] max-w-[300px] shrink-0 snap-center sm:w-[33%] lg:-translate-y-6"
+            className="z-10 order-first w-[68vw] max-w-[300px] shrink-0 snap-center sm:order-none sm:w-[33%] lg:-translate-y-6"
           >
             <HomeScreen />
           </IPhone>
@@ -206,7 +260,7 @@ export function AppShowcase() {
 /** Desejo (cena) */
 export function Desire() {
   const c = copy.desire;
-  const photo = siteConfig.chef.photosAbout[0];
+  const photo = copy.gallery.items.find((g) => g.src.includes("mesa-ceia")) ?? null;
   return (
     <section className="section bg-ivory-deep/60">
       <div className="container-page grid items-center gap-14 lg:grid-cols-2">

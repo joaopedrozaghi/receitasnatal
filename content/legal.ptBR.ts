@@ -21,7 +21,7 @@ export const terms: LegalDoc = {
       heading: "1. Quem somos",
       paragraphs: [
         'Este site e o produto {{brandName}} · {{edition}} são oferecidos por {{legalName}}, CNPJ {{cnpj}} ("nós"). Contato: {{supportEmail}}.',
-        "As receitas e o conteúdo são apresentados por Roseli (a Rô), rosto das Receitinhas da Rô.",
+        "As receitas e o conteúdo são apresentados por Roseli Monteiro (a Rô), rosto das Receitinhas da Rô.",
       ],
     },
     {

@@ -8,7 +8,7 @@ import { ChefPhotos } from "@/components/sections/Chef";
 import { OfferShell } from "@/components/offer/OfferShell";
 import { CheckoutCta } from "@/components/offer/OfferBits";
 import { Footer } from "@/components/sections/Closing";
-import { SiteLogo } from "@/components/sections/Hero";
+import { SubpageHeader } from "@/components/SubpageHeader";
 import { Sprig } from "@/components/decor/Ornaments";
 import { Kicker } from "@/components/ui/Kicker";
 import { Reveal } from "@/components/ui/Reveal";
@@ -58,14 +58,10 @@ export default function AboutPage() {
 
   return (
     <OfferShell>
+      <SubpageHeader />
       <main id="conteudo">
         <section className="grain bg-pine-deep text-snow">
-          <header className="container-page py-5">
-            <Link href="/">
-              <SiteLogo />
-            </Link>
-          </header>
-          <div className="container-page grid items-center gap-12 pb-16 pt-6 lg:grid-cols-2 lg:pb-24">
+          <div className="container-page grid items-center gap-12 pb-16 pt-12 lg:grid-cols-2 lg:pb-24">
             <div>
               <Kicker tone="dark">{story.eyebrow}</Kicker>
               <h1 className="mt-5 text-[2.6rem] leading-[1.04] !text-snow sm:text-6xl">
@@ -117,8 +113,14 @@ export default function AboutPage() {
                 </li>
               ))}
             </ul>
-            <div className="mt-12 flex justify-center">
+            <div className="mt-12 flex flex-col items-center gap-4">
               <CheckoutCta block>{copy.hero.cta}</CheckoutCta>
+              <Link
+                href="/"
+                className="inline-flex min-h-[44px] items-center font-semibold text-pine underline decoration-gold decoration-2 underline-offset-4 hover:text-berry"
+              >
+                ← Voltar para a página do Especial de Natal
+              </Link>
             </div>
           </div>
         </section>
