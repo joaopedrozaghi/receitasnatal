@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { saveProgress } from "@/lib/app/actions";
+import { KEYS, useLocalStore, type ProgressMap } from "@/lib/app/local-store";
 import { formatQty, type Recipe } from "@/lib/app/recipe-model";
 import { StepTimer } from "@/components/app/StepTimer";
 
@@ -43,6 +43,11 @@ export function CookMode({ recipe, initialStep }: { recipe: Recipe; initialStep:
   const [showIng, setShowIng] = useState(false);
   const awake = useWakeLock();
   const touch = useRef<number | null>(null);
+  const [, setProgress] = useLocalStore<ProgressMap>(KEYS.progress, {});
+  const saveProgress = useCallback(
+    (slug: string, step: number) => setProgress((p) => ({ ...p, [slug]: { step, at: Date.now() } })),
+    [setProgress],
+  );
   const step = recipe.steps[i]!;
 
   const go = useCallback(
@@ -51,7 +56,7 @@ export function CookMode({ recipe, initialStep }: { recipe: Recipe; initialStep:
       setI(n);
       void saveProgress(recipe.slug, n);
     },
-    [recipe.slug, total],
+    [recipe.slug, total, saveProgress],
   );
 
   useEffect(() => {

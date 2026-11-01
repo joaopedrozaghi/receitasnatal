@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { isDatabaseConfigured } from "@/lib/app/db";
+import { isAuthConfigured } from "@/lib/app/session";
 
 export const metadata: Metadata = {
   title: { default: "App Especial de Natal", template: "%s · App da Rô" },
@@ -17,8 +17,8 @@ export const viewport: Viewport = {
 };
 
 export default function AppRootLayout({ children }: { children: React.ReactNode }) {
-  // Publicado sem banco configurado: mostra um aviso amigável em vez de erro.
-  if (!isDatabaseConfigured()) {
+  // Publicado sem login/senha configurados (APP_LOGIN / APP_PASSWORD): aviso amigável em vez de erro.
+  if (!isAuthConfigured()) {
     return (
       <main className="grain flex min-h-[100dvh] items-center justify-center bg-pine-deep px-6 text-center text-snow">
         <div className="max-w-md">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getCategory, recipesByCategory } from "@/content/recipes";
 import { Container, PageHeader } from "@/components/app/PageHeader";
-import { RecipeCard } from "@/components/app/RecipeCard";
+import { RecipeCard, toCardData } from "@/components/app/RecipeCard";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -21,7 +21,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ id: s
         <ul className="grid gap-3 sm:grid-cols-2">
           {list.map((r) => (
             <li key={r.slug}>
-              <RecipeCard recipe={r} />
+              <RecipeCard recipe={toCardData(r)} />
             </li>
           ))}
         </ul>

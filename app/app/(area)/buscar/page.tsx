@@ -3,7 +3,7 @@ import Link from "next/link";
 import { categories, recipes } from "@/content/recipes";
 import { searchRecipes } from "@/lib/app/recipe-model";
 import { Container, PageHeader } from "@/components/app/PageHeader";
-import { RecipeCard } from "@/components/app/RecipeCard";
+import { RecipeCard, toCardData } from "@/components/app/RecipeCard";
 import { Icon } from "@/components/ui/Icon";
 
 export const metadata: Metadata = { title: "Buscar" };
@@ -56,7 +56,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             <ul className="mt-3 grid gap-3 sm:grid-cols-2">
               {results.map((r) => (
                 <li key={r.slug}>
-                  <RecipeCard recipe={r} />
+                  <RecipeCard recipe={toCardData(r)} />
                 </li>
               ))}
             </ul>

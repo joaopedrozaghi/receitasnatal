@@ -1,20 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, useTransition } from "react";
-import { addRecipeToShopping, toggleFavorite } from "@/lib/app/actions";
+import { useMemo, useState } from "react";
+import { KEYS, newId, useLocalStore, type ShoppingItem } from "@/lib/app/local-store";
 import { formatQty, scaleIngredients, type Recipe } from "@/lib/app/recipe-model";
 import { Icon } from "@/components/ui/Icon";
 
-export function FavoriteButton({ slug, initial }: { slug: string; initial: boolean }) {
-  const [fav, setFav] = useState(initial);
-  const [pending, start] = useTransition();
+/** Favoritar: salvo no próprio aparelho. */
+export function FavoriteButton({ slug }: { slug: string }) {
+  const [favs, setFavs] = useLocalStore<string[]>(KEYS.favorites, []);
+  const fav = favs.includes(slug);
   return (
     <button
       type="button"
       aria-pressed={fav}
-      onClick={() => start(async () => setFav(await toggleFavorite(slug)))}
-      disabled={pending}
+      onClick={() =>
+        setFavs((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [slug, ...prev]))
+      }
       className={`inline-flex min-h-[44px] items-center gap-2 rounded-full px-4 text-sm font-bold ring-1 transition ${
         fav ? "bg-berry text-white ring-berry" : "bg-white/10 text-snow ring-white/25 hover:bg-white/20"
       }`}
@@ -31,7 +33,7 @@ export function IngredientsPanel({ recipe }: { recipe: Recipe }) {
     recipe.yieldQty >= 10 ? Math.max(1, Math.round(recipe.yieldQty / 5)) : recipe.yieldQty === 1 ? 0.5 : 1;
   const [qty, setQty] = useState(recipe.yieldQty);
   const [added, setAdded] = useState<number | null>(null);
-  const [pending, start] = useTransition();
+  const [, setList] = useLocalStore<ShoppingItem[]>(KEYS.shopping, []);
   const items = useMemo(() => scaleIngredients(recipe, qty), [recipe, qty]);
   const groups = useMemo(() => {
     const map = new Map<string, typeof items>();
@@ -109,12 +111,22 @@ export function IngredientsPanel({ recipe }: { recipe: Recipe }) {
 
       <button
         type="button"
-        disabled={pending}
-        onClick={() => start(async () => setAdded(await addRecipeToShopping(recipe.slug, qty)))}
+        onClick={() => {
+          const toAdd: ShoppingItem[] = items.map((i) => ({
+            id: newId(),
+            name: i.name,
+            qty: i.qty,
+            unit: i.unit,
+            recipe: recipe.slug,
+            checked: false,
+          }));
+          setList((prev) => [...prev, ...toAdd]);
+          setAdded(toAdd.length);
+        }}
         className="mt-6 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-pine px-5 font-bold text-white disabled:opacity-60"
       >
         <Icon name="list" className="h-5 w-5" strokeWidth={2} />
-        {pending ? "Adicionando…" : "Adicionar à lista de compras"}
+        Adicionar à lista de compras
       </button>
       {added !== null ? (
         <p role="status" className="mt-3 text-center text-sm font-semibold text-pine">

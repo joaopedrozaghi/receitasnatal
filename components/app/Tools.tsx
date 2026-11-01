@@ -1,8 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useMemo, useState } from "react";
-import { adminGrant, changePassword, type FormState } from "@/lib/app/actions";
-import { Alert, DevCode, Field, SubmitButton } from "@/components/app/Form";
+import { useEffect, useMemo, useState } from "react";
 
 const brl = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 const num = (s: string) => {
@@ -183,47 +181,5 @@ export function Checklist({
         ))}
       </div>
     </div>
-  );
-}
-
-export function ChangePasswordForm() {
-  const [state, action] = useActionState<FormState, FormData>(changePassword, {});
-  return (
-    <form action={action} className="space-y-4">
-      <Field label="Senha atual" name="current" type="password" autoComplete="current-password" required />
-      <Field
-        label="Nova senha"
-        name="password"
-        type="password"
-        autoComplete="new-password"
-        minLength={8}
-        required
-      />
-      <Field
-        label="Repita a nova senha"
-        name="confirm"
-        type="password"
-        autoComplete="new-password"
-        minLength={8}
-        required
-      />
-      {state.error ? <Alert>{state.error}</Alert> : null}
-      {state.ok ? <Alert tone="success">{state.message}</Alert> : null}
-      <SubmitButton>Alterar senha</SubmitButton>
-    </form>
-  );
-}
-
-export function AdminGrantForm() {
-  const [state, action] = useActionState<FormState, FormData>(adminGrant, {});
-  return (
-    <form action={action} className="space-y-4">
-      <Field label="E-mail da compradora" name="email" type="email" required />
-      <Field label="Nome (opcional)" name="name" />
-      {state.error ? <Alert>{state.error}</Alert> : null}
-      {state.ok ? <Alert tone="success">{state.message}</Alert> : null}
-      <DevCode code={state.devCode} />
-      <SubmitButton>Liberar acesso e enviar código</SubmitButton>
-    </form>
   );
 }

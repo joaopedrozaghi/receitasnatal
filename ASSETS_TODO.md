@@ -2,10 +2,10 @@
 
 ## 0. App (área de membros)
 
-- [ ] **Configurar na Vercel:** banco Neon (`DATABASE_URL`), `APP_SECRET`, `RESEND_API_KEY` + `EMAIL_FROM` (domínio verificado), `APP_WEBHOOK_TOKEN`, `ADMIN_EMAILS`. Passo a passo no README > App.
-- [ ] **Webhook na plataforma de checkout** apontando para `/api/app/compra?token=...` (compra aprovada, reembolso, chargeback). Confirmar com uma compra de teste.
+- [ ] **Login e senha padrão na Vercel:** `APP_LOGIN` e `APP_PASSWORD` + Redeploy (passo a passo no README > App).
+- [ ] **Mensagem de entrega na plataforma de checkout** com o link `/app`, o login e a senha.
 - [ ] **Testar e revisar as 102 receitas** (`content/recipes/`). Foram escritas com proporções usuais, mas cada uma precisa ser feita na cozinha e ajustada antes de vender: quantidades, tempos, temperaturas, rendimento.
-- [ ] Fotos das receitas: hoje só 5 receitas/categorias têm foto; as demais usam ilustração. Fotos próprias de cada receita deixam o app bem mais forte.
+- [ ] Fotos das receitas: hoje só 5 receitas/categorias têm foto; as demais usam ilustração.
 
 ## 1. Bloqueia a publicação
 

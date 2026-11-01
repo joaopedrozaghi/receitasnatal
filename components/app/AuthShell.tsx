@@ -42,12 +42,6 @@ export function AuthShell({
           {subtitle ? <p className="mt-2 text-[15px] leading-relaxed text-cocoa-muted">{subtitle}</p> : null}
           <div className="mt-7">{children}</div>
         </div>
-        <p className="mt-6 text-center text-xs text-snow/60">
-          Precisa de ajuda? Escreva para{" "}
-          <a href={`mailto:${siteConfig.brand.supportEmail}`} className="underline">
-            {siteConfig.brand.supportEmail}
-          </a>
-        </p>
       </main>
     </div>
   );

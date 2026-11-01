@@ -62,13 +62,3 @@ export function Alert({
     </p>
   );
 }
-
-export function DevCode({ code }: { code?: string }) {
-  if (!code) return null;
-  return (
-    <Alert tone="info">
-      Modo de teste (e-mail ainda não configurado): seu código é{" "}
-      <strong className="tracking-[0.2em]">{code}</strong>
-    </Alert>
-  );
-}

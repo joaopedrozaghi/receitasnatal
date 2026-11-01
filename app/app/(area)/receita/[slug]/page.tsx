@@ -4,8 +4,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCategory, getRecipe, recipePhoto } from "@/content/recipes";
 import { LEVELS, formatDuration } from "@/lib/app/recipe-model";
-import { requireUser } from "@/lib/app/session";
-import { isFavorite } from "@/lib/app/userdata";
 import { Container } from "@/components/app/PageHeader";
 import { FavoriteButton, IngredientsPanel } from "@/components/app/RecipeInteractive";
 import { StepTimer } from "@/components/app/StepTimer";
@@ -20,8 +18,6 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
   const { slug } = await params;
   const recipe = getRecipe(slug);
   if (!recipe) notFound();
-  const user = await requireUser();
-  const fav = await isFavorite(user.id, recipe.slug);
   const cat = getCategory(recipe.category);
   const photo = recipePhoto(recipe);
 
@@ -53,7 +49,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
               </svg>
               {cat?.short}
             </Link>
-            <FavoriteButton slug={recipe.slug} initial={fav} />
+            <FavoriteButton slug={recipe.slug} />
           </div>
           <h1 className="mt-8 text-[2.2rem] leading-[1.04] !text-snow sm:text-5xl">{recipe.title}</h1>
           <p className="mt-3 max-w-2xl text-[16px] leading-relaxed text-snow/80">{recipe.summary}</p>

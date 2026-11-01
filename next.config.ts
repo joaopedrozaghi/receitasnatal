@@ -49,8 +49,6 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   experimental: { inlineCss: true },
-  // banco local de desenvolvimento (Postgres em WebAssembly): carregado direto do node_modules
-  serverExternalPackages: ["@electric-sql/pglite"],
   images: {
     formats: ["image/avif", "image/webp"],
   },

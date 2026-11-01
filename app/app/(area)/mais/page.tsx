@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { requireUser } from "@/lib/app/session";
 import { Container, PageHeader } from "@/components/app/PageHeader";
 import { Icon } from "@/components/ui/Icon";
 
 export const metadata: Metadata = { title: "Mais" };
 
-export default async function MorePage() {
-  const user = await requireUser();
+export default function MorePage() {
   const links = [
     {
       href: "/app/sos",
@@ -39,10 +37,7 @@ export default async function MorePage() {
       title: "Embalagem e apresentação",
       text: "Como embalar, etiquetar e montar cestas.",
     },
-    { href: "/app/conta", icon: "lock", title: "Minha conta", text: "Senha, instalar o app e sair." },
-    ...(user.role === "admin"
-      ? [{ href: "/app/admin", icon: "shield", title: "Admin", text: "Liberar acessos e ver compradoras." }]
-      : []),
+    { href: "/app/conta", icon: "lock", title: "Minha conta", text: "Instalar o app e sair." },
   ];
   return (
     <>

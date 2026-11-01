@@ -1,21 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { categories, getRecipe, recipes, recipesByCategory } from "@/content/recipes";
-import { requireUser } from "@/lib/app/session";
-import { recentProgress } from "@/lib/app/userdata";
 import { Container } from "@/components/app/PageHeader";
-import { RecipeCard, RecipeCover } from "@/components/app/RecipeCard";
+import { RecipeCard, toCardData } from "@/components/app/RecipeCard";
+import { ContinueSection } from "@/components/app/LocalLists";
 import { InstallHint } from "@/components/app/InstallHint";
 import { Icon } from "@/components/ui/Icon";
 
 export default async function AppHome({ searchParams }: { searchParams: Promise<{ bemvinda?: string }> }) {
-  const user = await requireUser();
   const { bemvinda } = await searchParams;
-  const progress = await recentProgress(user.id, 3);
-  const continuing = progress
-    .map((p) => ({ recipe: getRecipe(p.recipe_slug), step: p.step }))
-    .filter((p): p is { recipe: NonNullable<ReturnType<typeof getRecipe>>; step: number } => !!p.recipe);
-  const first = user.name?.split(" ")[0];
   const featured = [
     "panetone-classico-de-frutas",
     "panetone-trufado-de-chocolate",
@@ -46,18 +39,17 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
             </span>
             <Link
               href="/app/conta"
-              className="grid h-11 w-11 place-items-center rounded-full bg-white/10 font-bold text-gold-light ring-1 ring-white/15"
+              className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-gold-light ring-1 ring-white/15"
               aria-label="Minha conta"
             >
-              {(first ?? user.email)[0]?.toUpperCase()}
+              <Icon name="lock" className="h-5 w-5" />
             </Link>
           </div>
           <p className="mt-6 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
             Especial de Natal
           </p>
           <h1 className="mt-1 text-[2.2rem] leading-[1.05] !text-snow sm:text-5xl">
-            {hello}
-            {first ? `, ${first}` : ""}! <em className="text-gold-light">O que vamos fazer hoje?</em>
+            {hello}! <em className="text-gold-light">O que vamos fazer hoje?</em>
           </h1>
           <form action="/app/buscar" className="mt-6">
             <label className="flex min-h-[54px] items-center gap-3 rounded-full bg-white px-5 text-cocoa shadow-lift">
@@ -91,35 +83,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
           </div>
         ) : null}
 
-        {continuing.length ? (
-          <section>
-            <h2 className="text-2xl">Continuar de onde parou</h2>
-            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-              {continuing.map(({ recipe, step }) => (
-                <li key={recipe.slug}>
-                  <Link
-                    href={`/app/receita/${recipe.slug}/cozinhar?passo=${step}`}
-                    className="flex items-center gap-4 rounded-2xl bg-white p-3 shadow-soft ring-1 ring-cocoa/5"
-                  >
-                    <RecipeCover recipe={recipe} sizes="80px" className="h-16 w-16 shrink-0 rounded-xl" />
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate font-semibold text-cocoa">{recipe.title}</span>
-                      <span className="text-sm text-cocoa-muted">
-                        Passo {step + 1} de {recipe.steps.length}
-                      </span>
-                      <span className="mt-1.5 block h-1.5 rounded-full bg-ivory-deep">
-                        <span
-                          className="block h-full rounded-full bg-berry"
-                          style={{ width: `${((step + 1) / recipe.steps.length) * 100}%` }}
-                        />
-                      </span>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
+        <ContinueSection all={recipes.map((r) => ({ ...toCardData(r), steps: r.steps.length }))} />
 
         <section>
           <div className="flex items-end justify-between">
@@ -178,7 +142,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {featured.map((r) => (
               <li key={r.slug}>
-                <RecipeCard recipe={r} />
+                <RecipeCard recipe={toCardData(r)} />
               </li>
             ))}
           </ul>

@@ -7,8 +7,7 @@ import {
   scaleIngredients,
   searchRecipes,
 } from "@/lib/app/recipe-model";
-import { parsePurchase } from "@/lib/app/purchase";
-import { generateCode, hashPassword, verifyPassword } from "@/lib/app/crypto";
+import { checkCredentials, getCredentials, signSession, verifySession } from "@/lib/app/auth-core";
 
 describe("receitas", () => {
   it("tem mais de 100 receitas, com slugs únicos e conteúdo completo", () => {
@@ -61,33 +60,34 @@ describe("receitas", () => {
   });
 });
 
-describe("aviso de compra (webhook)", () => {
-  it("entende formatos comuns", () => {
-    expect(
-      parsePurchase({ order_status: "paid", Customer: { email: "Ana@x.com", full_name: "Ana" } }),
-    ).toMatchObject({
-      email: "ana@x.com",
-      action: "grant",
-    });
-    expect(parsePurchase({ event: "PURCHASE_APPROVED", data: { buyer: { email: "b@x.com" } } }).action).toBe(
-      "grant",
-    );
-    expect(parsePurchase({ event: "PURCHASE_REFUNDED", data: { buyer: { email: "b@x.com" } } }).action).toBe(
-      "revoke",
-    );
-    expect(parsePurchase({ email: "c@x.com", status: "chargeback" }).action).toBe("revoke");
-    expect(parsePurchase({ email: "c@x.com", status: "waiting_payment" }).action).toBe("ignore");
-  });
-});
+describe("login padrão (sem banco de dados)", () => {
+  const env = {
+    NODE_ENV: "production",
+    APP_LOGIN: "Natal",
+    APP_PASSWORD: "Panetone-2026",
+  } as NodeJS.ProcessEnv;
+  const creds = getCredentials(env);
 
-describe("segurança", () => {
-  it("senha com hash e verificação", async () => {
-    const h = await hashPassword("panetone123");
-    expect(h).not.toContain("panetone123");
-    expect(await verifyPassword("panetone123", h)).toBe(true);
-    expect(await verifyPassword("errada", h)).toBe(false);
+  it("lê login e senha das variáveis de ambiente; em produção sem elas, não libera", () => {
+    expect(creds).toEqual({ login: "Natal", password: "Panetone-2026" });
+    expect(getCredentials({ NODE_ENV: "production" } as NodeJS.ProcessEnv)).toBeNull();
   });
-  it("código de 6 dígitos", () => {
-    for (let i = 0; i < 50; i++) expect(generateCode()).toMatch(/^\d{6}$/);
+
+  it("confere login sem diferenciar maiúsculas e senha exata", () => {
+    expect(checkCredentials(" natal ", "Panetone-2026", creds)).toBe(true);
+    expect(checkCredentials("natal", "panetone-2026", creds)).toBe(false);
+    expect(checkCredentials("outro", "Panetone-2026", creds)).toBe(false);
+    expect(checkCredentials("natal", "Panetone-2026", null)).toBe(false);
+  });
+
+  it("sessão assinada: válida, expira e cai quando a senha muda", () => {
+    const now = Date.now();
+    const token = signSession(creds!, now, env);
+    expect(verifySession(token, creds, now, env)).toBe(true);
+    expect(verifySession(token, creds, now + 91 * 86_400_000, env)).toBe(false);
+    expect(verifySession(token.replace(/.$/, "x"), creds, now, env)).toBe(false);
+    const changed = { login: "Natal", password: "Nova-senha" };
+    expect(verifySession(token, changed, now, env)).toBe(false);
+    expect(verifySession(undefined, creds, now, env)).toBe(false);
   });
 });

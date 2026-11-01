@@ -1,7 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getCategory, recipePhoto } from "@/content/recipes";
+import { categories } from "@/content/recipes/categories";
 import { LEVELS, formatDuration, type Recipe } from "@/lib/app/recipe-model";
+
+/** Dados mínimos para o cartão (leve o bastante para ir para o navegador). */
+export type RecipeCardData = Pick<
+  Recipe,
+  "slug" | "title" | "summary" | "level" | "totalMin" | "yieldQty" | "yieldUnit" | "category" | "photo"
+>;
+
+export const toCardData = (r: Recipe): RecipeCardData => ({
+  slug: r.slug,
+  title: r.title,
+  summary: r.summary,
+  level: r.level,
+  totalMin: r.totalMin,
+  yieldQty: r.yieldQty,
+  yieldUnit: r.yieldUnit,
+  category: r.category,
+  photo: r.photo,
+});
 import { Icon } from "@/components/ui/Icon";
 
 /** Capa da receita: foto, ou ilustração colorida da categoria. */
@@ -10,13 +28,13 @@ export function RecipeCover({
   className = "",
   sizes,
 }: {
-  recipe: Recipe;
+  recipe: RecipeCardData;
   className?: string;
   sizes: string;
 }) {
-  const photo = recipePhoto(recipe);
-  const cat = getCategory(recipe.category);
-  if (photo && recipe.photo) {
+  const cat = categories.find((c) => c.id === recipe.category);
+  const photo = recipe.photo;
+  if (photo) {
     return (
       <span className={`relative block overflow-hidden bg-ivory-deep ${className}`}>
         <Image src={photo} alt="" fill sizes={sizes} className="object-cover" />
@@ -37,7 +55,7 @@ export function RecipeCover({
   );
 }
 
-export function RecipeCard({ recipe }: { recipe: Recipe }) {
+export function RecipeCard({ recipe }: { recipe: RecipeCardData }) {
   return (
     <Link
       href={`/app/receita/${recipe.slug}`}
