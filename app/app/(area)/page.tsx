@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { categories, getRecipe, recipes, recipesByCategory } from "@/content/recipes";
 import { Container } from "@/components/app/PageHeader";
@@ -23,7 +22,7 @@ function HeroCard({ r }: { r: RecipeCardData }) {
           className="h-full w-full transition duration-700 group-hover:scale-105"
         />
       </span>
-      <span className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
+      <span className="absolute inset-0 bg-gradient-to-t from-pine-deep/95 via-pine-deep/30 to-transparent" />
       <span className="absolute left-4 top-4 rounded-full bg-white/85 px-3 py-1 text-xs font-bold text-cocoa backdrop-blur">
         {LEVELS[r.level]}
       </span>
@@ -95,7 +94,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
       <header className="grain relative overflow-hidden rounded-b-[2.25rem] bg-pine-deep px-5 pb-8 pt-[calc(env(safe-area-inset-top)+18px)] text-snow sm:px-8 lg:rounded-none">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_70%_at_95%_0%,rgba(212,162,76,0.3)_0%,transparent_70%),radial-gradient(40%_50%_at_0%_100%,rgba(200,16,46,0.18)_0%,transparent_70%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_70%_at_95%_0%,rgba(91,76,245,0.45)_0%,transparent_70%),radial-gradient(40%_50%_at_0%_100%,rgba(34,211,238,0.22)_0%,transparent_70%)]"
         />
         <div className="relative mx-auto max-w-5xl">
           <HomeHello />
@@ -174,28 +173,13 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
                     href={`/app/categoria/${c.id}`}
                     className="group relative flex h-32 flex-col justify-end overflow-hidden rounded-3xl p-4 shadow-soft transition active:scale-[0.98]"
                   >
-                    {c.photo ? (
-                      <>
-                        <Image
-                          src={c.photo}
-                          alt=""
-                          fill
-                          sizes="(min-width: 1024px) 220px, 45vw"
-                          className="object-cover transition duration-500 group-hover:scale-105"
-                        />
-                        <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                      </>
-                    ) : (
-                      <span className={`absolute inset-0 grid place-items-start p-4 ${c.tint}`}>
-                        <Icon name={c.icon} className="h-9 w-9" strokeWidth={1.4} />
-                      </span>
-                    )}
-                    <span
-                      className={`relative font-display text-lg leading-tight ${c.photo ? "text-white" : "text-cocoa"}`}
-                    >
+                    <span className={`absolute inset-0 grid place-items-start p-4 ${c.tint}`}>
+                      <Icon name={c.icon} className="h-9 w-9" strokeWidth={1.4} />
+                    </span>
+                    <span className={`relative font-display text-lg leading-tight text-cocoa`}>
                       {c.short}
                     </span>
-                    <span className={`relative text-xs ${c.photo ? "text-white/80" : "text-cocoa-muted"}`}>
+                    <span className={`relative text-xs text-cocoa-muted`}>
                       {recipesByCategory(c.id).length} receitas
                     </span>
                   </Link>
@@ -204,7 +188,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
               <li>
                 <Link
                   href="/app/sos"
-                  className="flex h-32 flex-col justify-end rounded-3xl bg-gradient-to-br from-[#D81F3D] to-berry p-4 text-white shadow-soft transition active:scale-[0.98]"
+                  className="flex h-32 flex-col justify-end rounded-3xl bg-gradient-to-br from-berry to-[#9333EA] p-4 text-white shadow-soft transition active:scale-[0.98]"
                 >
                   <Icon name="sos" className="mb-auto h-9 w-9" strokeWidth={1.4} />
                   <span className="font-display text-lg leading-tight">Guia SOS</span>
@@ -240,7 +224,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
                   href: "/app/bonus#cronograma",
                   icon: "calendar",
                   label: "Cronograma da ceia",
-                  tint: "bg-[#F6E3C4] text-gold-text",
+                  tint: "bg-[#DDF6FB] text-[#0E7490]",
                 },
                 {
                   href: "/app/calculadora",
@@ -252,7 +236,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
                   href: "/app/bonus#substituicoes",
                   icon: "swap",
                   label: "Substituições",
-                  tint: "bg-[#E6EEF3] text-[#2E5670]",
+                  tint: "bg-[#E2ECFF] text-[#1D4ED8]",
                 },
               ].map((t) => (
                 <li key={t.href}>

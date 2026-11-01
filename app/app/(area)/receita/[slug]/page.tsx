@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getCategory, getRecipe, recipePhoto } from "@/content/recipes";
+import { getCategory, getRecipe } from "@/content/recipes";
 import { LEVELS, formatDuration } from "@/lib/app/recipe-model";
 import { Container } from "@/components/app/PageHeader";
 import { FavoriteButton, IngredientsPanel } from "@/components/app/RecipeInteractive";
@@ -19,17 +18,14 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
   const recipe = getRecipe(slug);
   if (!recipe) notFound();
   const cat = getCategory(recipe.category);
-  const photo = recipePhoto(recipe);
 
   return (
     <>
-      <header className="grain relative overflow-hidden bg-pine-deep text-snow">
-        {photo ? (
-          <>
-            <Image src={photo} alt="" fill priority sizes="100vw" className="object-cover opacity-45" />
-            <span className="absolute inset-0 bg-gradient-to-t from-pine-deep via-pine-deep/70 to-pine-deep/30" />
-          </>
-        ) : null}
+      <header className="grain relative overflow-hidden rounded-b-[2.25rem] bg-pine-deep text-snow lg:rounded-none">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_70%_at_95%_0%,rgba(91,76,245,0.45)_0%,transparent_70%),radial-gradient(40%_50%_at_0%_100%,rgba(34,211,238,0.2)_0%,transparent_70%)]"
+        />
         <div className="relative mx-auto max-w-4xl px-5 pb-8 pt-[calc(env(safe-area-inset-top)+16px)] sm:px-8">
           <div className="flex items-center justify-between gap-3">
             <Link
@@ -66,7 +62,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
           </ul>
           <Link
             href={`/app/receita/${recipe.slug}/cozinhar`}
-            className="mt-6 inline-flex min-h-[56px] items-center gap-2 rounded-full bg-gradient-to-b from-[#D81F3D] to-berry px-7 font-bold uppercase tracking-wide text-white shadow-cta"
+            className="mt-6 inline-flex min-h-[56px] items-center gap-2 rounded-full bg-gradient-to-b from-berry to-[#9333EA] px-7 font-bold uppercase tracking-wide text-white shadow-cta"
           >
             <Icon name="flame" className="h-5 w-5" strokeWidth={2} />
             Começar no modo cozinha

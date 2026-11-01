@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type InputHTMLAttributes } from "react";
 import { canHash, hasAccounts, listAccounts, MIN_PASSWORD, signIn, signUp } from "@/lib/app/local-auth";
@@ -111,28 +110,25 @@ export function LoginScreen({
 
   return (
     <div className="relative min-h-[100dvh] overflow-hidden bg-pine-deep">
-      {/* foto de fundo */}
-      <div className="absolute inset-x-0 top-0 h-[42dvh] lg:inset-y-0 lg:left-0 lg:right-auto lg:h-auto lg:w-1/2">
-        <Image
-          src="/images/receitas/panetones-trufados.jpg"
-          alt=""
-          fill
-          priority
-          sizes="(min-width: 1024px) 50vw, 100vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-pine-deep/30 via-pine-deep/40 to-pine-deep lg:bg-gradient-to-r lg:from-transparent lg:via-pine-deep/30 lg:to-pine-deep" />
-        <div className="absolute inset-x-6 bottom-16 hidden text-snow lg:block">
+      {/* fundo: brilhos e grade, sem foto */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-24 -top-24 h-[420px] w-[420px] rounded-full bg-pine/50 blur-[110px]" />
+        <div className="absolute -right-32 top-[18dvh] h-[360px] w-[360px] rounded-full bg-gold/25 blur-[110px]" />
+        <div className="absolute bottom-0 left-1/3 h-[300px] w-[300px] rounded-full bg-berry/20 blur-[120px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:36px_36px] [mask-image:radial-gradient(70%_60%_at_50%_30%,black,transparent)]" />
+      </div>
+      <div className="absolute inset-y-0 left-0 hidden w-1/2 lg:block">
+        <div className="absolute inset-x-12 bottom-16 text-snow">
           <p className="font-display text-5xl leading-tight">
             Massa boa não tem pressa. <em className="text-gold-light">Mas tem método.</em>
           </p>
-          <p className="mt-4 font-script text-4xl text-gold-light">Roseli Monteiro</p>
+          <p className="mt-5 text-lg font-semibold tracking-wide text-gold-light">Roseli Monteiro</p>
         </div>
       </div>
 
       <main
         id="conteudo"
-        className="relative flex min-h-[100dvh] flex-col items-center justify-end px-4 pb-[calc(env(safe-area-inset-bottom)+20px)] pt-[22dvh] lg:ml-[50%] lg:justify-center lg:pt-10"
+        className="relative flex min-h-[100dvh] flex-col items-center justify-center px-4 pb-[calc(env(safe-area-inset-bottom)+20px)] pt-[calc(env(safe-area-inset-top)+28px)] lg:ml-[50%] lg:pt-10"
       >
         <div className="mb-5 flex items-center gap-2.5 text-snow lg:mb-8">
           <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 text-gold-light ring-1 ring-white/20 backdrop-blur">
@@ -278,7 +274,7 @@ export function LoginScreen({
                 <button
                   type="submit"
                   disabled={busy}
-                  className="flex min-h-[56px] w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-b from-[#D81F3D] to-berry font-bold text-white shadow-cta transition active:scale-[0.99] disabled:opacity-70"
+                  className="flex min-h-[56px] w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-b from-berry to-[#9333EA] font-bold text-white shadow-cta transition active:scale-[0.99] disabled:opacity-70"
                 >
                   {busy ? (
                     <span

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { categories } from "@/content/recipes/categories";
 import { LEVELS, formatDuration, type Recipe } from "@/lib/app/recipe-model";
@@ -22,35 +21,33 @@ export const toCardData = (r: Recipe): RecipeCardData => ({
 });
 import { Icon } from "@/components/ui/Icon";
 
-/** Capa da receita: foto, ou ilustração colorida da categoria. */
+/** Capa da receita: ilustração da categoria (o app não usa fotos). */
 export function RecipeCover({
   recipe,
   className = "",
-  sizes,
 }: {
   recipe: RecipeCardData;
   className?: string;
-  sizes: string;
+  sizes?: string;
 }) {
   const cat = categories.find((c) => c.id === recipe.category);
-  const photo = recipe.photo;
-  if (photo) {
-    return (
-      <span className={`relative block overflow-hidden bg-ivory-deep ${className}`}>
-        <Image src={photo} alt="" fill sizes={sizes} className="object-cover" />
-      </span>
-    );
-  }
   return (
     <span
       className={`relative grid place-items-center overflow-hidden ${cat?.tint ?? "bg-ivory-deep"} ${className}`}
     >
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 bg-[linear-gradient(currentColor_1px,transparent_1px),linear-gradient(90deg,currentColor_1px,transparent_1px)] bg-[size:22px_22px] opacity-[0.07]"
+      />
+      <span
+        aria-hidden="true"
+        className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-white/50 blur-2xl"
+      />
       <Icon
         name={cat?.icon ?? "sparkle"}
-        className="h-1/2 max-h-16 w-1/2 max-w-16 opacity-80"
-        strokeWidth={1.2}
+        className="relative h-1/2 max-h-16 w-1/2 max-w-16 opacity-85"
+        strokeWidth={1.3}
       />
-      <span aria-hidden="true" className="absolute -bottom-6 -right-6 h-20 w-20 rounded-full bg-white/30" />
     </span>
   );
 }

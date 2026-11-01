@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { AuthProvider } from "@/components/app/AuthProvider";
+import { future } from "../fonts";
 
 export const metadata: Metadata = {
   title: { default: "App Especial de Natal", template: "%s · App da Rô" },
@@ -10,12 +11,16 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0A2B20",
+  themeColor: "#0B0F24",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
 };
 
 export default function AppRootLayout({ children }: { children: React.ReactNode }) {
-  return <AuthProvider>{children}</AuthProvider>;
+  return (
+    <div className={`app-theme ${future.variable}`}>
+      <AuthProvider>{children}</AuthProvider>
+    </div>
+  );
 }

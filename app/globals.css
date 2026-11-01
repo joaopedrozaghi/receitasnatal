@@ -2,6 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Paleta da página de vendas (marfim, pinheiro, cereja, dourado) em canais RGB. */
+:root {
+  --c-ivory: 255 248 238;
+  --c-ivory-deep: 246 234 218;
+  --c-cocoa: 43 26 20;
+  --c-cocoa-soft: 92 68 56;
+  --c-cocoa-muted: 118 96 79;
+  --c-pine: 15 61 46;
+  --c-pine-deep: 10 43 32;
+  --c-pine-soft: 228 239 232;
+  --c-pine-line: 30 85 65;
+  --c-berry: 200 16 46;
+  --c-berry-hover: 165 13 38;
+  --c-berry-soft: 251 227 230;
+  --c-gold: 212 162 76;
+  --c-gold-light: 242 215 155;
+  --c-gold-text: 138 100 24;
+  --c-snow: 255 243 224;
+}
+
+/* Tema do app (/app): azul-noite, violeta elétrico, ciano e magenta, fonte Space Grotesk. */
+.app-theme {
+  --c-ivory: 244 246 251;
+  --c-ivory-deep: 231 235 244;
+  --c-cocoa: 14 18 38;
+  --c-cocoa-soft: 51 60 85;
+  --c-cocoa-muted: 88 97 122;
+  --c-pine: 91 76 245;
+  --c-pine-deep: 11 15 36;
+  --c-pine-soft: 236 235 255;
+  --c-pine-line: 35 42 82;
+  --c-berry: 225 29 104;
+  --c-berry-hover: 190 24 88;
+  --c-berry-soft: 253 230 239;
+  --c-gold: 34 211 238;
+  --c-gold-light: 165 243 252;
+  --c-gold-text: 14 116 144;
+  --c-snow: 238 241 255;
+  --font-display: var(--font-future);
+  --font-sans: var(--font-future);
+  --font-script: var(--font-future);
+  font-family: var(--font-future), system-ui, sans-serif;
+  min-height: 100dvh;
+  background: rgb(var(--c-ivory));
+}
+.app-theme :is(h1, h2, h3, .font-display) {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+/* destaques dos títulos: degradê em vez de itálico */
+.app-theme :is(h1, h2, p) em {
+  font-style: normal;
+  background: linear-gradient(90deg, rgb(var(--c-gold-light)), #c4b5fd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.app-theme .italic {
+  font-style: normal;
+}
+.app-theme ::selection {
+  background: #c4b5fd;
+  color: #0e1226;
+}
+.app-theme :focus-visible {
+  outline-color: #22d3ee;
+}
+
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;

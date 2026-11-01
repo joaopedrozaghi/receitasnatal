@@ -27,7 +27,7 @@ export function SubmitButton({ children, className = "" }: { children: ReactNode
       type="submit"
       disabled={pending}
       aria-busy={pending || undefined}
-      className={`flex min-h-[56px] w-full items-center justify-center gap-2 rounded-full bg-gradient-to-b from-[#D81F3D] to-berry px-6 font-bold uppercase tracking-wide text-white shadow-cta transition hover:from-berry hover:to-berry-hover disabled:opacity-60 ${className}`}
+      className={`flex min-h-[56px] w-full items-center justify-center gap-2 rounded-full bg-gradient-to-b from-berry to-[#9333EA] px-6 font-bold uppercase tracking-wide text-white shadow-cta transition hover:from-berry hover:to-berry-hover disabled:opacity-60 ${className}`}
     >
       {pending ? (
         <span

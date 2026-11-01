@@ -1,4 +1,4 @@
-import { Bricolage_Grotesque, Caveat, DM_Serif_Display } from "next/font/google";
+import { Bricolage_Grotesque, Caveat, DM_Serif_Display, Space_Grotesk } from "next/font/google";
 
 /** Títulos: serifada editorial de alto contraste (com itálico para os destaques). */
 export const display = DM_Serif_Display({
@@ -23,4 +23,11 @@ export const script = Caveat({
   variable: "--font-script",
   weight: "600",
   preload: false,
+});
+
+/** App (/app): grotesca geométrica de ar futurista, carregada só nas telas do app. */
+export const future = Space_Grotesk({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-future",
 });

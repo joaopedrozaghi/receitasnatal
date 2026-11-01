@@ -8,13 +8,34 @@ const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./content/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      // Cores em variáveis: a página de vendas usa os valores de :root, o app (/app) os de .app-theme.
       colors: {
-        ivory: { DEFAULT: "#FFF8EE", deep: "#F6EADA" },
-        cocoa: { DEFAULT: "#2B1A14", soft: "#5C4438", muted: "#76604F" },
-        pine: { DEFAULT: "#0F3D2E", deep: "#0A2B20", soft: "#E4EFE8", line: "#1E5541" },
-        berry: { DEFAULT: "#C8102E", hover: "#A50D26", soft: "#FBE3E6" },
-        gold: { DEFAULT: "#D4A24C", light: "#F2D79B", text: "#8A6418" },
-        snow: "#FFF3E0",
+        ivory: {
+          DEFAULT: "rgb(var(--c-ivory) / <alpha-value>)",
+          deep: "rgb(var(--c-ivory-deep) / <alpha-value>)",
+        },
+        cocoa: {
+          DEFAULT: "rgb(var(--c-cocoa) / <alpha-value>)",
+          soft: "rgb(var(--c-cocoa-soft) / <alpha-value>)",
+          muted: "rgb(var(--c-cocoa-muted) / <alpha-value>)",
+        },
+        pine: {
+          DEFAULT: "rgb(var(--c-pine) / <alpha-value>)",
+          deep: "rgb(var(--c-pine-deep) / <alpha-value>)",
+          soft: "rgb(var(--c-pine-soft) / <alpha-value>)",
+          line: "rgb(var(--c-pine-line) / <alpha-value>)",
+        },
+        berry: {
+          DEFAULT: "rgb(var(--c-berry) / <alpha-value>)",
+          hover: "rgb(var(--c-berry-hover) / <alpha-value>)",
+          soft: "rgb(var(--c-berry-soft) / <alpha-value>)",
+        },
+        gold: {
+          DEFAULT: "rgb(var(--c-gold) / <alpha-value>)",
+          light: "rgb(var(--c-gold-light) / <alpha-value>)",
+          text: "rgb(var(--c-gold-text) / <alpha-value>)",
+        },
+        snow: "rgb(var(--c-snow) / <alpha-value>)",
       },
       fontFamily: {
         display: ["var(--font-display)", "Georgia", "serif"],
