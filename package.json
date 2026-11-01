@@ -1,0 +1,40 @@
+{
+  "name": "receitinhas-da-ro",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Receitinhas da Rô · página de vendas",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "testimonial:add": "tsx scripts/add-testimonial.ts"
+  },
+  "dependencies": {
+    "next": "15.5.4",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "3.3.1",
+    "@types/node": "22.18.6",
+    "@types/react": "19.1.13",
+    "@types/react-dom": "19.1.9",
+    "autoprefixer": "10.4.21",
+    "eslint": "9.35.0",
+    "eslint-config-next": "15.5.4",
+    "postcss": "8.5.6",
+    "prettier": "3.6.2",
+    "prettier-plugin-tailwindcss": "0.6.14",
+    "tailwindcss": "3.4.17",
+    "tsx": "4.20.5",
+    "typescript": "5.9.2",
+    "vitest": "3.2.4"
+  }
+}
