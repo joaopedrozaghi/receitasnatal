@@ -35,8 +35,8 @@ const hashes = [createHash("sha256").update(CODE).digest("hex")];
 describe("contas no aparelho com código de acesso", () => {
   beforeEach(() => storage.clear());
 
-  it("o código padrão da config confere (NATAL2026)", async () => {
-    expect(await auth.codeIsValid(" natal2026 ", siteConfig.app.accessCodeHashes)).toBe(true);
+  it("a config tem hashes válidos e não aceita qualquer código", async () => {
+    expect(siteConfig.app.accessCodeHashes.every((h) => /^[0-9a-f]{64}$/.test(h))).toBe(true);
     expect(await auth.codeIsValid("errado", siteConfig.app.accessCodeHashes)).toBe(false);
   });
 

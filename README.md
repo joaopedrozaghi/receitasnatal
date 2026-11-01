@@ -152,7 +152,7 @@ com hash PBKDF2, nunca em texto. Em outro celular, a cliente cria a conta de nov
 
 ### Configurar o código de acesso (uma vez)
 
-O código padrão é `NATAL2026`. **Troque antes de vender**, porque o repositório é público:
+O código atual você já tem (não fica escrito aqui, porque o repositório é público). Para trocar:
 
 1. Escolha um código (ex.: `PANETONE-ROSE-7Q2`) e gere o hash dele:
 

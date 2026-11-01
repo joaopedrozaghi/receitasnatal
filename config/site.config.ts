@@ -219,9 +219,10 @@ export const rawConfig = {
   guarantee: { days: 7 }, // CDC art. 49
 
   // App em /app: a cliente cria a conta com o CÓDIGO DE ACESSO que você manda no e-mail da compra
-  // (o mesmo para todas). Aqui fica só o hash do código. Código inicial: NATAL2026 (troque!).
+  // (o mesmo para todas). Aqui fica só o hash do código
+  // (o código em si NÃO vai no repositório). Gere com: npm run app:codigo -- SEUCODIGO
   app: {
-    accessCodeHashes: ["aa0ddc6392b4994611cc3577efb16de223bbc52948f78427ac64734505d774b0"],
+    accessCodeHashes: ["54a86726680aac1a1670fb9180908becc5bfb12168d7bc817bbd5e8a28d8d82b"],
   },
 
   social: { instagram: "", tiktok: "" },
