@@ -274,7 +274,7 @@ export function LoginScreen({
                 <button
                   type="submit"
                   disabled={busy}
-                  className="flex min-h-[56px] w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-b from-berry to-[#9333EA] font-bold text-white shadow-cta transition active:scale-[0.99] disabled:opacity-70"
+                  className="btn-neon flex min-h-[56px] w-full items-center justify-center gap-2 rounded-2xl font-bold text-white disabled:opacity-70"
                 >
                   {busy ? (
                     <span

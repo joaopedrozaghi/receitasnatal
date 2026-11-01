@@ -24,7 +24,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
       <header className="grain relative overflow-hidden rounded-b-[2.25rem] bg-pine-deep text-snow lg:rounded-none">
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_70%_at_95%_0%,rgba(91,76,245,0.45)_0%,transparent_70%),radial-gradient(40%_50%_at_0%_100%,rgba(34,211,238,0.2)_0%,transparent_70%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_70%_at_95%_0%,rgba(212,162,76,0.3)_0%,transparent_70%),radial-gradient(40%_50%_at_0%_100%,rgba(200,16,46,0.16)_0%,transparent_70%)]"
         />
         <div className="relative mx-auto max-w-4xl px-5 pb-8 pt-[calc(env(safe-area-inset-top)+16px)] sm:px-8">
           <div className="flex items-center justify-between gap-3">
@@ -62,7 +62,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
           </ul>
           <Link
             href={`/app/receita/${recipe.slug}/cozinhar`}
-            className="mt-6 inline-flex min-h-[56px] items-center gap-2 rounded-full bg-gradient-to-b from-berry to-[#9333EA] px-7 font-bold uppercase tracking-wide text-white shadow-cta"
+            className="btn-neon mt-6 inline-flex min-h-[56px] items-center gap-2 rounded-full px-7 font-bold uppercase tracking-wide text-white"
           >
             <Icon name="flame" className="h-5 w-5" strokeWidth={2} />
             Começar no modo cozinha

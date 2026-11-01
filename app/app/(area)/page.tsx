@@ -94,7 +94,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
       <header className="grain relative overflow-hidden rounded-b-[2.25rem] bg-pine-deep px-5 pb-8 pt-[calc(env(safe-area-inset-top)+18px)] text-snow sm:px-8 lg:rounded-none">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_70%_at_95%_0%,rgba(91,76,245,0.45)_0%,transparent_70%),radial-gradient(40%_50%_at_0%_100%,rgba(34,211,238,0.22)_0%,transparent_70%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_70%_at_95%_0%,rgba(212,162,76,0.3)_0%,transparent_70%),radial-gradient(40%_50%_at_0%_100%,rgba(200,16,46,0.18)_0%,transparent_70%)]"
         />
         <div className="relative mx-auto max-w-5xl">
           <HomeHello />
@@ -188,7 +188,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
               <li>
                 <Link
                   href="/app/sos"
-                  className="flex h-32 flex-col justify-end rounded-3xl bg-gradient-to-br from-berry to-[#9333EA] p-4 text-white shadow-soft transition active:scale-[0.98]"
+                  className="flex h-32 flex-col justify-end rounded-3xl bg-gradient-to-br from-[#D81F3D] to-[#8E0B22] p-4 text-white shadow-soft transition active:scale-[0.98]"
                 >
                   <Icon name="sos" className="mb-auto h-9 w-9" strokeWidth={1.4} />
                   <span className="font-display text-lg leading-tight">Guia SOS</span>
@@ -224,7 +224,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
                   href: "/app/bonus#cronograma",
                   icon: "calendar",
                   label: "Cronograma da ceia",
-                  tint: "bg-[#DDF6FB] text-[#0E7490]",
+                  tint: "bg-[#F6E3C4] text-gold-text",
                 },
                 {
                   href: "/app/calculadora",
@@ -236,7 +236,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
                   href: "/app/bonus#substituicoes",
                   icon: "swap",
                   label: "Substituições",
-                  tint: "bg-[#E2ECFF] text-[#1D4ED8]",
+                  tint: "bg-[#E6EEF3] text-[#2E5670]",
                 },
               ].map((t) => (
                 <li key={t.href}>
