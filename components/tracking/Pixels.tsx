@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CONSENT_EVENT, readConsent, type ConsentState } from "@/lib/consent";
 import { track } from "@/lib/track";
@@ -11,6 +12,7 @@ const TIKTOK = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID;
 
 /** Carrega Meta Pixel, GA4 e TikTok SOMENTE depois do aceite no banner de cookies. */
 export function Pixels() {
+  const pathname = usePathname();
   const [consent, setConsent] = useState<ConsentState | null>(null);
 
   useEffect(() => {
@@ -27,7 +29,7 @@ export function Pixels() {
     return () => window.clearTimeout(id);
   }, [consent?.marketing, consent?.analytics]);
 
-  if (!consent) return null;
+  if (!consent || pathname.startsWith("/app")) return null;
 
   return (
     <>

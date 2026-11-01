@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { copy } from "@/content/copy.ptBR";
 import { OPEN_PREFERENCES_EVENT, readConsent, writeConsent } from "@/lib/consent";
 
 /** Banner LGPD: cookies não essenciais ficam bloqueados até o aceite. */
 export function CookieBanner() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [custom, setCustom] = useState(false);
   const [analytics, setAnalytics] = useState(false);
@@ -26,7 +28,8 @@ export function CookieBanner() {
     return () => window.removeEventListener(OPEN_PREFERENCES_EVENT, reopen);
   }, []);
 
-  if (!open) return null;
+  // dentro do app (área de membros) não há pixels nem anúncios: só cookie essencial de sessão
+  if (!open || pathname.startsWith("/app")) return null;
 
   const save = (choice: { analytics: boolean; marketing: boolean }) => {
     writeConsent(choice);

@@ -135,6 +135,56 @@ Conversions API da própria plataforma.
 
 A página é estática e é regenerada a cada minuto; o preço da fase também é recalculado no navegador.
 
+## App de receitas (área de membros em `/app`)
+
+O produto é um web app dentro deste mesmo projeto: `https://SEU-DOMINIO/app`.
+
+**O que tem:** 102 receitas em 7 categorias (`content/recipes/`), busca por nome ou ingrediente, porções
+ajustáveis (as medidas em gramas se recalculam), lista de compras que soma itens repetidos, favoritos,
+modo cozinha (tela acesa, um passo por vez, timer com alarme e o "por quê" de cada etapa), "continuar de
+onde parou", Guia SOS, calculadora de preço, os 3 bônus (cronograma com checklist, substituições e
+embalagem), instalação na tela inicial e painel admin.
+
+### Como a cliente entra
+
+1. A compra é aprovada na plataforma de checkout, que avisa o app em `/api/app/compra?token=APP_WEBHOOK_TOKEN`.
+2. O app libera o e-mail e envia um **código de 6 números** (válido por 7 dias) com o botão "Ativar meu acesso".
+3. Em `/app/ativar` ela digita o código, cria a senha e já entra. Depois, entra com e-mail + senha em `/app/entrar`.
+4. Esqueceu a senha? `/app/esqueci` envia um código novo (30 minutos).
+5. Reembolso ou chargeback avisado pela plataforma bloqueia o acesso na hora.
+
+Segurança: senhas com scrypt, códigos e sessões guardados só como hash, código de uso único com limite de
+5 tentativas e de 5 envios por hora, sessão em cookie `httpOnly`.
+
+### Configurar na Vercel (uma vez)
+
+1. **Banco:** no projeto, *Storage → Create Database → Neon (Postgres)* e conecte ao projeto. Isso cria a
+   variável `DATABASE_URL`. As tabelas são criadas sozinhas no primeiro acesso.
+2. **E-mail:** crie conta em resend.com, verifique o seu domínio e crie uma API key.
+3. **Variáveis** (*Settings → Environment Variables*): `APP_SECRET`, `RESEND_API_KEY`, `EMAIL_FROM`,
+   `APP_WEBHOOK_TOKEN`, `ADMIN_EMAILS` (veja `.env.example`) e `NEXT_PUBLIC_SITE_URL` com o domínio final.
+4. **Redeploy.**
+5. **Plataforma de checkout:** cadastre o webhook/postback com a URL
+   `https://SEU-DOMINIO/api/app/compra?token=SEU_APP_WEBHOOK_TOKEN` para os eventos de compra aprovada,
+   reembolso e chargeback. O receptor entende os formatos de Kiwify, Hotmart, Eduzz e um formato simples
+   `{ "email": "...", "name": "...", "status": "approved" }`.
+6. **Admin:** com o seu e-mail em `ADMIN_EMAILS`, ative a sua conta em `/app/ativar`. Em `/app/admin` você
+   libera acessos manualmente (ex.: compra que não chegou pelo aviso) e bloqueia quando precisar.
+
+### Testar no computador
+
+`npm run dev` usa um banco local automático (pasta `.data/`, fora do git) e, sem `RESEND_API_KEY`, mostra o
+código na tela e no terminal em vez de enviar e-mail. Para simular uma compra:
+
+```bash
+curl -X POST "http://localhost:3000/api/app/compra?token=SEU_TOKEN" -H "content-type: application/json" -d '{"email":"cliente@exemplo.com","name":"Cliente","status":"approved"}'
+```
+
+### Editar receitas
+
+Cada categoria é um arquivo em `content/recipes/` (formato comentado em `lib/app/recipe-model.ts`).
+Guia SOS, substituições, cronograma e embalagens ficam em `content/recipes/guides.ts`.
+
 ## Testes
 
 `npm test` cobre: fase atual por data (incluindo a virada exata), total com bump, parcelas, contagem

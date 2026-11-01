@@ -1,5 +1,12 @@
 # O que falta fornecer ou validar antes de publicar
 
+## 0. App (área de membros)
+
+- [ ] **Configurar na Vercel:** banco Neon (`DATABASE_URL`), `APP_SECRET`, `RESEND_API_KEY` + `EMAIL_FROM` (domínio verificado), `APP_WEBHOOK_TOKEN`, `ADMIN_EMAILS`. Passo a passo no README > App.
+- [ ] **Webhook na plataforma de checkout** apontando para `/api/app/compra?token=...` (compra aprovada, reembolso, chargeback). Confirmar com uma compra de teste.
+- [ ] **Testar e revisar as 102 receitas** (`content/recipes/`). Foram escritas com proporções usuais, mas cada uma precisa ser feita na cozinha e ajustada antes de vender: quantidades, tempos, temperaturas, rendimento.
+- [ ] Fotos das receitas: hoje só 5 receitas/categorias têm foto; as demais usam ilustração. Fotos próprias de cada receita deixam o app bem mais forte.
+
 ## 1. Bloqueia a publicação
 
 - [ ] **Link do checkout** → `config/site.config.ts > checkout.url` (Kiwify/Hotmart/Eduzz). Sem ele, os botões só rolam até a oferta.
