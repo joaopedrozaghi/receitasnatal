@@ -16,9 +16,9 @@
     "testimonial:add": "tsx scripts/add-testimonial.ts"
   },
   "dependencies": {
-    "next": "15.5.4",
-    "react": "19.1.1",
-    "react-dom": "19.1.1",
+    "next": "15.5.28",
+    "react": "19.1.10",
+    "react-dom": "19.1.10",
     "zod": "3.25.76"
   },
   "devDependencies": {
@@ -28,8 +28,8 @@
     "@types/react-dom": "19.1.9",
     "autoprefixer": "10.4.21",
     "eslint": "9.35.0",
-    "eslint-config-next": "15.5.4",
-    "postcss": "8.5.6",
+    "eslint-config-next": "15.5.28",
+    "postcss": "8.5.32",
     "prettier": "3.6.2",
     "prettier-plugin-tailwindcss": "0.6.14",
     "tailwindcss": "3.4.17",
