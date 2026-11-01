@@ -13,7 +13,8 @@
     "test:watch": "vitest",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "testimonial:add": "tsx scripts/add-testimonial.ts"
+    "testimonial:add": "tsx scripts/add-testimonial.ts",
+    "app:codigo": "node scripts/hash-code.mjs"
   },
   "dependencies": {
     "next": "15.5.28",

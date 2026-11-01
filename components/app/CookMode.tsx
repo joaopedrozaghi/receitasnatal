@@ -118,7 +118,7 @@ export function CookMode({ recipe, initialStep }: { recipe: Recipe; initialStep:
         </p>
       </div>
 
-      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col overflow-y-auto px-5 py-6">
+      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col overflow-y-auto px-5 py-6">
         <p
           key={i}
           className="font-display text-[1.9rem] leading-[1.18] motion-safe:animate-price-in sm:text-[2.4rem]"
@@ -141,7 +141,7 @@ export function CookMode({ recipe, initialStep }: { recipe: Recipe; initialStep:
             <p className="mt-1 text-[17px] leading-relaxed text-snow/90">{step.why}</p>
           </div>
         ) : null}
-      </main>
+      </div>
 
       <footer className="flex gap-3 px-5 pb-[calc(env(safe-area-inset-bottom)+16px)] pt-3">
         <button

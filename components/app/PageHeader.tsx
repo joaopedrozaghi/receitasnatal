@@ -14,7 +14,7 @@ export function PageHeader({
   action?: ReactNode;
 }) {
   return (
-    <header className="grain bg-pine-deep px-5 pb-8 pt-[calc(env(safe-area-inset-top)+20px)] text-snow sm:px-8">
+    <header className="grain rounded-b-[2.25rem] bg-pine-deep px-5 pb-8 pt-[calc(env(safe-area-inset-top)+20px)] text-snow sm:px-8 lg:rounded-none">
       <div className="mx-auto max-w-4xl">
         <div className="flex items-center justify-between gap-3">
           {back ? (

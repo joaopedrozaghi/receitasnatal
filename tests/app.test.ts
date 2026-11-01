@@ -7,7 +7,6 @@ import {
   scaleIngredients,
   searchRecipes,
 } from "@/lib/app/recipe-model";
-import { checkCredentials, getCredentials, signSession, verifySession } from "@/lib/app/auth-core";
 
 describe("receitas", () => {
   it("tem mais de 100 receitas, com slugs únicos e conteúdo completo", () => {
@@ -57,37 +56,5 @@ describe("receitas", () => {
     expect(searchRecipes(recipes, "brigadeiro")[0]?.title).toMatch(/Brigadeiro/);
     expect(searchRecipes(recipes, "bacalhau").length).toBeGreaterThanOrEqual(2);
     expect(searchRecipes(recipes, "xyzabc")).toEqual([]);
-  });
-});
-
-describe("login padrão (sem banco de dados)", () => {
-  const env = {
-    NODE_ENV: "production",
-    APP_LOGIN: "Natal",
-    APP_PASSWORD: "Panetone-2026",
-  } as NodeJS.ProcessEnv;
-  const creds = getCredentials(env);
-
-  it("lê login e senha das variáveis de ambiente; em produção sem elas, não libera", () => {
-    expect(creds).toEqual({ login: "Natal", password: "Panetone-2026" });
-    expect(getCredentials({ NODE_ENV: "production" } as NodeJS.ProcessEnv)).toBeNull();
-  });
-
-  it("confere login sem diferenciar maiúsculas e senha exata", () => {
-    expect(checkCredentials(" natal ", "Panetone-2026", creds)).toBe(true);
-    expect(checkCredentials("natal", "panetone-2026", creds)).toBe(false);
-    expect(checkCredentials("outro", "Panetone-2026", creds)).toBe(false);
-    expect(checkCredentials("natal", "Panetone-2026", null)).toBe(false);
-  });
-
-  it("sessão assinada: válida, expira e cai quando a senha muda", () => {
-    const now = Date.now();
-    const token = signSession(creds!, now, env);
-    expect(verifySession(token, creds, now, env)).toBe(true);
-    expect(verifySession(token, creds, now + 91 * 86_400_000, env)).toBe(false);
-    expect(verifySession(token.replace(/.$/, "x"), creds, now, env)).toBe(false);
-    const changed = { login: "Natal", password: "Nova-senha" };
-    expect(verifySession(token, changed, now, env)).toBe(false);
-    expect(verifySession(undefined, creds, now, env)).toBe(false);
   });
 });

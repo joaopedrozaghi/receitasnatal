@@ -45,6 +45,19 @@ const config: Config = {
           "0%": { transform: "translateX(-120%) skewX(-20deg)" },
           "60%, 100%": { transform: "translateX(260%) skewX(-20deg)" },
         },
+        shake: {
+          "0%, 100%": { transform: "translateX(0)" },
+          "20%, 60%": { transform: "translateX(-6px)" },
+          "40%, 80%": { transform: "translateX(6px)" },
+        },
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(12px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "fade-in": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
         float: {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-8px)" },
@@ -55,6 +68,8 @@ const config: Config = {
         marquee: "marquee 40s linear infinite",
         shine: "shine 3.6s ease-in-out infinite",
         float: "float 6s ease-in-out infinite",
+        "fade-in": "fade-in 0.35s ease-out both",
+        "fade-up": "fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both",
       },
     },
   },

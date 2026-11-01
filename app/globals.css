@@ -87,3 +87,11 @@
     transition-duration: 0.001ms !important;
   }
 }
+
+/* carrosséis do app sem barra de rolagem visível */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

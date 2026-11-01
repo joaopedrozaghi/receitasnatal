@@ -137,33 +137,44 @@ A página é estática e é regenerada a cada minuto; o preço da fase também �
 
 ## App de receitas (área de membros em `/app`)
 
-O produto é um web app dentro deste mesmo projeto: `https://SEU-DOMINIO/app`. Funciona como o app do
-protocolo creatina: **um login e uma senha padrão, iguais para todas as compradoras**, sem banco de dados.
+O produto é um web app dentro deste mesmo projeto: `https://SEU-DOMINIO/app`. Funciona como o app
+`edfisica`: **cada compradora cria a própria conta (nome, e-mail e senha) usando um código de acesso**, que
+é o mesmo para todo mundo que compra e vai no e-mail de entrega. Não há banco de dados na nuvem.
 
 **O que tem:** 102 receitas em 7 categorias (`content/recipes/`), busca por nome ou ingrediente, porções
 ajustáveis, lista de compras que soma itens repetidos, favoritos, modo cozinha (tela acesa, um passo por
-vez, timer com alarme e o "por quê" de cada etapa), "continuar de onde parou", Guia SOS, calculadora de
-preço, os 3 bônus e instalação na tela inicial.
+vez, timer com alarme e o "por quê" de cada etapa), "continuar de onde parou", cronograma da ceia, Guia
+SOS, calculadora de preço, os 3 bônus e instalação na tela inicial.
 
-**Onde ficam os dados da cliente:** favoritos, lista de compras e progresso ficam salvos no próprio
-aparelho (no navegador). Não há nada na nuvem; se ela trocar de celular, começa a lista do zero.
+**Onde ficam os dados:** a conta e os dados dela (favoritos, lista, progresso, cronograma) ficam salvos no
+próprio aparelho, separados por conta (dá para ter mais de uma pessoa no mesmo celular). A senha é guardada
+com hash PBKDF2, nunca em texto. Em outro celular, a cliente cria a conta de novo com o mesmo código.
 
-### Configurar (uma vez)
+### Configurar o código de acesso (uma vez)
 
-1. Na Vercel: *Settings → Environment Variables* → crie `APP_LOGIN` e `APP_PASSWORD` com o login e a
-   senha que você quer entregar. **Não coloque a senha no código**: este repositório é público.
-2. *Deployments → Redeploy*.
-3. Na plataforma de checkout (Kiwify, Hotmart, Eduzz…), coloque na mensagem/e-mail de entrega:
-   o link `https://SEU-DOMINIO/app`, o login e a senha.
+O código padrão é `NATAL2026`. **Troque antes de vender**, porque o repositório é público:
 
-A senha é conferida no servidor (não aparece no código do site), a sessão fica num cookie assinado por 90
-dias e há limite de tentativas. **Trocar a senha** (ex.: na próxima edição, ou se ela vazar) desloga todo
-mundo; avise as compradoras atuais da senha nova.
+1. Escolha um código (ex.: `PANETONE-ROSE-7Q2`) e gere o hash dele:
+
+   ```bash
+   npm run app:codigo -- PANETONE-ROSE-7Q2
+   ```
+
+2. Cole o hash que aparecer em `config/site.config.ts` → `app.accessCodeHashes` (no lugar do atual) e faça
+   commit + push. Só o hash fica no código, não o código.
+3. Na plataforma de checkout (Kiwify, Hotmart, Eduzz…), coloque na mensagem/e-mail de entrega: o link
+   `https://SEU-DOMINIO/app` e o código de acesso.
+
+Dá para ter mais de um código válido ao mesmo tempo (ex.: o antigo e o novo): é só deixar os dois hashes
+na lista. Maiúsculas e espaços no código não importam.
+
+**Limite (igual ao edfisica):** é uma barreira leve. Como tudo roda no navegador, quem entende de
+programação consegue contornar. Para conteúdo de receitas, costuma ser suficiente; se um dia precisar de
+bloqueio forte, é preciso um servidor com banco de dados.
 
 ### Testar no computador
 
-Crie um `.env.local` com `APP_LOGIN` e `APP_PASSWORD` e rode `npm run dev`. Sem esse arquivo, em
-desenvolvimento o login de teste é `natal` / `panetone`.
+`npm run dev`, abra `http://localhost:3000/app`, toque em **Criar conta** e use o código atual.
 
 ### Editar receitas
 

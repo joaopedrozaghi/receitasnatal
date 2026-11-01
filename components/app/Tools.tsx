@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { useLocalStore } from "@/lib/app/local-store";
 
 const brl = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 const num = (s: string) => {
@@ -124,7 +125,7 @@ export function PriceCalculator() {
   );
 }
 
-/** Checklist salvo no próprio aparelho. */
+/** Checklist salvo no aparelho, separado por conta. */
 export function Checklist({
   storageKey,
   groups,
@@ -132,23 +133,8 @@ export function Checklist({
   storageKey: string;
   groups: { title: string; items: { id: string; label: string }[] }[];
 }) {
-  const [done, setDone] = useState<Record<string, boolean>>({});
-  useEffect(() => {
-    try {
-      setDone(JSON.parse(localStorage.getItem(storageKey) ?? "{}"));
-    } catch {
-      /* sem storage */
-    }
-  }, [storageKey]);
-  const toggle = (id: string) => {
-    const next = { ...done, [id]: !done[id] };
-    setDone(next);
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(next));
-    } catch {
-      /* sem storage */
-    }
-  };
+  const [done, update] = useLocalStore<Record<string, boolean>>(storageKey, {});
+  const toggle = (id: string) => update((prev) => ({ ...prev, [id]: !prev[id] }));
   const total = useMemo(() => groups.reduce((s, g) => s + g.items.length, 0), [groups]);
   const count = Object.values(done).filter(Boolean).length;
   return (

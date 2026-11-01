@@ -19,7 +19,7 @@ export default function BonusPage() {
           <h2 className="mt-1 text-3xl">Cronograma da Ceia em 72 horas</h2>
           <p className="mt-2 text-cocoa-muted">Marque o que já fez. Fica salvo neste aparelho.</p>
           <div className="mt-5">
-            <Checklist storageKey="rr_cronograma" groups={cronograma} />
+            <Checklist storageKey="cronograma" groups={cronograma} />
           </div>
         </section>
 

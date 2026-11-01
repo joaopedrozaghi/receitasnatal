@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { isAuthConfigured } from "@/lib/app/session";
+import { AuthProvider } from "@/components/app/AuthProvider";
 
 export const metadata: Metadata = {
   title: { default: "App Especial de Natal", template: "%s · App da Rô" },
@@ -17,22 +17,5 @@ export const viewport: Viewport = {
 };
 
 export default function AppRootLayout({ children }: { children: React.ReactNode }) {
-  // Publicado sem login/senha configurados (APP_LOGIN / APP_PASSWORD): aviso amigável em vez de erro.
-  if (!isAuthConfigured()) {
-    return (
-      <main className="grain flex min-h-[100dvh] items-center justify-center bg-pine-deep px-6 text-center text-snow">
-        <div className="max-w-md">
-          <p className="font-display text-3xl">
-            Receitinhas <span className="italic text-gold">da Rô</span>
-          </p>
-          <h1 className="mt-6 text-3xl !text-snow">O app está quase pronto 🎄</h1>
-          <p className="mt-3 text-snow/75">
-            Estamos finalizando a configuração. Se você já comprou, o seu acesso chega por e-mail assim que
-            tudo estiver no ar.
-          </p>
-        </div>
-      </main>
-    );
-  }
-  return children;
+  return <AuthProvider>{children}</AuthProvider>;
 }

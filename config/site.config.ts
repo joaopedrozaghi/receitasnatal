@@ -99,6 +99,10 @@ export const siteConfigSchema = z
     }),
     bonuses: z.array(z.object({ id: z.string(), referenceValue: z.number().positive().nullable() })),
     guarantee: z.object({ days: z.number().int().min(7) }),
+    app: z.object({
+      /** SHA-256 (hex minúsculo) dos códigos de acesso válidos. Gere com: npm run app:codigo -- SEUCODIGO */
+      accessCodeHashes: z.array(z.string().regex(/^[0-9a-f]{64}$/)).min(1),
+    }),
     social: z.object({ instagram: z.string(), tiktok: z.string() }),
     testimonials: z.array(testimonialSchema),
     proofStats: z.array(proofStatSchema),
@@ -213,6 +217,12 @@ export const rawConfig = {
   ],
 
   guarantee: { days: 7 }, // CDC art. 49
+
+  // App em /app: a cliente cria a conta com o CÓDIGO DE ACESSO que você manda no e-mail da compra
+  // (o mesmo para todas). Aqui fica só o hash do código. Código inicial: NATAL2026 (troque!).
+  app: {
+    accessCodeHashes: ["aa0ddc6392b4994611cc3577efb16de223bbc52948f78427ac64734505d774b0"],
+  },
 
   social: { instagram: "", tiktok: "" },
   testimonials: testimonialsData, // vazio = seção escondida (cadastre com npm run testimonial:add)
