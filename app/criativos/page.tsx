@@ -576,12 +576,221 @@ function Carousel({ format, tone, price }: { format: "square" | "feed"; tone: To
   );
 }
 
+/* ───────── Promo: panetone em destaque + preço ───────── */
+
+type Promo = "foto" | "selo" | "grade";
+const PROMOS: Promo[] = ["foto", "selo", "grade"];
+
+/** Selo redondo de preço, levemente girado. */
+function PriceSticker({ price, size }: { price: number; size: number }) {
+  return (
+    <div
+      className="grid place-items-center rounded-full bg-gradient-to-b from-[#D81F3D] to-berry text-center text-white shadow-[0_30px_60px_-20px_rgba(200,16,46,0.9)] ring-[6px] ring-white"
+      style={{ width: size, height: size, transform: "rotate(-10deg)" }}
+    >
+      <div>
+        <p className="font-bold uppercase tracking-[0.14em]" style={{ fontSize: size * 0.085 }}>
+          Por apenas
+        </p>
+        <p className="font-display leading-none" style={{ fontSize: size * 0.27 }}>
+          <span style={{ fontSize: size * 0.1 }} className="mr-1 align-top">
+            R$
+          </span>
+          {formatReais(price)}
+        </p>
+        <p className="font-semibold opacity-90" style={{ fontSize: size * 0.075 }}>
+          de <span className="line-through">R$ {formatReais(siteConfig.pricing.anchorPrice)}</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function PromoCreative({
+  promo,
+  format,
+  tone,
+  price,
+}: {
+  promo: Promo;
+  format: Format;
+  tone: Tone;
+  price: number;
+}) {
+  const [w, h] = SIZES[format];
+  const dark = tone === "dark";
+  const pad = format === "story" ? { top: 150, bottom: 260 } : { top: 70, bottom: 80 };
+  const titleSize = { story: 104, feed: 88, square: 74 }[format];
+  const sticker = { story: 330, feed: 290, square: 240 }[format];
+  const textMain = dark ? "text-snow" : "text-pine-deep";
+
+  if (promo === "foto") {
+    const photoH = { story: 1060, feed: 760, square: 560 }[format];
+    return (
+      <div
+        id="creative"
+        className="relative overflow-hidden"
+        style={{ width: w, height: h, fontFamily: "var(--font-sans)" }}
+      >
+        <Background dark={dark} />
+        <div className="absolute inset-x-0 top-0 overflow-hidden rounded-b-[64px]" style={{ height: photoH }}>
+          <Image
+            src="/images/app/receitas/panetone-trufado-de-chocolate.jpg"
+            alt=""
+            fill
+            priority
+            sizes="1080px"
+            className="object-cover"
+            style={{ objectPosition: "50% 45%" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-transparent to-transparent" />
+        </div>
+        <div className="absolute inset-x-0" style={{ top: pad.top - 10, padding: "0 72px" }}>
+          <TopBar dark />
+        </div>
+        <div className="absolute" style={{ right: 60, top: photoH - sticker * 0.7 }}>
+          <PriceSticker price={price} size={sticker} />
+        </div>
+        <div
+          className="absolute inset-x-0 flex flex-col"
+          style={{ top: photoH + 50, bottom: pad.bottom, padding: "0 72px" }}
+        >
+          <p className={kickerCls(dark)}>Receita completa no app</p>
+          <h1 className={`mt-3 ${titleCls(dark)}`} style={{ fontSize: titleSize, maxWidth: 700 }}>
+            Panetone trufado <em>de confeitaria</em>, feito em casa.
+          </h1>
+          <div className="mt-auto flex flex-col items-start gap-5">
+            <Cta dark={dark}>Ver a receita</Cta>
+            {format !== "square" ? <Trust dark={dark} /> : null}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (promo === "selo") {
+    const circle = { story: 640, feed: 520, square: 400 }[format];
+    return (
+      <div
+        id="creative"
+        className="relative overflow-hidden"
+        style={{ width: w, height: h, fontFamily: "var(--font-sans)" }}
+      >
+        <Background dark={dark} />
+        <div
+          className="relative flex h-full flex-col items-center text-center"
+          style={{ padding: `${pad.top}px 72px ${pad.bottom}px` }}
+        >
+          <div className="w-full">
+            <TopBar dark={dark} />
+          </div>
+          <h1 className={`mt-10 ${titleCls(dark)}`} style={{ fontSize: titleSize * 0.92, maxWidth: 900 }}>
+            102 receitas de Natal por <em>menos de R$ 25.</em>
+          </h1>
+          <div className="relative my-auto" style={{ width: circle, height: circle }}>
+            <div
+              className={`absolute -inset-5 rounded-full border-[3px] border-dashed ${dark ? "border-gold/60" : "border-pine/30"}`}
+            />
+            <div className="relative h-full w-full overflow-hidden rounded-full shadow-[0_40px_90px_-30px_rgba(0,0,0,0.6)]">
+              <Image
+                src="/images/app/receitas/panetone-classico-de-frutas.jpg"
+                alt=""
+                fill
+                priority
+                sizes="700px"
+                className="object-cover"
+              />
+            </div>
+            <div className="absolute" style={{ right: -sticker * 0.35, bottom: -sticker * 0.15 }}>
+              <PriceSticker price={price} size={sticker * 0.9} />
+            </div>
+          </div>
+          <div className="space-y-4">
+            <Cta dark={dark}>Garantir acesso</Cta>
+            {format !== "square" ? (
+              <div className="flex justify-center">
+                <Trust dark={dark} />
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // grade de panetones
+  const items = [
+    ["panetone-trufado-de-chocolate", "Trufado"],
+    ["chocotone", "Chocotone"],
+    ["panetone-de-doce-de-leite", "Doce de leite"],
+    ["panetone-de-frutas-vermelhas", "Frutas vermelhas"],
+  ];
+  const gridH = { story: 900, feed: 640, square: 470 }[format];
+  return (
+    <div
+      id="creative"
+      className="relative overflow-hidden"
+      style={{ width: w, height: h, fontFamily: "var(--font-sans)" }}
+    >
+      <Background dark={dark} />
+      <div className="relative flex h-full flex-col" style={{ padding: `${pad.top}px 72px ${pad.bottom}px` }}>
+        <TopBar dark={dark} />
+        <h1 className={`mt-10 ${titleCls(dark)}`} style={{ fontSize: titleSize }}>
+          16 panetones. <em>Um preço só.</em>
+        </h1>
+        <div className="mt-8 grid grid-cols-2 gap-5" style={{ height: gridH }}>
+          {items.map(([slug, label]) => (
+            <div key={slug} className="relative overflow-hidden rounded-[32px] shadow-soft">
+              <Image
+                src={`/images/app/receitas/${slug}.jpg`}
+                alt=""
+                fill
+                priority
+                sizes="520px"
+                className="object-cover"
+              />
+              <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-5 pt-14 text-[30px] font-semibold text-white">
+                {label}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div
+          className={`mt-auto flex items-center justify-between gap-6 rounded-[36px] p-6 pl-9 ${dark ? "bg-white/[0.08] ring-1 ring-white/15" : "bg-pine-soft"}`}
+        >
+          <div className={textMain}>
+            <p className="text-[26px] font-semibold opacity-75">
+              + 86 receitas · de{" "}
+              <span className="line-through">R$ {formatReais(siteConfig.pricing.anchorPrice)}</span> por
+            </p>
+            <p
+              className={`font-display leading-none ${dark ? "text-gold-light" : "text-pine-deep"}`}
+              style={{ fontSize: format === "square" ? 76 : 92 }}
+            >
+              <span className="mr-2 align-top text-[0.4em]">R$</span>
+              {formatReais(price)}
+            </p>
+          </div>
+          <Cta dark={dark}>Garantir</Cta>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const FORMATS = Object.keys(SIZES) as Format[];
 
 export default async function CriativosPage({
   searchParams,
 }: {
-  searchParams: Promise<{ c?: string; f?: string; tone?: string; p?: string; carrossel?: string }>;
+  searchParams: Promise<{
+    c?: string;
+    f?: string;
+    tone?: string;
+    p?: string;
+    carrossel?: string;
+    promo?: string;
+  }>;
 }) {
   if (process.env.NODE_ENV === "production") notFound();
   const q = await searchParams;
@@ -595,6 +804,13 @@ export default async function CriativosPage({
       <>
         {hideDev}
         <Carousel format={q.carrossel} tone={tone} price={price} />
+      </>
+    );
+  if (q.promo && PROMOS.includes(q.promo as Promo) && FORMATS.includes(q.f as Format))
+    return (
+      <>
+        {hideDev}
+        <PromoCreative promo={q.promo as Promo} format={q.f as Format} tone={tone} price={price} />
       </>
     );
   if (q.c && q.f && q.c in CONCEPTS && FORMATS.includes(q.f as Format))

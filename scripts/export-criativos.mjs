@@ -22,6 +22,13 @@ for (const [toneName, tone] of Object.entries(TONES)) {
   for (const c of CONCEPTS)
     for (const f of Object.keys(SIZES))
       jobs.push({ name: `${toneName}/${c}-${f}`, q: `c=${c}&f=${f}&tone=${tone}`, size: SIZES[f] });
+  for (const promo of ["foto", "selo", "grade"])
+    for (const f of Object.keys(SIZES))
+      jobs.push({
+        name: `${toneName}/panetone-${promo}-${f}`,
+        q: `promo=${promo}&f=${f}&tone=${tone}`,
+        size: SIZES[f],
+      });
   jobs.push({
     name: `${toneName}/carrossel-quadrado`,
     q: `carrossel=square&tone=${tone}`,
