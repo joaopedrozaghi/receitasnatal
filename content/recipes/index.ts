@@ -7,8 +7,11 @@ import { paes } from "@/content/recipes/paes";
 import { panetones } from "@/content/recipes/panetones";
 import { salgados } from "@/content/recipes/salgados";
 import { sobremesas } from "@/content/recipes/sobremesas";
+import { RECIPES_WITH_PHOTO } from "@/content/recipes/photos";
 
 export { categories };
+
+const withPhoto = new Set(RECIPES_WITH_PHOTO);
 
 export const recipes: Recipe[] = [
   ...panetones,
@@ -18,7 +21,7 @@ export const recipes: Recipe[] = [
   ...sobremesas,
   ...paes,
   ...biscoitos,
-];
+].map((rec) => (withPhoto.has(rec.slug) ? { ...rec, photo: `/images/app/receitas/${rec.slug}.jpg` } : rec));
 
 const bySlug = new Map(recipes.map((rec) => [rec.slug, rec]));
 

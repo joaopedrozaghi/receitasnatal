@@ -77,14 +77,14 @@ export const copy = {
         caption: "Ceia completa",
       },
       {
-        src: "/images/receitas/biscoitos-papai-noel.jpg",
-        alt: "Biscoitos decorados de Papai Noel e boneco de gengibre",
-        caption: "Biscoitos decorados",
+        src: "/images/receitas/mesa-docinhos.jpg",
+        alt: "Mesa de festa com bandejas de docinhos, brigadeiros e bombons",
+        caption: "Docinhos de festa",
       },
       {
-        src: "/images/receitas/panetone-salgado.jpg",
-        alt: "Panetone salgado dourado com queijo e calabresa",
-        caption: "Panetone salgado",
+        src: "/images/receitas/coxinhas.jpg",
+        alt: "Coxinhas douradas em volta de uma tigela de molho",
+        caption: "Salgados de festa",
       },
       {
         src: "/images/receitas/biscoitos-arvore.jpg",
@@ -110,11 +110,13 @@ export const copy = {
       {
         icon: "truffle",
         title: "Docinhos de festa",
+        photo: "/images/receitas/mesa-docinhos.jpg",
         examples: "Brigadeiro gourmet, beijinho, bicho-de-pé, trufas, camafeu, docinho de nozes.",
       },
       {
         icon: "savory",
         title: "Salgados de festa",
+        photo: "/images/receitas/salgados-festa.jpg",
         examples: "Coxinha cremosa, risoles, empadinha que desmancha, enroladinho, esfiha.",
       },
       {
@@ -126,11 +128,13 @@ export const copy = {
       {
         icon: "dessert",
         title: "Sobremesas natalinas",
+        photo: "/images/receitas/pudim.jpg",
         examples: "Rabanada sequinha, pavê, torta holandesa, pudim, mousse de maracujá.",
       },
       {
         icon: "wreath",
         title: "Pães, roscas e bolos",
+        photo: "/images/receitas/paes.jpg",
         examples: "Rosca doce, pão de mel, bolo de frutas, pão de nozes para a ceia.",
       },
       {
@@ -203,7 +207,7 @@ export const copy = {
       categoriesTitle: "Categorias",
       categories: [
         { name: "Panetones", photo: "/images/receitas/panetones-trufados.jpg", focus: "30% 70%" },
-        { name: "Salgados", photo: "/images/receitas/panetone-salgado.jpg", focus: "50% 45%" },
+        { name: "Salgados", photo: "/images/receitas/coxinhas.jpg", focus: "50% 55%" },
         { name: "Biscoitos", photo: "/images/receitas/biscoitos-papai-noel.jpg", focus: "50% 60%" },
         { name: "Ceia", photo: "/images/receitas/mesa-ceia.jpg", focus: "40% 30%" },
       ],

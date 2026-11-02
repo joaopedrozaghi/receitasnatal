@@ -3,15 +3,16 @@ import type { Category } from "@/lib/app/recipe-model";
 export const categories: Category[] = [
   {
     id: "panetones",
+    photo: "/images/app/categorias/panetones.jpg",
     name: "Panetones e chocotones",
     short: "Panetones",
     icon: "panettone",
     tint: "bg-[#F6E3C4] text-gold-text",
-    photo: "/images/receitas/panetones-trufados.jpg",
     description: "Do clássico de frutas ao trufado, doces e salgados.",
   },
   {
     id: "docinhos",
+    photo: "/images/app/categorias/docinhos.jpg",
     name: "Docinhos de festa",
     short: "Docinhos",
     icon: "truffle",
@@ -20,24 +21,25 @@ export const categories: Category[] = [
   },
   {
     id: "salgados",
+    photo: "/images/app/categorias/salgados.jpg",
     name: "Salgados de festa",
     short: "Salgados",
     icon: "savory",
     tint: "bg-pine-soft text-pine",
-    photo: "/images/receitas/panetone-salgado.jpg",
     description: "Coxinha, empadinha, bolinho de bacalhau e muito mais.",
   },
   {
     id: "ceia",
+    photo: "/images/app/categorias/ceia.jpg",
     name: "Ceia completa",
     short: "Ceia",
     icon: "roast",
     tint: "bg-[#F3E1D6] text-cocoa-soft",
-    photo: "/images/receitas/mesa-ceia.jpg",
     description: "Carnes, aves, arroz, farofas, saladas e acompanhamentos.",
   },
   {
     id: "sobremesas",
+    photo: "/images/app/categorias/sobremesas.jpg",
     name: "Sobremesas natalinas",
     short: "Sobremesas",
     icon: "dessert",
@@ -46,6 +48,7 @@ export const categories: Category[] = [
   },
   {
     id: "paes",
+    photo: "/images/app/categorias/paes.jpg",
     name: "Pães, roscas e bolos",
     short: "Pães e bolos",
     icon: "wreath",
@@ -54,11 +57,11 @@ export const categories: Category[] = [
   },
   {
     id: "biscoitos",
+    photo: "/images/app/categorias/biscoitos.jpg",
     name: "Biscoitos decorados",
     short: "Biscoitos",
     icon: "cookie",
     tint: "bg-[#E6EEF3] text-[#2E5670]",
-    photo: "/images/receitas/biscoitos-papai-noel.jpg",
     description: "Amanteigados, gengibre, glacê real e casinha.",
   },
 ];

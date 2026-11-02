@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { categories, getRecipe, recipes, recipesByCategory } from "@/content/recipes";
 import { Container } from "@/components/app/PageHeader";
@@ -86,7 +87,11 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
     .map(toCardData);
   const rails = (["panetones", "docinhos", "ceia"] as const).map((id) => ({
     cat: categories.find((c) => c.id === id)!,
-    list: recipesByCategory(id).slice(0, 8).map(toCardData),
+    list: recipesByCategory(id)
+      .filter((r) => r.photo)
+      .concat(recipesByCategory(id).filter((r) => !r.photo))
+      .slice(0, 8)
+      .map(toCardData),
   }));
 
   return (
@@ -173,13 +178,28 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
                     href={`/app/categoria/${c.id}`}
                     className="group relative flex h-32 flex-col justify-end overflow-hidden rounded-3xl p-4 shadow-soft transition active:scale-[0.98]"
                   >
-                    <span className={`absolute inset-0 grid place-items-start p-4 ${c.tint}`}>
-                      <Icon name={c.icon} className="h-9 w-9" strokeWidth={1.4} />
-                    </span>
-                    <span className={`relative font-display text-lg leading-tight text-cocoa`}>
+                    {c.photo ? (
+                      <>
+                        <Image
+                          src={c.photo}
+                          alt=""
+                          fill
+                          sizes="(min-width: 1024px) 220px, 45vw"
+                          className="object-cover transition duration-500 group-hover:scale-105"
+                        />
+                        <span className="absolute inset-0 bg-gradient-to-t from-pine-deep/85 via-pine-deep/25 to-transparent" />
+                      </>
+                    ) : (
+                      <span className={`absolute inset-0 grid place-items-start p-4 ${c.tint}`}>
+                        <Icon name={c.icon} className="h-9 w-9" strokeWidth={1.4} />
+                      </span>
+                    )}
+                    <span
+                      className={`relative font-display text-lg leading-tight ${c.photo ? "text-white" : "text-cocoa"}`}
+                    >
                       {c.short}
                     </span>
-                    <span className={`relative text-xs text-cocoa-muted`}>
+                    <span className={`relative text-xs ${c.photo ? "text-white/80" : "text-cocoa-muted"}`}>
                       {recipesByCategory(c.id).length} receitas
                     </span>
                   </Link>

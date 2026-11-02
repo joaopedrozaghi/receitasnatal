@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCategory, getRecipe } from "@/content/recipes";
@@ -22,10 +23,24 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
   return (
     <>
       <header className="grain relative overflow-hidden rounded-b-[2.25rem] bg-pine-deep text-snow lg:rounded-none">
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_70%_at_95%_0%,rgba(212,162,76,0.3)_0%,transparent_70%),radial-gradient(40%_50%_at_0%_100%,rgba(200,16,46,0.16)_0%,transparent_70%)]"
-        />
+        {recipe.photo ? (
+          <>
+            <Image
+              src={recipe.photo}
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover opacity-55"
+            />
+            <span className="absolute inset-0 bg-gradient-to-t from-pine-deep via-pine-deep/70 to-pine-deep/25" />
+          </>
+        ) : (
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_70%_at_95%_0%,rgba(212,162,76,0.3)_0%,transparent_70%),radial-gradient(40%_50%_at_0%_100%,rgba(200,16,46,0.16)_0%,transparent_70%)]"
+          />
+        )}
         <div className="relative mx-auto max-w-4xl px-5 pb-8 pt-[calc(env(safe-area-inset-top)+16px)] sm:px-8">
           <div className="flex items-center justify-between gap-3">
             <Link

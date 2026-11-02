@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { categories } from "@/content/recipes/categories";
 import { LEVELS, formatDuration, type Recipe } from "@/lib/app/recipe-model";
@@ -21,16 +22,24 @@ export const toCardData = (r: Recipe): RecipeCardData => ({
 });
 import { Icon } from "@/components/ui/Icon";
 
-/** Capa da receita: ilustração da categoria (o app não usa fotos). */
+/** Capa da receita: a foto, ou (sem foto) o ícone da categoria sobre uma grade. */
 export function RecipeCover({
   recipe,
   className = "",
+  sizes = "300px",
 }: {
   recipe: RecipeCardData;
   className?: string;
   sizes?: string;
 }) {
   const cat = categories.find((c) => c.id === recipe.category);
+  if (recipe.photo) {
+    return (
+      <span className={`relative block overflow-hidden bg-ivory-deep ${className}`}>
+        <Image src={recipe.photo} alt="" fill sizes={sizes} className="object-cover" />
+      </span>
+    );
+  }
   return (
     <span
       className={`relative grid place-items-center overflow-hidden ${cat?.tint ?? "bg-ivory-deep"} ${className}`}
