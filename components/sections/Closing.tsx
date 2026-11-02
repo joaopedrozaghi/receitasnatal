@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { siteConfig } from "@/config/site.config";
 import { copy } from "@/content/copy.ptBR";
 import { chefDisclosure, getStaticVars, shouldShowDisclosure, t } from "@/lib/offer";
@@ -8,7 +7,6 @@ import { IPhone } from "@/components/phone/IPhone";
 import { HomeScreen } from "@/components/phone/Screens";
 import { OrangeSlice, Sprig, Star } from "@/components/decor/Ornaments";
 import { SiteLogo } from "@/components/sections/Hero";
-import { ManageCookiesButton } from "@/components/tracking/CookieBanner";
 import { Accordion } from "@/components/ui/Accordion";
 import { Icon } from "@/components/ui/Icon";
 import { Kicker } from "@/components/ui/Kicker";
@@ -176,54 +174,24 @@ export function FinalCta() {
 
 /** Rodapé */
 export function Footer() {
-  const c = copy.footer;
   const showDisclosure = shouldShowDisclosure();
+  const email = siteConfig.brand.supportEmail;
   return (
-    <footer id="rodape" className="bg-cocoa pb-28 pt-14 text-snow/75 md:pb-14">
-      <div className="container-page grid gap-10 md:grid-cols-[1.2fr_1fr]">
-        <div>
-          <SiteLogo />
-          <p className="mt-3 max-w-md text-sm leading-relaxed">{siteConfig.brand.tagline}</p>
-          {showDisclosure ? (
-            <p data-testid="footer-disclosure" className="mt-4 max-w-md text-sm leading-relaxed">
-              {chefDisclosure()}
-            </p>
-          ) : null}
-        </div>
-        <nav aria-label="Links do rodapé">
-          <ul className="grid grid-cols-1 gap-1 text-sm sm:grid-cols-2">
-            {[
-              { href: "/sobre", label: c.links.about },
-              { href: "/termos", label: c.links.terms },
-              { href: "/privacidade", label: c.links.privacy },
-              { href: "/politica-de-reembolso", label: c.links.refund },
-              { href: `mailto:${siteConfig.brand.supportEmail}`, label: c.links.contact },
-            ].map((l) => (
-              <li key={l.href}>
-                <Link
-                  href={l.href}
-                  className="inline-flex min-h-[44px] items-center hover:text-gold-light hover:underline"
-                >
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <ManageCookiesButton className="inline-flex min-h-[44px] items-center hover:text-gold-light hover:underline">
-                {c.links.cookies}
-              </ManageCookiesButton>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      <div className="container-page mt-10 border-t border-white/10 pt-6 text-xs leading-relaxed text-snow/70">
-        <p>{c.disclaimer}</p>
-        <p className="mt-2">
-          {t(c.company)} · {siteConfig.brand.supportEmail}
-        </p>
-        <p className="mt-2">
-          © {siteConfig.brand.editionYear} {siteConfig.brand.name}
-        </p>
+    <footer id="rodape" className="bg-cocoa pb-28 pt-12 text-center text-snow/75 md:pb-12">
+      <div className="container-page flex flex-col items-center gap-3">
+        <SiteLogo />
+        {showDisclosure ? (
+          <p data-testid="footer-disclosure" className="max-w-md text-sm leading-relaxed">
+            {chefDisclosure()}
+          </p>
+        ) : null}
+        <p className="text-sm">Criado em {siteConfig.brand.editionYear}</p>
+        <a
+          href={`mailto:${email}`}
+          className="inline-flex min-h-[44px] items-center text-sm hover:text-gold-light hover:underline"
+        >
+          {email}
+        </a>
       </div>
     </footer>
   );

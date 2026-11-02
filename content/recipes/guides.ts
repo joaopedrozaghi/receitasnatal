@@ -217,29 +217,35 @@ export const cronograma: { title: string; items: ChecklistItem[] }[] = [
   },
 ];
 
-export const packaging: { title: string; text: string }[] = [
+export const packaging: { title: string; text: string; photo?: string }[] = [
   {
     title: "Panetone de 500 g",
+    photo: "/images/embalagens/panetone-500g.jpg",
     text: "Saco de polipropileno (celofane) com fecho de arame dourado, fita de cetim e etiqueta com sabor e validade (7 dias para frutas, 5 para recheados).",
   },
   {
     title: "Mini panetones",
+    photo: "/images/embalagens/mini-panetones.jpg",
     text: "Saquinho celofane individual + caixinha de papel kraft para 4 unidades. Ótimo para empresas e lembrancinhas.",
   },
   {
     title: "Docinhos",
+    photo: "/images/embalagens/docinhos.jpg",
     text: "Forminhas de papel nº 4, caixas de 4, 6 ou 12 unidades com berço. Guarde em local fresco e entregue em até 3 dias.",
   },
   {
     title: "Biscoitos decorados",
+    photo: "/images/embalagens/biscoitos.jpg",
     text: "Saquinho individual selado (o glacê precisa estar totalmente seco, 8 horas). Pote de vidro para biscoitos simples.",
   },
   {
     title: "Cesta de Natal",
+    photo: "/images/embalagens/cesta.jpg",
     text: "Base de caixa de madeira ou kraft, palha de papel no fundo, itens maiores atrás e menores na frente, cartão escrito à mão.",
   },
   {
     title: "Etiqueta",
+    photo: "/images/embalagens/etiqueta.jpg",
     text: "Nome do produto, ingredientes principais, data de fabricação, validade, alérgenos (contém glúten, leite, ovos, castanhas) e seu contato.",
   },
 ];

@@ -300,18 +300,21 @@ export const copy = {
       {
         id: "cronograma",
         tag: "Bônus 1",
+        photo: "/images/receitas/mesa-ceia.jpg",
         title: "Cronograma da Ceia em 72 horas",
         text: "O que comprar, o que adiantar e o que deixar para o dia. Checklist para chegar na noite do dia 24 sem correria.",
       },
       {
         id: "substituicoes",
         tag: "Bônus 2",
+        photo: "/images/receitas/paes.jpg",
         title: "Guia de Substituições",
         text: "Faltou um ingrediente? Precisa de versão sem lactose? Trocas práticas para não travar no meio da receita.", // CONFIRMAR
       },
       {
         id: "embalagem",
         tag: "Bônus 3",
+        photo: "/images/embalagens/presentes.jpg",
         title: "Guia de Embalagem e Apresentação",
         text: "Embalagens, etiquetas e montagem de cestas para presentear lindo ou vender bem.",
       },

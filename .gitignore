@@ -21,3 +21,6 @@ next-env.d.ts
 
 # banco local do app (desenvolvimento)
 .data/
+
+# PNGs gerados por scripts/export-criativos.mjs
+/criativos/

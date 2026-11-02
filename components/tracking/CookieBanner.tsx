@@ -6,6 +6,13 @@ import { useEffect, useState } from "react";
 import { copy } from "@/content/copy.ptBR";
 import { OPEN_PREFERENCES_EVENT, readConsent, writeConsent } from "@/lib/consent";
 
+// O banner só existe quando há algum pixel configurado (é o que exige o consentimento).
+const HAS_PIXELS = Boolean(
+  process.env.NEXT_PUBLIC_META_PIXEL_ID ||
+    process.env.NEXT_PUBLIC_GA4_ID ||
+    process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID,
+);
+
 /** Banner LGPD: cookies não essenciais ficam bloqueados até o aceite. */
 export function CookieBanner() {
   const pathname = usePathname();
@@ -29,7 +36,7 @@ export function CookieBanner() {
   }, []);
 
   // dentro do app (área de membros) não há pixels nem anúncios: só cookie essencial de sessão
-  if (!open || pathname.startsWith("/app")) return null;
+  if (!HAS_PIXELS || !open || pathname.startsWith("/app") || pathname.startsWith("/criativos")) return null;
 
   const save = (choice: { analytics: boolean; marketing: boolean }) => {
     writeConsent(choice);

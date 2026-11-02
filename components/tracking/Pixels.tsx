@@ -29,7 +29,7 @@ export function Pixels() {
     return () => window.clearTimeout(id);
   }, [consent?.marketing, consent?.analytics]);
 
-  if (!consent || pathname.startsWith("/app")) return null;
+  if (!consent || pathname.startsWith("/app") || pathname.startsWith("/criativos")) return null;
 
   return (
     <>

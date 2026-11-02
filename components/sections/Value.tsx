@@ -32,12 +32,25 @@ export function Bonus() {
                 delay={i * 0.06}
                 className="relative overflow-hidden rounded-[1.75rem] bg-gradient-to-b from-[#FFF4DD] to-white p-7 ring-1 ring-gold/40"
               >
+                {b.photo ? (
+                  <span className="relative -mx-7 -mt-7 mb-6 block h-44">
+                    <Image
+                      src={b.photo}
+                      alt=""
+                      fill
+                      sizes="(min-width: 768px) 380px, 92vw"
+                      className="object-cover"
+                    />
+                  </span>
+                ) : null}
                 {/* laço de presente */}
                 <span aria-hidden="true" className="absolute inset-y-0 right-10 w-3 bg-berry/10" />
                 <span className="inline-flex rounded-full bg-berry px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
                   {b.tag}
                 </span>
-                <Icon name={icons[i] ?? "gift"} className="absolute right-6 top-6 h-8 w-8 text-gold-text" />
+                {b.photo ? null : (
+                  <Icon name={icons[i] ?? "gift"} className="absolute right-6 top-6 h-8 w-8 text-gold-text" />
+                )}
                 <h3 className="mt-6 text-2xl leading-tight">{b.title}</h3>
                 <p className="mt-2 leading-relaxed">{b.text}</p>
                 {ref ? (

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { cronograma, packaging, substitutions } from "@/content/recipes/guides";
 import { Container, PageHeader } from "@/components/app/PageHeader";
 import { Checklist } from "@/components/app/Tools";
@@ -44,9 +45,25 @@ export default function BonusPage() {
           <h2 className="mt-1 text-3xl">Guia de Embalagem e Apresentação</h2>
           <ul className="mt-5 grid gap-3 sm:grid-cols-2">
             {packaging.map((p) => (
-              <li key={p.title} className="rounded-2xl bg-white p-5 shadow-soft">
-                <p className="font-display text-xl text-cocoa">{p.title}</p>
-                <p className="mt-1 text-[15px] leading-relaxed">{p.text}</p>
+              <li
+                key={p.title}
+                className="overflow-hidden rounded-3xl bg-white shadow-soft ring-1 ring-cocoa/5"
+              >
+                {p.photo ? (
+                  <span className="relative block h-40">
+                    <Image
+                      src={p.photo}
+                      alt=""
+                      fill
+                      sizes="(min-width: 640px) 400px, 92vw"
+                      className="object-cover"
+                    />
+                  </span>
+                ) : null}
+                <span className="block p-5">
+                  <span className="block font-display text-xl text-cocoa">{p.title}</span>
+                  <span className="mt-1 block text-[15px] leading-relaxed">{p.text}</span>
+                </span>
               </li>
             ))}
           </ul>
