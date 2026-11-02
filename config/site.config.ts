@@ -188,8 +188,7 @@ export const rawConfig = {
     currency: "BRL",
     anchorPrice: 97,
     phases: [
-      { id: "lancamento", label: "Oferta de lançamento", price: 37, until: "2026-11-15T23:59:00-03:00" },
-      { id: "natal", label: "Oferta de Natal", price: 57, until: "2026-12-10T23:59:00-03:00" },
+      { id: "natal", label: "Oferta de Natal", price: 24.9, until: "2026-12-25T23:59:00-03:00" },
       { id: "cheio", label: "Preço cheio", price: 97, until: null },
     ],
     installments: { max: 3, interestFreeUpTo: 3, monthlyInterestRate: 0 }, // igual ao configurado na plataforma

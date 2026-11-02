@@ -3,20 +3,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
+import { siteConfig } from "@/config/site.config";
 import { IPhone } from "@/components/phone/IPhone";
 import { CookScreen, HomeScreen, PricingScreen, RecipeScreen } from "@/components/phone/Screens";
 import { Icon } from "@/components/ui/Icon";
+import { formatReais } from "@/lib/pricing";
 
 /**
  * Gerador de criativos para anúncios (Instagram/Facebook).
  * Só abre em desenvolvimento: `npm run dev` e acesse /criativos.
- * Cada criativo é exportado em PNG por scripts/export-criativos.mjs.
+ * Os PNGs saem com scripts/export-criativos.mjs.
  */
 export const metadata: Metadata = { title: "Criativos", robots: { index: false, follow: false } };
 
 type Format = "story" | "feed" | "square";
-type Concept = "solado" | "tudo" | "preco" | "renda" | "ceia";
-type Tone = "dark" | "light";
+type Tone = "dark" | "white";
+type Visual =
+  | { kind: "phone"; screen: "home" | "recipe" | "cook" | "pricing" }
+  | { kind: "model"; photo: string; focus?: string };
 
 const SIZES: Record<Format, [number, number]> = {
   story: [1080, 1920],
@@ -24,19 +28,21 @@ const SIZES: Record<Format, [number, number]> = {
   square: [1080, 1080],
 };
 
-const COPY: Record<
-  Concept,
-  {
-    title: ReactNode;
-    sub?: string;
-    bullets?: string[];
-    price?: boolean;
-    cta: string;
-    screen: "home" | "recipe" | "cook" | "pricing";
-    photo?: string;
-  }
-> = {
+interface Concept {
+  kicker: string;
+  title: ReactNode;
+  sub?: string;
+  bullets?: string[];
+  price?: boolean;
+  cta: string;
+  visual: Visual;
+  /** foto de fundo (só no tom escuro) */
+  bg?: string;
+}
+
+const CONCEPTS: Record<string, Concept> = {
   solado: {
+    kicker: "Para quem nunca acertou o panetone",
     title: (
       <>
         Chega de panetone <em>solado.</em>
@@ -45,9 +51,10 @@ const COPY: Record<
     sub: "102 receitas de Natal com passo a passo, do jeito da Rô.",
     bullets: ["Medidas em gramas", "Timer em cada etapa", "Guia SOS se der errado"],
     cta: "Garantir meu app",
-    screen: "recipe",
+    visual: { kind: "phone", screen: "recipe" },
   },
   tudo: {
+    kicker: "Especial de Natal completo",
     title: (
       <>
         Panetone, docinhos e ceia. <em>Num app só.</em>
@@ -56,9 +63,10 @@ const COPY: Record<
     sub: "Tudo que vai para a mesa de Natal, no seu celular.",
     bullets: ["102 receitas passo a passo", "Lista de compras automática", "Modo cozinha com timer"],
     cta: "Ver as receitas",
-    screen: "home",
+    visual: { kind: "phone", screen: "home" },
   },
   preco: {
+    kicker: "Oferta de Natal",
     title: (
       <>
         Pague uma vez. <em>Cozinhe o Natal inteiro.</em>
@@ -66,47 +74,77 @@ const COPY: Record<
     ),
     price: true,
     cta: "Garantir acesso",
-    screen: "home",
+    visual: { kind: "phone", screen: "home" },
   },
   renda: {
+    kicker: "Renda extra de fim de ano",
     title: (
       <>
         Seu Natal pode <em>pagar o seu janeiro.</em>
       </>
     ),
     sub: "Panetones e docinhos que vendem, e a calculadora que mostra o preço certo.",
-    bullets: ["Receitas que vendem", "Calculadora de preço", "Dicas de embalagem"],
+    bullets: ["Receitas que vendem", "Calculadora de preço", "Guia de embalagem"],
     cta: "Vender no Natal",
-    screen: "pricing",
+    visual: { kind: "phone", screen: "pricing" },
   },
   ceia: {
+    kicker: "Ceia sem correria",
     title: (
       <>
         Esse ano, a ceia <em>é você quem faz.</em>
       </>
     ),
     sub: "Pernil, farofa, rabanada e o panetone que todo mundo vai pedir a receita.",
+    bullets: ["Cronograma da ceia", "Porções que se ajustam", "Passo a passo com timer"],
     cta: "Começar agora",
-    screen: "cook",
-    photo: "/images/receitas/mesa-ceia.jpg",
+    visual: { kind: "phone", screen: "cook" },
+    bg: "/images/receitas/mesa-ceia.jpg",
+  },
+  rose: {
+    kicker: "Com Roseli Monteiro, a Rô",
+    title: (
+      <>
+        Eu te ensino o panetone <em>que vende sozinho.</em>
+      </>
+    ),
+    sub: "Coloquei minhas receitas de Natal num app, com cada passo explicado.",
+    bullets: ["Panetones e chocotones", "Docinhos e salgados", "Ceia completa"],
+    cta: "Aprender com a Rô",
+    visual: { kind: "model", photo: "/images/ro-panetone.jpg", focus: "50% 30%" },
+  },
+  roseOferta: {
+    kicker: "Especial de Natal da Rô",
+    title: (
+      <>
+        O Natal inteiro da Rô <em>no seu celular.</em>
+      </>
+    ),
+    price: true,
+    cta: "Garantir acesso",
+    visual: { kind: "model", photo: "/images/ro-retrato.jpg", focus: "50% 25%" },
+  },
+  roseCaderno: {
+    kicker: "Receitas de família",
+    title: (
+      <>
+        Do meu caderninho <em>pro seu celular.</em>
+      </>
+    ),
+    sub: "As receitas que eu faço todo Natal, agora com medidas exatas e o porquê de cada etapa.",
+    bullets: ["Tudo em gramas", "Cada passo com o porquê", "Funciona no celular"],
+    cta: "Ver as receitas",
+    visual: { kind: "model", photo: "/images/ro-cozinha.jpg", focus: "50% 30%" },
   },
 };
 
-function Check({ light }: { light: boolean }) {
+/* ───────── peças visuais ───────── */
+
+function CheckIcon({ className = "" }: { className?: string }) {
   return (
-    <span
-      className={`grid h-[1.25em] w-[1.25em] shrink-0 place-items-center rounded-[0.32em] ${light ? "bg-pine text-white" : "bg-gold text-pine-deep"}`}
-    >
-      <svg
-        viewBox="0 0 24 24"
-        className="h-[0.8em] w-[0.8em]"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3.4"
-      >
-        <path d="M5 12.5l4.5 4.5L19 7.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </span>
+    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="3.2">
+      <path d="M5 12.5l4.5 4.5L19 7.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }
 
@@ -124,34 +162,40 @@ function Arrow() {
   );
 }
 
-function Logo({ light }: { light: boolean }) {
+function TopBar({ dark, pager }: { dark: boolean; pager?: number }) {
   return (
-    <div className="flex items-center gap-[18px]">
-      <span
-        className={`grid h-[68px] w-[68px] place-items-center rounded-[20px] ring-1 ${light ? "bg-pine text-gold-light ring-pine" : "bg-white/10 text-gold-light ring-white/20"}`}
-      >
-        <Icon name="panettone" className="h-[38px] w-[38px]" strokeWidth={1.8} />
-      </span>
-      <span className={`font-display text-[42px] ${light ? "text-cocoa" : "text-snow"}`}>
-        Receitinhas <span className="italic text-gold">da Rô</span>
-      </span>
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-4">
+        <span
+          className={`grid h-[60px] w-[60px] place-items-center rounded-[18px] ${dark ? "bg-white/10 text-gold-light ring-1 ring-white/20" : "bg-pine text-gold-light"}`}
+        >
+          <Icon name="panettone" className="h-[34px] w-[34px]" strokeWidth={1.8} />
+        </span>
+        <span className={`font-display text-[38px] ${dark ? "text-snow" : "text-pine-deep"}`}>
+          Receitinhas <span className="italic text-gold">da Rô</span>
+        </span>
+      </div>
+      {pager ? (
+        <Pager n={pager} dark={dark} />
+      ) : (
+        <span
+          className={`rounded-full px-5 py-2.5 text-[22px] font-bold uppercase tracking-[0.14em] ${dark ? "bg-gold/15 text-gold-light ring-1 ring-gold/40" : "bg-pine-soft text-pine ring-1 ring-pine/20"}`}
+        >
+          Natal 2026
+        </span>
+      )}
     </div>
   );
 }
 
-function Screen({ which }: { which: "home" | "recipe" | "cook" | "pricing" }) {
-  if (which === "recipe") return <RecipeScreen />;
-  if (which === "cook") return <CookScreen />;
-  if (which === "pricing") return <PricingScreen />;
-  return <HomeScreen />;
-}
-
-function Background({ light, photo }: { light: boolean; photo?: string }) {
-  if (light)
+function Background({ dark, photo }: { dark: boolean; photo?: string }) {
+  if (!dark)
     return (
       <>
-        <div className="absolute inset-0 bg-ivory" />
-        <div className="absolute inset-0 bg-[radial-gradient(60%_45%_at_85%_80%,rgba(212,162,76,0.35)_0%,transparent_70%),radial-gradient(50%_40%_at_0%_0%,rgba(200,16,46,0.10)_0%,transparent_70%)]" />
+        <div className="absolute inset-0 bg-white" />
+        <div className="absolute inset-0 bg-[radial-gradient(55%_40%_at_100%_85%,rgba(15,61,46,0.16)_0%,transparent_70%),radial-gradient(45%_30%_at_0%_0%,rgba(212,162,76,0.18)_0%,transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(rgba(15,61,46,0.07)_1.5px,transparent_1.5px)] bg-[size:28px_28px] [mask-image:linear-gradient(to_bottom,black,transparent_60%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-[14px] bg-gradient-to-r from-pine via-gold to-pine" />
       </>
     );
   return (
@@ -159,67 +203,173 @@ function Background({ light, photo }: { light: boolean; photo?: string }) {
       <div className="absolute inset-0 bg-pine-deep" />
       {photo ? (
         <>
-          <Image src={photo} alt="" fill priority sizes="1080px" className="object-cover opacity-45" />
-          <div className="absolute inset-0 bg-gradient-to-b from-pine-deep via-pine-deep/70 to-pine-deep/30" />
+          <Image src={photo} alt="" fill priority sizes="1080px" className="object-cover opacity-40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-pine-deep via-pine-deep/75 to-pine-deep/30" />
         </>
       ) : null}
-      <div className="absolute inset-0 bg-[radial-gradient(60%_45%_at_90%_75%,rgba(212,162,76,0.32)_0%,transparent_70%),radial-gradient(55%_40%_at_0%_0%,rgba(200,16,46,0.22)_0%,transparent_70%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(60%_45%_at_95%_80%,rgba(212,162,76,0.30)_0%,transparent_70%),radial-gradient(55%_40%_at_0%_0%,rgba(200,16,46,0.20)_0%,transparent_70%)]" />
       <div className="grain absolute inset-0 opacity-70" />
+      <div className="absolute inset-x-0 bottom-0 h-[14px] bg-gradient-to-r from-berry via-gold to-berry" />
     </>
   );
 }
 
-function PriceBlock({ light, price, size }: { light: boolean; price: number; size: number }) {
+function PhoneVisual({ screen, format, dark }: { screen: string; format: Format; dark: boolean }) {
+  const pos = {
+    story: { right: -170, bottom: -470, width: 580 },
+    feed: { right: -90, bottom: -300, width: 500 },
+    square: { right: -80, bottom: -420, width: 440 },
+  }[format];
+  return (
+    <div className="absolute -rotate-[8deg]" style={pos}>
+      <div
+        className={`absolute -inset-16 rounded-full blur-3xl ${dark ? "bg-gold/20" : "bg-pine/15"}`}
+        aria-hidden="true"
+      />
+      <IPhone label="App Receitinhas da Rô" dark={screen === "cook"} overlayStatus={screen === "recipe"}>
+        {screen === "recipe" ? (
+          <RecipeScreen />
+        ) : screen === "cook" ? (
+          <CookScreen />
+        ) : screen === "pricing" ? (
+          <PricingScreen />
+        ) : (
+          <HomeScreen />
+        )}
+      </IPhone>
+    </div>
+  );
+}
+
+function ModelVisual({
+  photo,
+  focus,
+  format,
+  dark,
+}: {
+  photo: string;
+  focus?: string;
+  format: Format;
+  dark: boolean;
+}) {
+  const box = {
+    story: { right: 60, bottom: 330, width: 470, height: 760 },
+    feed: { right: 56, bottom: 110, width: 430, height: 640 },
+    square: { right: 56, bottom: 90, width: 370, height: 520 },
+  }[format];
+  return (
+    <div className="absolute" style={box}>
+      <div
+        className={`absolute -inset-4 rounded-b-[48px] rounded-t-full ${dark ? "ring-2 ring-gold/60" : "ring-2 ring-pine/30"}`}
+        aria-hidden="true"
+      />
+      <div className="relative h-full w-full overflow-hidden rounded-b-[40px] rounded-t-full shadow-[0_40px_80px_-30px_rgba(0,0,0,0.55)]">
+        <Image
+          src={photo}
+          alt=""
+          fill
+          priority
+          sizes="500px"
+          className="object-cover"
+          style={{ objectPosition: focus }}
+        />
+      </div>
+      <div
+        className={`absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-7 py-3.5 text-center shadow-lift ${dark ? "bg-snow text-pine-deep" : "bg-pine text-white"}`}
+      >
+        <span className="block font-display text-[30px] leading-none">Roseli Monteiro</span>
+        <span
+          className={`mt-1 block text-[18px] font-semibold uppercase tracking-[0.14em] ${dark ? "text-berry" : "text-gold-light"}`}
+        >
+          a Rô das Receitinhas
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function Price({ dark, price, size }: { dark: boolean; price: number; size: number }) {
+  const anchor = siteConfig.pricing.anchorPrice;
   return (
     <div>
-      <p className={`text-[34px] font-semibold ${light ? "text-cocoa-soft" : "text-snow/80"}`}>
-        De <span className="line-through decoration-berry decoration-[3px]">R$ 97</span> por apenas
-      </p>
+      <span className="inline-flex items-center gap-3 rounded-full bg-berry px-5 py-2 text-[26px] font-bold text-white">
+        -{Math.round((1 - price / anchor) * 100)}% · De{" "}
+        <span className="line-through decoration-2">R$ {formatReais(anchor)}</span>
+      </span>
       <p
-        className={`font-display leading-[0.95] ${light ? "text-berry" : "text-gold-light"}`}
-        style={{ fontSize: size }}
+        className={`mt-3 flex items-start font-display leading-[0.9] ${dark ? "text-gold-light" : "text-pine-deep"}`}
       >
-        R$ {price}
+        <span style={{ fontSize: size * 0.32 }} className="mr-2 mt-[0.35em]">
+          R$
+        </span>
+        <span style={{ fontSize: size }}>{formatReais(price)}</span>
       </p>
-      <p
-        className={`mt-3 flex items-center gap-3 text-[32px] font-semibold ${light ? "text-cocoa" : "text-snow"}`}
-      >
-        <Icon name="shield" className="h-[38px] w-[38px] text-gold" /> 7 dias de garantia
+      <p className={`mt-2 text-[28px] font-semibold ${dark ? "text-snow/80" : "text-cocoa-soft"}`}>
+        pagamento único · acesso imediato
       </p>
     </div>
   );
 }
 
-function Cta({ children }: { children: ReactNode }) {
+function Cta({ dark, children }: { dark: boolean; children: ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-4 whitespace-nowrap rounded-full bg-gradient-to-b from-[#D81F3D] to-berry px-[52px] py-[28px] text-[38px] font-bold text-white no-underline shadow-[0_24px_50px_-16px_rgba(200,16,46,0.85)] ring-1 ring-white/20 [text-decoration:none]">
+    <span
+      className={`inline-flex items-center gap-4 whitespace-nowrap rounded-full px-[52px] py-[28px] text-[38px] font-bold text-white ring-1 ring-white/20 ${
+        dark
+          ? "bg-gradient-to-b from-[#D81F3D] to-berry shadow-[0_24px_50px_-16px_rgba(200,16,46,0.85)]"
+          : "bg-gradient-to-b from-pine-line to-pine shadow-[0_24px_50px_-16px_rgba(15,61,46,0.8)]"
+      }`}
+    >
       {children} <Arrow />
     </span>
   );
 }
 
+function Trust({ dark }: { dark: boolean }) {
+  const ic = `h-[30px] w-[30px] ${dark ? "text-gold" : "text-pine"}`;
+  return (
+    <p
+      className={`flex items-center gap-6 text-[24px] font-semibold ${dark ? "text-snow/70" : "text-cocoa-muted"}`}
+    >
+      <span className="flex items-center gap-2">
+        <Icon name="shield" className={ic} /> 7 dias de garantia
+      </span>
+      <span className="flex items-center gap-2">
+        <Icon name="phone" className={ic} /> Acesso na hora
+      </span>
+    </p>
+  );
+}
+
+function Pager({ n, dark }: { n: number; dark: boolean }) {
+  return (
+    <span
+      className={`flex items-center gap-4 text-[30px] font-semibold ${dark ? "text-snow/70" : "text-cocoa-muted"}`}
+    >
+      {n}/3
+      <span
+        className={`grid h-[60px] w-[60px] place-items-center rounded-full text-white ${dark ? "bg-berry" : "bg-pine"}`}
+      >
+        <Arrow />
+      </span>
+    </span>
+  );
+}
+
+const titleCls = (dark: boolean) =>
+  `font-display leading-[1.02] tracking-[-0.01em] ${dark ? "!text-snow [&_em]:text-gold-light" : "!text-pine-deep [&_em]:text-pine"}`;
+const kickerCls = (dark: boolean) =>
+  `text-[26px] font-bold uppercase tracking-[0.16em] ${dark ? "text-gold" : "text-berry"}`;
+
 /** Um criativo completo, no tamanho exato do formato. */
-function Creative({
-  concept,
-  format,
-  tone,
-  price,
-}: {
-  concept: Concept;
-  format: Format;
-  tone: Tone;
-  price: number;
-}) {
-  const c = COPY[concept];
+function Creative({ id, format, tone, price }: { id: string; format: Format; tone: Tone; price: number }) {
+  const c = CONCEPTS[id]!;
   const [w, h] = SIZES[format];
-  const light = tone === "light";
-  const titleSize = { story: 128, feed: 108, square: 96 }[format];
-  const phone = {
-    story: "right-[-170px] bottom-[-470px] w-[580px] -rotate-[8deg]",
-    feed: "right-[-90px] bottom-[-300px] w-[500px] -rotate-[9deg]",
-    square: "right-[-80px] bottom-[-420px] w-[440px] -rotate-[9deg]",
-  }[format];
-  const showSub = !!c.sub && (format !== "square" || !c.bullets);
+  const dark = tone === "dark";
+  const isModel = c.visual.kind === "model";
+  const titleSize = { story: 120, feed: 100, square: 86 }[format];
+  const showSub = !!c.sub && format !== "square";
+  const colWidth = format === "feed" && !isModel ? 560 : 520;
 
   return (
     <div
@@ -227,58 +377,63 @@ function Creative({
       className="relative overflow-hidden"
       style={{ width: w, height: h, fontFamily: "var(--font-sans)" }}
     >
-      <Background light={light} photo={c.photo} />
-
-      <div className={`absolute ${phone}`}>
-        <IPhone
-          label="App Receitinhas da Rô"
-          dark={c.screen === "cook"}
-          overlayStatus={c.screen === "recipe"}
-        >
-          <Screen which={c.screen} />
-        </IPhone>
-      </div>
+      <Background dark={dark} photo={dark ? c.bg : undefined} />
+      {c.visual.kind === "phone" ? (
+        <PhoneVisual screen={c.visual.screen} format={format} dark={dark} />
+      ) : (
+        <ModelVisual photo={c.visual.photo} focus={c.visual.focus} format={format} dark={dark} />
+      )}
 
       <div
         className="relative flex h-full flex-col"
-        style={{ padding: format === "story" ? "130px 84px 150px" : "76px 76px 84px" }}
+        style={{ padding: format === "story" ? "150px 80px 260px" : "70px 72px 92px" }}
       >
-        <Logo light={light} />
+        <TopBar dark={dark} />
+        <p className={`mt-[48px] ${kickerCls(dark)}`}>{c.kicker}</p>
         <h1
-          className={`mt-[44px] max-w-[880px] font-display leading-[1.02] tracking-[-0.01em] [&_em]:text-gold-light ${light ? "!text-cocoa [&_em]:!text-berry" : "!text-snow"}`}
-          style={{ fontSize: titleSize }}
+          className={`mt-4 ${titleCls(dark)}`}
+          style={{ fontSize: titleSize, maxWidth: isModel ? 600 : 900 }}
         >
           {c.title}
         </h1>
         {showSub ? (
           <p
-            className={`mt-7 max-w-[620px] text-[38px] leading-snug ${light ? "text-cocoa-soft" : "text-snow/80"}`}
+            className={`mt-6 text-[36px] leading-snug ${dark ? "text-snow/80" : "text-cocoa-soft"}`}
+            style={{ maxWidth: isModel ? 520 : 640 }}
           >
             {c.sub}
           </p>
         ) : null}
 
-        <div className={`mt-auto space-y-8 ${format === "feed" ? "max-w-[560px]" : "max-w-[520px]"}`}>
+        <div className="mt-auto space-y-8" style={{ maxWidth: colWidth }}>
           {c.price ? (
-            <PriceBlock
-              light={light}
+            <Price
+              dark={dark}
               price={price}
-              size={format === "square" ? 150 : format === "story" ? 160 : 190}
+              size={isModel ? (format === "square" ? 104 : 130) : format === "square" ? 140 : 180}
             />
           ) : null}
-          {c.bullets ? (
+          {c.bullets && !c.price ? (
             <ul className="space-y-4">
               {c.bullets.map((b) => (
                 <li
                   key={b}
-                  className={`flex items-center gap-4 text-[36px] font-semibold ${light ? "text-cocoa" : "text-snow"}`}
+                  className={`flex items-center gap-4 text-[34px] font-semibold ${dark ? "text-snow" : "text-pine-deep"}`}
                 >
-                  <Check light={light} /> {b}
+                  <span
+                    className={`grid h-[44px] w-[44px] shrink-0 place-items-center rounded-full ${dark ? "bg-gold text-pine-deep" : "bg-pine text-white"}`}
+                  >
+                    <CheckIcon className="h-[26px] w-[26px]" />
+                  </span>
+                  {b}
                 </li>
               ))}
             </ul>
           ) : null}
-          <Cta>{c.cta}</Cta>
+          <div className="space-y-5">
+            <Cta dark={dark}>{c.cta}</Cta>
+            {format !== "square" ? <Trust dark={dark} /> : null}
+          </div>
         </div>
       </div>
     </div>
@@ -287,37 +442,59 @@ function Creative({
 
 /* ───────── Carrossel: uma tela larga que vira 3 slides ───────── */
 
-function Carousel({ format, price }: { format: "square" | "feed"; price: number }) {
+function Carousel({ format, tone, price }: { format: "square" | "feed"; tone: Tone; price: number }) {
   const [w, h] = SIZES[format];
-  const pad = 76;
-  const t = format === "square" ? 100 : 112;
+  const dark = tone === "dark";
+  const pad = 72;
+  const t = format === "square" ? 96 : 108;
   return (
     <div
       id="creative"
       className="relative overflow-hidden"
       style={{ width: w * 3, height: h, fontFamily: "var(--font-sans)" }}
     >
-      <Background light={false} />
-      {/* faixa dourada que atravessa os 3 slides */}
+      <Background dark={dark} />
       <svg className="absolute inset-0" width={w * 3} height={h} viewBox={`0 0 ${w * 3} ${h}`} fill="none">
         <path
           d={`M-50 ${h * 0.78} C ${w * 0.7} ${h * 0.55}, ${w * 1.3} ${h * 0.98}, ${w * 1.9} ${h * 0.7} S ${w * 2.7} ${h * 0.5}, ${w * 3 + 50} ${h * 0.62}`}
-          stroke="rgba(212,162,76,0.35)"
+          stroke={dark ? "rgba(212,162,76,0.30)" : "rgba(15,61,46,0.10)"}
           strokeWidth="70"
           strokeLinecap="round"
         />
         <path
           d={`M-50 ${h * 0.84} C ${w * 0.7} ${h * 0.61}, ${w * 1.3} ${h * 1.04}, ${w * 1.9} ${h * 0.76} S ${w * 2.7} ${h * 0.56}, ${w * 3 + 50} ${h * 0.68}`}
-          stroke="rgba(242,215,155,0.45)"
+          stroke={dark ? "rgba(242,215,155,0.45)" : "rgba(15,61,46,0.35)"}
           strokeWidth="3"
           strokeDasharray="10 14"
         />
       </svg>
 
-      {/* celulares atravessando a divisa dos slides */}
+      {/* Roseli no slide 1; celulares atravessando as divisas */}
+      <div
+        className="absolute"
+        style={{ left: w - 450, bottom: 90, width: 370, height: format === "square" ? 520 : 680 }}
+      >
+        <div
+          className={`absolute -inset-4 rounded-b-[48px] rounded-t-full ring-2 ${dark ? "ring-gold/60" : "ring-pine/30"}`}
+        />
+        <div className="relative h-full w-full overflow-hidden rounded-b-[40px] rounded-t-full shadow-lift">
+          <Image
+            src="/images/ro-panetone.jpg"
+            alt=""
+            fill
+            sizes="400px"
+            className="object-cover"
+            style={{ objectPosition: "50% 30%" }}
+          />
+        </div>
+      </div>
       <div
         className="absolute -rotate-[8deg]"
-        style={{ left: w - 230, bottom: -h * 0.42, width: format === "square" ? 420 : 470 }}
+        style={{
+          left: w * 2 - 250,
+          bottom: format === "square" ? -h * 0.66 : -h * 0.45,
+          width: format === "square" ? 400 : 470,
+        }}
       >
         <IPhone label="Tela inicial do app">
           <HomeScreen />
@@ -334,17 +511,14 @@ function Carousel({ format, price }: { format: "square" | "feed"; price: number 
 
       {/* slide 1 */}
       <div className="absolute top-0 flex h-full flex-col" style={{ left: 0, width: w, padding: pad }}>
-        <div className="flex items-center justify-between">
-          <Logo light={false} />
-          <Pager n={1} />
-        </div>
-        <h1
-          className="mt-[56px] font-display leading-[1.02] !text-snow [&_em]:text-gold-light"
-          style={{ fontSize: t }}
-        >
+        <TopBar dark={dark} pager={1} />
+        <p className={`mt-[48px] ${kickerCls(dark)}`}>Com Roseli Monteiro</p>
+        <h1 className={`mt-4 max-w-[540px] ${titleCls(dark)}`} style={{ fontSize: t }}>
           Chega de panetone <em>solado.</em>
         </h1>
-        <p className="mt-7 max-w-[560px] text-[40px] leading-snug text-snow/80">
+        <p
+          className={`mt-6 max-w-[480px] text-[36px] leading-snug ${dark ? "text-snow/80" : "text-cocoa-soft"}`}
+        >
           Existe um jeito mais fácil. Arrasta pro lado →
         </p>
       </div>
@@ -352,10 +526,10 @@ function Carousel({ format, price }: { format: "square" | "feed"; price: number 
       {/* slide 2 */}
       <div className="absolute top-0 flex h-full flex-col" style={{ left: w, width: w, padding: pad }}>
         <div className="flex justify-end">
-          <Pager n={2} />
+          <Pager n={2} dark={dark} />
         </div>
         <h2
-          className="ml-auto mt-[40px] max-w-[640px] text-right font-display leading-[1.02] !text-snow [&_em]:text-gold-light"
+          className={`ml-auto mt-[40px] max-w-[640px] text-right ${titleCls(dark)}`}
           style={{ fontSize: t }}
         >
           Tudo num <em>app só.</em>
@@ -368,12 +542,18 @@ function Carousel({ format, price }: { format: "square" | "feed"; price: number 
           ].map(([icon, text]) => (
             <li
               key={text}
-              className="flex items-center gap-5 rounded-[28px] bg-white/[0.08] p-5 ring-1 ring-white/15"
+              className={`flex items-center gap-5 rounded-[28px] p-5 ring-1 ${dark ? "bg-white/[0.08] ring-white/15" : "bg-white shadow-soft ring-pine/10"}`}
             >
-              <span className="grid h-[72px] w-[72px] shrink-0 place-items-center rounded-[20px] bg-gold text-pine-deep">
+              <span
+                className={`grid h-[72px] w-[72px] shrink-0 place-items-center rounded-[20px] ${dark ? "bg-gold text-pine-deep" : "bg-pine text-gold-light"}`}
+              >
                 <Icon name={icon!} className="h-[40px] w-[40px]" strokeWidth={1.9} />
               </span>
-              <span className="text-[34px] font-semibold leading-tight text-snow">{text}</span>
+              <span
+                className={`text-[34px] font-semibold leading-tight ${dark ? "text-snow" : "text-pine-deep"}`}
+              >
+                {text}
+              </span>
             </li>
           ))}
         </ul>
@@ -382,35 +562,20 @@ function Carousel({ format, price }: { format: "square" | "feed"; price: number 
       {/* slide 3 */}
       <div className="absolute top-0 flex h-full flex-col" style={{ left: w * 2, width: w, padding: pad }}>
         <div className="flex justify-end">
-          <Pager n={3} />
+          <Pager n={3} dark={dark} />
         </div>
-        <h2
-          className="mt-[40px] font-display leading-[1.02] !text-snow [&_em]:text-gold-light"
-          style={{ fontSize: t }}
-        >
+        <h2 className={`mt-[40px] ${titleCls(dark)}`} style={{ fontSize: t }}>
           Pague uma vez. <em>Cozinhe o Natal inteiro.</em>
         </h2>
         <div className="mt-10 space-y-8">
-          <PriceBlock light={false} price={price} size={format === "square" ? 150 : 180} />
-          <Cta>Garantir acesso</Cta>
+          <Price dark={dark} price={price} size={format === "square" ? 140 : 170} />
+          <Cta dark={dark}>Garantir acesso</Cta>
         </div>
       </div>
     </div>
   );
 }
 
-function Pager({ n }: { n: number }) {
-  return (
-    <span className="flex items-center gap-4 text-[32px] font-semibold text-snow/70">
-      {n}/3
-      <span className="grid h-[64px] w-[64px] place-items-center rounded-full bg-berry text-white">
-        <Arrow />
-      </span>
-    </span>
-  );
-}
-
-const CONCEPTS = Object.keys(COPY) as Concept[];
 const FORMATS = Object.keys(SIZES) as Format[];
 
 export default async function CriativosPage({
@@ -420,33 +585,38 @@ export default async function CriativosPage({
 }) {
   if (process.env.NODE_ENV === "production") notFound();
   const q = await searchParams;
-  const price = Number(q.p) || 37;
+  const price = Number(q.p) || siteConfig.pricing.phases[0]!.price;
+  const tone: Tone = q.tone === "white" ? "white" : "dark";
   // esconde o indicador do Next.js em desenvolvimento para não sair no PNG
   const hideDev = <style>{"nextjs-portal{display:none!important}body{margin:0}"}</style>;
 
   if (q.carrossel === "square" || q.carrossel === "feed")
-    return <Carousel format={q.carrossel} price={price} />;
-  if (q.c && q.f && CONCEPTS.includes(q.c as Concept) && FORMATS.includes(q.f as Format))
     return (
       <>
         {hideDev}
-        <Creative
-          concept={q.c as Concept}
-          format={q.f as Format}
-          tone={q.tone === "light" ? "light" : "dark"}
-          price={price}
-        />
+        <Carousel format={q.carrossel} tone={tone} price={price} />
+      </>
+    );
+  if (q.c && q.f && q.c in CONCEPTS && FORMATS.includes(q.f as Format))
+    return (
+      <>
+        {hideDev}
+        <Creative id={q.c} format={q.f as Format} tone={tone} price={price} />
       </>
     );
 
   return (
     <main className="space-y-2 p-8">
       <h1 className="text-3xl">Criativos</h1>
-      {CONCEPTS.flatMap((c) =>
+      {Object.keys(CONCEPTS).flatMap((c) =>
         FORMATS.map((f) => (
           <p key={c + f}>
             <Link className="underline" href={`/criativos?c=${c}&f=${f}`}>
               {c} · {f}
+            </Link>{" "}
+            ·{" "}
+            <Link className="underline" href={`/criativos?c=${c}&f=${f}&tone=white`}>
+              branco
             </Link>
           </p>
         )),

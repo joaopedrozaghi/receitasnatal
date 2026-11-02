@@ -1,8 +1,9 @@
 // Exporta os criativos de /criativos em PNG (2x, como os de referência: 2160 px de largura).
-// Uso: com `npm run dev` rodando, `node scripts/export-criativos.mjs` → pasta criativos/
+// Uso: com `npm run dev` rodando, `node scripts/export-criativos.mjs` → pasta criativos/verde e criativos/branco
+// Carrosséis saem inteiros (-inteiro.png); corte em 3 slides com: python scripts/cortar-carrossel.py
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync } from "node:fs";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
 
 const BASE = process.env.BASE ?? "http://localhost:3000/criativos";
 const OUT = resolve("criativos");
@@ -14,21 +15,33 @@ const CHROME = [
 if (!CHROME) throw new Error("Chrome não encontrado");
 
 const SIZES = { story: [1080, 1920], feed: [1080, 1350], square: [1080, 1080] };
+const CONCEPTS = ["solado", "tudo", "preco", "renda", "ceia", "rose", "roseOferta", "roseCaderno"];
+const TONES = { verde: "dark", branco: "white" };
 const jobs = [];
-for (const c of ["solado", "tudo", "preco", "renda", "ceia"])
-  for (const f of Object.keys(SIZES)) jobs.push({ name: `${c}-${f}`, q: `c=${c}&f=${f}`, size: SIZES[f] });
-for (const f of Object.keys(SIZES))
-  jobs.push({ name: `preco-${f}-57`, q: `c=preco&f=${f}&p=57`, size: SIZES[f] });
-jobs.push({ name: "solado-feed-claro", q: "c=solado&f=feed&tone=light", size: SIZES.feed });
-jobs.push({ name: "preco-feed-claro", q: "c=preco&f=feed&tone=light", size: SIZES.feed });
-jobs.push({ name: "carrossel-quadrado-inteiro", q: "carrossel=square", size: [3240, 1080] });
-jobs.push({ name: "carrossel-feed-inteiro", q: "carrossel=feed", size: [3240, 1350] });
+for (const [toneName, tone] of Object.entries(TONES)) {
+  for (const c of CONCEPTS)
+    for (const f of Object.keys(SIZES))
+      jobs.push({ name: `${toneName}/${c}-${f}`, q: `c=${c}&f=${f}&tone=${tone}`, size: SIZES[f] });
+  jobs.push({
+    name: `${toneName}/carrossel-quadrado`,
+    q: `carrossel=square&tone=${tone}`,
+    size: [3240, 1080],
+    split: 3,
+  });
+  jobs.push({
+    name: `${toneName}/carrossel-feed`,
+    q: `carrossel=feed&tone=${tone}`,
+    size: [3240, 1350],
+    split: 3,
+  });
+}
 
 const only = process.argv[2];
 mkdirSync(OUT, { recursive: true });
 for (const j of jobs) {
   if (only && !j.name.includes(only)) continue;
-  const file = resolve(OUT, `${j.name}.png`);
+  const file = resolve(OUT, `${j.name}${j.split ? "-inteiro" : ""}.png`);
+  mkdirSync(dirname(file), { recursive: true });
   execFileSync(
     CHROME,
     [

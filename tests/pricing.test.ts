@@ -40,7 +40,7 @@ describe("fase atual por data", () => {
   it("usa os valores reais da config", () => {
     const offer = getOfferState(new Date("2026-11-20T12:00:00-03:00"));
     expect(offer.phaseId).toBe("natal");
-    expect(offer.price).toBe(siteConfig.pricing.phases[1]?.price);
+    expect(offer.price).toBe(siteConfig.pricing.phases[0]?.price);
     expect(offer.nextPhase?.price).toBe(siteConfig.pricing.anchorPrice);
   });
 
