@@ -2,20 +2,36 @@
 /* eslint-disable @next/next/no-img-element -- quadros de vídeo: <img> simples carrega tudo de uma vez */
 
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
-import { IPhone } from "@/components/phone/IPhone";
-import { CookScreen, HomeScreen, PricingScreen, RecipeScreen } from "@/components/phone/Screens";
 import { Icon } from "@/components/ui/Icon";
+import { Phone3DLive } from "../Phone3DLive";
 import { DURATION, SIZES, type Format, type VideoId } from "./config";
 
 /**
  * Vídeos animados quadro a quadro: tudo é função do tempo `t` (ms), então a gravação
- * (scripts/export-videos.mjs) sai lisa, sem depender da velocidade do computador.
+ * (scripts/export-videos.mjs) sai lisa. O iPhone é o modelo 3D com as telas reais do app.
  */
 
 const PRICE = 24.9;
 const ANCHOR = 97;
 
-/* ───────── curvas de animação ───────── */
+/* paleta (igual aos criativos de imagem) */
+const NOITE = "linear-gradient(165deg, #123A2E 0%, #0B261E 55%, #071A14 100%)";
+const CLARO = "linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 50%, #EEF4F0 100%)";
+const CREAM = "#F7F3EC";
+const CHAMP = "#E3C78A";
+const EVER = "#0B261E";
+const GREEN = "#1F6B52";
+const WINE = "#A8323A";
+const MUTED_D = "rgba(247,243,236,0.72)";
+const MUTED_L = "#55645D";
+
+const SCREENS = ["home", "recipe", "cook", "pricing"].map((s) => `/criativos/telas/${s}.png`);
+const HOME = 0;
+const RECIPE = 1;
+const COOK = 2;
+const PRICING = 3;
+
+/* ───────── curvas ───────── */
 const clamp = (x: number) => Math.min(1, Math.max(0, x));
 const prog = (t: number, a: number, b: number) => clamp((t - a) / (b - a));
 const eo = (x: number) => 1 - Math.pow(1 - x, 3);
@@ -34,30 +50,31 @@ function Words({
   t,
   start,
   step = 110,
-  dur = 420,
-  className = "",
-  wordClass = "",
+  dur = 460,
+  color,
+  italic,
 }: {
   text: string;
   t: number;
   start: number;
   step?: number;
   dur?: number;
-  className?: string;
-  wordClass?: string;
+  color?: string;
+  italic?: boolean;
 }) {
   return (
-    <span className={className}>
+    <>
       {text.split(" ").map((w, i) => {
         const x = eo(prog(t, start + i * step, start + i * step + dur));
         return (
           <span
             key={i}
-            className={`inline-block ${wordClass}`}
+            className={`inline-block ${italic ? "italic" : ""}`}
             style={{
+              color,
               opacity: x,
-              transform: `translateY(${(1 - x) * 0.45}em)`,
-              filter: `blur(${(1 - x) * 8}px)`,
+              transform: `translateY(${(1 - x) * 0.4}em)`,
+              filter: `blur(${(1 - x) * 6}px)`,
               marginRight: "0.24em",
             }}
           >
@@ -65,60 +82,57 @@ function Words({
           </span>
         );
       })}
-    </span>
+    </>
   );
 }
 
-function fadeUp(t: number, start: number, dur = 450, dist = 40): CSSProperties {
+function fadeUp(t: number, start: number, dur = 450, dist = 36): CSSProperties {
   const x = eo(prog(t, start, start + dur));
   return { opacity: x, transform: `translateY(${(1 - x) * dist}px)` };
 }
 
-function pop(t: number, start: number, dur = 500): CSSProperties {
+function pop(t: number, start: number, dur = 520): CSSProperties {
   const x = prog(t, start, start + dur);
-  return { opacity: clamp(x * 3), transform: `scale(${lerp(0.6, 1, back(x))})` };
+  return { opacity: clamp(x * 3), transform: `scale(${lerp(0.7, 1, back(x))})` };
 }
 
 function Logo({ dark, style }: { dark: boolean; style?: CSSProperties }) {
   return (
     <div className="flex items-center gap-4" style={style}>
       <span
-        className={`grid h-[64px] w-[64px] place-items-center rounded-[18px] ${dark ? "bg-white/10 text-gold-light ring-1 ring-white/20" : "bg-pine text-gold-light"}`}
+        className="grid h-[60px] w-[60px] place-items-center rounded-[17px]"
+        style={{ background: dark ? "rgba(247,243,236,0.10)" : EVER, color: CHAMP }}
       >
-        <Icon name="panettone" className="h-[36px] w-[36px]" strokeWidth={1.8} />
+        <Icon name="panettone" className="h-[34px] w-[34px]" strokeWidth={1.8} />
       </span>
-      <span className={`font-display text-[40px] ${dark ? "text-snow" : "text-pine-deep"}`}>
-        Receitinhas <span className="italic text-gold">da Rô</span>
+      <span className="font-display text-[38px] leading-none" style={{ color: dark ? CREAM : EVER }}>
+        Receitinhas{" "}
+        <span className="italic" style={{ color: dark ? CHAMP : "#9B6A2B" }}>
+          da Rô
+        </span>
       </span>
     </div>
   );
 }
 
-function Cta({
-  children,
-  style,
-  dark = true,
-}: {
-  children: ReactNode;
-  style?: CSSProperties;
-  dark?: boolean;
-}) {
+function Cta({ children, dark, style }: { children: ReactNode; dark: boolean; style?: CSSProperties }) {
   return (
     <span
-      style={style}
-      className={`inline-flex items-center gap-4 whitespace-nowrap rounded-full px-[50px] py-[26px] text-[38px] font-bold text-white ring-1 ring-white/20 ${
-        dark
-          ? "bg-gradient-to-b from-[#D81F3D] to-berry shadow-[0_24px_50px_-16px_rgba(200,16,46,0.85)]"
-          : "bg-gradient-to-b from-pine-line to-pine shadow-[0_24px_50px_-16px_rgba(15,61,46,0.8)]"
-      }`}
+      style={{
+        background: dark ? CREAM : EVER,
+        color: dark ? EVER : "#fff",
+        boxShadow: dark ? "0 20px 50px -18px rgba(0,0,0,0.6)" : "0 20px 44px -18px rgba(11,38,30,0.45)",
+        ...style,
+      }}
+      className="inline-flex items-center gap-5 whitespace-nowrap rounded-full px-[48px] py-[26px] text-[36px] font-semibold"
     >
       {children}
       <svg
         viewBox="0 0 24 24"
-        className="h-[0.9em] w-[0.9em]"
+        className="h-[30px] w-[30px]"
         fill="none"
         stroke="currentColor"
-        strokeWidth="2.6"
+        strokeWidth="2.4"
       >
         <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
@@ -126,172 +140,154 @@ function Cta({
   );
 }
 
-function DarkBg() {
+function Eyebrow({ dark, children, style }: { dark: boolean; children: ReactNode; style?: CSSProperties }) {
+  const c = dark ? CHAMP : WINE;
   return (
-    <>
-      <div className="absolute inset-0 bg-pine-deep" />
-      <div className="absolute inset-0 bg-[radial-gradient(60%_45%_at_80%_20%,rgba(212,162,76,0.28)_0%,transparent_70%),radial-gradient(55%_45%_at_10%_90%,rgba(200,16,46,0.22)_0%,transparent_70%)]" />
-      <div className="grain absolute inset-0 opacity-70" />
-    </>
+    <p
+      className="flex items-center gap-4 text-[24px] font-bold uppercase tracking-[0.22em]"
+      style={{ color: c, ...style }}
+    >
+      <span className="h-[2px] w-[44px]" style={{ background: c }} />
+      {children}
+    </p>
   );
 }
 
-function LightBg() {
+function Glow({ x, y, r, color }: { x: number; y: number; r: number; color: string }) {
   return (
-    <>
-      <div className="absolute inset-0 bg-white" />
-      <div className="absolute inset-0 bg-[radial-gradient(60%_40%_at_50%_100%,rgba(15,61,46,0.14)_0%,transparent_70%),radial-gradient(45%_30%_at_0%_0%,rgba(212,162,76,0.2)_0%,transparent_70%)]" />
-    </>
+    <div
+      className="absolute rounded-full"
+      style={{
+        left: x - r,
+        top: y - r,
+        width: r * 2,
+        height: r * 2,
+        background: `radial-gradient(closest-side, ${color}, transparent)`,
+      }}
+    />
   );
 }
 
-/** Telas do app trocando dentro do celular (todas montadas para as fotos já estarem carregadas). */
-function Screens({ active }: { active: number[] }) {
-  const list = [
-    <HomeScreen key="h" />,
-    <RecipeScreen key="r" />,
-    <CookScreen key="c" />,
-    <PricingScreen key="p" />,
-  ];
-  return (
-    <>
-      {list.map((s, i) => (
-        <div
-          key={i}
-          className={`absolute inset-0 ${i === 2 ? "bg-pine-deep" : "bg-ivory"}`}
-          style={{ opacity: active[i] ?? 0, transform: `translateX(${(1 - (active[i] ?? 0)) * 18}%)` }}
-        >
-          {s}
-        </div>
-      ))}
-    </>
-  );
+/** telas trocando: devolve de/para/transição a partir dos cortes [tempo, tela] */
+function screenAt(t: number, cuts: [number, number][], dur = 420) {
+  let from = cuts[0]![1];
+  let to = from;
+  let mix = 0;
+  for (let i = 1; i < cuts.length; i++) {
+    const [at, idx] = cuts[i]!;
+    if (t >= at + dur) from = idx;
+    else if (t >= at) {
+      to = idx;
+      mix = eio(prog(t, at, at + dur));
+      break;
+    }
+  }
+  if (mix === 0) to = from;
+  return { from, to, mix };
 }
 
 /* ───────── Vídeo 1: o app girando ───────── */
 function VideoApp({ t, f }: { t: number; f: Format }) {
   const [W, H] = SIZES[f];
-  const pw = { square: 430, feed: 450, story: 540 }[f];
-  const ph = pw * (19.5 / 9);
   const square = f === "square";
+  const ph = { square: 900, feed: 1060, story: 1260 }[f];
+  const pw = ph * 0.62;
 
-  // entrada em 3D
-  const enter = eio(prog(t, 0, 1300));
-  const wobble = t > 1300 && t < 7400 ? Math.sin((t - 1300) / 950) * 7 : 0;
-  const rotY = lerp(80, 0, enter) + wobble;
-  // muda de lugar para dar espaço ao texto
-  const move = eio(prog(t, 7000, 8000));
-  const cx0 = W / 2;
-  const cy0 = H / 2;
-  const cx1 = square ? 300 : W - 230;
-  const cy1 = square ? H / 2 + 20 : f === "feed" ? H - 160 : H - 360;
-  const scale = lerp(lerp(0.78, 1, enter), square ? 0.95 : 0.8, move);
-  const cx = lerp(cx0, cx1, move);
-  const cy = lerp(cy0, cy1, move);
+  const enter = eio(prog(t, 0, 1500));
+  const wobble = t > 1500 && t < 7200 ? Math.sin((t - 1500) / 1100) * 9 : 0;
+  const move = eio(prog(t, 7000, 8100));
+  const yaw = lerp(-110, -10, enter) + wobble + lerp(0, -12, move);
+  const pitch = lerp(14, 4, enter);
 
-  // telas: início → receita → modo cozinha → calculadora
-  const cuts = [1500, 3300, 5000, 6600];
-  const active = cuts.map((c, i) => {
-    const inX = i === 0 ? 1 : eo(prog(t, c, c + 350));
-    const next = cuts[i + 1];
-    const outX = next ? 1 - prog(t, next, next + 250) : 1;
-    return Math.min(inX, outX);
-  });
-  const screenLabels = [
+  const cx = lerp(W / 2, square ? 290 : W - 220, move);
+  const cy = lerp(H / 2 + 20, square ? H / 2 + 30 : f === "feed" ? H - 150 : H - 330, move);
+  const scale = lerp(lerp(0.82, 1, enter), square ? 0.92 : 0.78, move);
+
+  const scr = screenAt(t, [
+    [0, HOME],
+    [2100, RECIPE],
+    [3800, COOK],
+    [5400, PRICING],
+  ]);
+  const labels = [
     "102 receitas de Natal",
     "Medidas em gramas",
     "Timer em cada etapa",
     "Preço certo para vender",
   ];
-  const labelIdx = Math.max(0, cuts.filter((c) => t >= c).length - 1);
-  const labelX = t < 1500 || t > 7000 ? 0 : eo(prog(t, cuts[labelIdx]!, cuts[labelIdx]! + 400));
+  const cuts = [1500, 2100, 3800, 5400];
+  const li = Math.max(0, cuts.filter((c) => t >= c).length - 1);
+  const labelX = t < 1500 || t > 7000 ? 0 : eo(prog(t, cuts[li]!, cuts[li]! + 420));
 
   const txt = square
-    ? { left: 560, top: 230, width: 470 }
-    : { left: 80, top: f === "feed" ? 90 : 230, width: 600 };
-  const title = square ? 70 : f === "feed" ? 82 : 96;
+    ? { left: 560, top: 200, width: 470 }
+    : { left: 76, top: f === "feed" ? 80 : 230, width: 600 };
+  const title = square ? 72 : f === "feed" ? 86 : 98;
 
   return (
     <>
-      <DarkBg />
-      <div
-        className="absolute rounded-full bg-gold/25 blur-[90px]"
-        style={{ left: cx - pw * 0.7, top: cy - pw * 0.7, width: pw * 1.4, height: pw * 1.4, opacity: enter }}
-      />
+      <div className="absolute inset-0" style={{ background: NOITE }} />
+      <Glow x={cx} y={cy} r={ph * 0.55} color={`rgba(227,199,138,${0.22 * enter})`} />
       <div
         className="absolute"
         style={{
           left: cx - pw / 2,
           top: cy - ph / 2,
-          width: pw,
-          perspective: 1800,
-          opacity: clamp(enter * 2),
+          opacity: clamp(enter * 2.5),
+          transform: `scale(${scale})`,
         }}
       >
-        <div style={{ transform: `scale(${scale}) rotateY(${rotY}deg) rotateX(${4 - enter * 4 + 3}deg)` }}>
-          <IPhone label="App Receitinhas da Rô">
-            <div className="absolute inset-0">
-              <Screens active={active} />
-            </div>
-          </IPhone>
-        </div>
+        <Phone3DLive screens={SCREENS} {...scr} width={pw} height={ph} yaw={yaw} pitch={pitch} roll={-2} />
       </div>
 
-      {/* etiqueta da tela atual */}
       <div
-        className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-snow px-8 py-4 text-[36px] font-bold text-pine-deep shadow-lift"
+        className="absolute left-1/2 whitespace-nowrap rounded-full px-8 py-4 text-[34px] font-semibold"
         style={{
-          top: f === "story" ? 230 : 70,
+          top: f === "story" ? 230 : 64,
+          background: "rgba(247,243,236,0.95)",
+          color: EVER,
           opacity: labelX,
-          transform: `translate(-50%, ${(1 - labelX) * -20}px)`,
+          transform: `translate(-50%, ${(1 - labelX) * -16}px)`,
+          boxShadow: "0 18px 40px -16px rgba(0,0,0,0.5)",
         }}
       >
-        {screenLabels[labelIdx]}
+        {labels[li]}
       </div>
 
-      {/* texto final */}
       <div className="absolute" style={{ left: txt.left, top: txt.top, width: txt.width }}>
         <Logo dark style={fadeUp(t, 7600)} />
-        <h1 className="mt-8 font-display leading-[1.03] text-snow" style={{ fontSize: title }}>
-          <Words text="Panetone, docinhos e ceia." t={t} start={7850} />{" "}
-          <Words text="Num app só." t={t} start={8400} wordClass="italic text-gold-light" />
+        <Eyebrow dark style={{ ...fadeUp(t, 7750), marginTop: 44 }}>
+          102 receitas · 1 app
+        </Eyebrow>
+        <h1 className="mt-5 font-display leading-[1.03]" style={{ fontSize: title, color: CREAM }}>
+          <Words text="Panetone, docinhos e ceia." t={t} start={7900} />{" "}
+          <Words text="Num app só." t={t} start={8450} italic color={CHAMP} />
         </h1>
         <ul className="mt-8 space-y-3">
-          {["102 receitas passo a passo", "Lista de compras automática", "Modo cozinha com timer"].map(
+          {["Passo a passo com timer", "Lista de compras automática", "Porções que se ajustam"].map(
             (b, i) => (
               <li
                 key={b}
-                className="flex items-center gap-4 font-semibold text-snow"
-                style={{ ...fadeUp(t, 9000 + i * 220, 400, 24), fontSize: square ? 28 : 34 }}
+                className="flex items-center gap-4 font-medium"
+                style={{ ...fadeUp(t, 9000 + i * 200, 400, 20), fontSize: square ? 28 : 32, color: CREAM }}
               >
-                <span className="grid h-[40px] w-[40px] shrink-0 place-items-center rounded-full bg-gold text-pine-deep">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-[24px] w-[24px]"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="3.2"
-                  >
-                    <path d="M5 12.5l4.5 4.5L19 7.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
+                <span className="h-[10px] w-[10px] rotate-45" style={{ background: CHAMP }} />
                 {b}
               </li>
             ),
           )}
         </ul>
-        <p
-          className="mt-8 font-display leading-none text-gold-light"
-          style={{ ...fadeUp(t, 9800), fontSize: square ? 64 : 80 }}
-        >
-          <span className="mr-3 align-top text-[0.4em]">R$</span>
-          {money(PRICE)}
-          <span className="ml-4 align-middle font-sans text-[0.32em] font-semibold text-snow/70 line-through decoration-berry">
-            R$ {ANCHOR}
-          </span>
-        </p>
+        <div className="mt-8" style={fadeUp(t, 9750)}>
+          <p className="text-[26px] font-medium" style={{ color: MUTED_D }}>
+            <span className="line-through">de R$ {ANCHOR}</span> por
+          </p>
+          <p className="font-display leading-none" style={{ fontSize: square ? 84 : 104, color: CHAMP }}>
+            <span className="mr-2 align-[0.55em] text-[0.34em]">R$</span>
+            {money(PRICE)}
+          </p>
+        </div>
         <div className="mt-8 origin-left" style={pop(t, 10300)}>
-          <Cta>Garantir acesso</Cta>
+          <Cta dark>Garantir acesso</Cta>
         </div>
       </div>
     </>
@@ -301,129 +297,143 @@ function VideoApp({ t, f }: { t: number; f: Format }) {
 /* ───────── Vídeo 2: texto animado em cenas ───────── */
 function VideoTexto({ t, f }: { t: number; f: Format }) {
   const [W, H] = SIZES[f];
-  const big = { square: 112, feed: 118, story: 128 }[f];
+  const big = { square: 110, feed: 116, story: 126 }[f];
+  const R = Math.hypot(W, H);
   const wipe1 = eio(prog(t, 2650, 3150));
   const wipe2 = eio(prog(t, 5500, 5950));
   const wipe3 = eio(prog(t, 8200, 8650));
-  const R = Math.hypot(W, H);
-
-  // preço caindo de 97 para 24,90
   const fall = eo(prog(t, 7000, 7800));
   const shown = lerp(ANCHOR, PRICE, fall);
 
+  const ph = { square: 720, feed: 900, story: 1120 }[f];
+  const phones = [
+    { dx: -0.29, yaw: 32, delay: 3700, screen: RECIPE, s: 0.86 },
+    { dx: 0.29, yaw: -32, delay: 3850, screen: PRICING, s: 0.86 },
+    { dx: 0, yaw: -6, delay: 3550, screen: HOME, s: 1 },
+  ];
+  const phonesTop = { square: H * 0.36, feed: H * 0.33, story: H * 0.34 }[f];
+
   return (
     <>
-      {/* cena 1: escuro */}
-      <DarkBg />
+      {/* cena 1 */}
+      <div className="absolute inset-0" style={{ background: NOITE }} />
       <div
         className="absolute inset-0 flex flex-col items-center justify-center px-16 text-center"
-        style={{ opacity: 1 - prog(t, 2400, 2700), transform: `scale(${1 - prog(t, 2300, 2700) * 0.08})` }}
+        style={{ opacity: 1 - prog(t, 2400, 2700), transform: `scale(${1 - prog(t, 2300, 2700) * 0.06})` }}
       >
-        <h1 className="font-display leading-[1.02] text-snow" style={{ fontSize: big }}>
+        <Eyebrow dark style={fadeUp(t, 100)}>
+          Especial de Natal
+        </Eyebrow>
+        <h1 className="mt-8 font-display leading-[1.02]" style={{ fontSize: big, color: CREAM }}>
           <Words text="Chega de" t={t} start={250} />
           <br />
           <Words text="panetone" t={t} start={600} />
           <br />
           <span className="relative inline-block">
-            <Words text="solado." t={t} start={950} wordClass="italic text-gold-light" />
+            <Words text="solado." t={t} start={950} italic color={CHAMP} />
             <span
-              className="absolute left-0 top-[55%] h-[0.08em] rounded-full bg-berry"
-              style={{ width: `${eo(prog(t, 1550, 1950)) * 92}%` }}
+              className="absolute left-0 top-[56%] h-[0.07em] rounded-full"
+              style={{ background: WINE, width: `${eo(prog(t, 1550, 1950)) * 92}%` }}
             />
           </span>
         </h1>
       </div>
 
-      {/* cena 2: branco com 3 celulares */}
-      <div className="absolute inset-0" style={{ clipPath: `circle(${wipe1 * R}px at 50% 50%)` }}>
-        <LightBg />
-        <div className="absolute inset-x-0 px-16 text-center" style={{ top: f === "story" ? 240 : 80 }}>
-          <h2 className="font-display leading-[1.03] text-pine-deep" style={{ fontSize: big * 0.72 }}>
+      {/* cena 2 */}
+      <div
+        className="absolute inset-0"
+        style={{ clipPath: `circle(${wipe1 * R}px at 50% 50%)`, background: CLARO }}
+      >
+        <div className="absolute inset-x-0 px-16 text-center" style={{ top: f === "story" ? 240 : 76 }}>
+          <h2 className="font-display leading-[1.04]" style={{ fontSize: big * 0.7, color: EVER }}>
             <Words text="Panetone, docinhos" t={t} start={3050} />
             <br />
             <Words text="e ceia." t={t} start={3350} />{" "}
             <span className="relative inline-block">
-              <Words text="Num app só." t={t} start={3600} wordClass="italic text-pine" />
+              <Words text="Num app só." t={t} start={3600} italic color={GREEN} />
               <span
-                className="absolute bottom-[0.02em] left-0 h-[0.07em] rounded-full bg-gold"
-                style={{ width: `${eo(prog(t, 4000, 4400)) * 94}%` }}
+                className="absolute bottom-[0.02em] left-0 h-[0.06em] rounded-full"
+                style={{ background: CHAMP, width: `${eo(prog(t, 4000, 4400)) * 94}%` }}
               />
             </span>
           </h2>
         </div>
-        {[
-          { x: -0.3, rot: -12, s: 0.82, delay: 3650, el: <RecipeScreen />, overlay: true },
-          { x: 0.3, rot: 12, s: 0.82, delay: 3800, el: <PricingScreen />, overlay: false },
-          { x: 0, rot: 0, s: 1, delay: 3500, el: <HomeScreen />, overlay: false },
-        ].map((p, i) => {
-          const y = eo(prog(t, p.delay, p.delay + 700));
-          const pw = (f === "square" ? 330 : 400) * p.s;
+        <Glow x={W / 2} y={phonesTop + ph * 0.5} r={ph * 0.8} color="rgba(31,107,82,0.14)" />
+        {phones.map((p, i) => {
+          const y = eo(prog(t, p.delay, p.delay + 800));
+          const h = ph * p.s;
+          const w = h * 0.62;
           return (
             <div
               key={i}
               className="absolute"
               style={{
-                width: pw,
-                left: W / 2 + p.x * W - pw / 2,
-                top: lerp(
-                  H + 50,
-                  H * (f === "square" ? 0.42 : f === "feed" ? 0.4 : 0.38) + (1 - p.s) * 200,
-                  y,
-                ),
-                transform: `rotate(${p.rot}deg)`,
+                left: W / 2 + p.dx * W - w / 2,
+                top: lerp(H + 40, phonesTop + (1 - p.s) * 120, y),
+                opacity: clamp(y * 2),
               }}
             >
-              <IPhone label="App" overlayStatus={p.overlay}>
-                {p.el}
-              </IPhone>
+              <Phone3DLive
+                screens={SCREENS}
+                from={p.screen}
+                width={w}
+                height={h}
+                yaw={p.yaw + (1 - y) * 25 * (p.yaw >= 0 ? 1 : -1)}
+                pitch={6}
+              />
             </div>
           );
         })}
       </div>
 
-      {/* cena 3: preço */}
-      <div className="absolute inset-0" style={{ transform: `translateY(${(1 - wipe2) * 100}%)` }}>
-        <DarkBg />
+      {/* cena 3 */}
+      <div
+        className="absolute inset-0"
+        style={{ transform: `translateY(${(1 - wipe2) * 100}%)`, background: NOITE }}
+      >
         <div className="absolute inset-0 flex flex-col items-center justify-center px-14 text-center">
-          <h2 className="font-display leading-[1.03] text-snow" style={{ fontSize: big * 0.75 }}>
+          <Eyebrow dark style={fadeUp(t, 5950)}>
+            Oferta de Natal
+          </Eyebrow>
+          <h2 className="mt-8 font-display leading-[1.04]" style={{ fontSize: big * 0.72, color: CREAM }}>
             <Words text="Pague uma vez." t={t} start={6050} />
             <br />
-            <Words text="Cozinhe o Natal inteiro." t={t} start={6350} wordClass="italic text-gold-light" />
+            <Words text="Cozinhe o Natal inteiro." t={t} start={6350} italic color={CHAMP} />
           </h2>
-          <p className="mt-10 text-[40px] font-semibold text-snow/80" style={fadeUp(t, 6800)}>
-            De <span className="line-through decoration-berry decoration-[3px]">R$ {ANCHOR}</span> por apenas
+          <p className="mt-10 text-[36px] font-medium" style={{ ...fadeUp(t, 6800), color: MUTED_D }}>
+            <span className="line-through">de R$ {ANCHOR}</span> por apenas
           </p>
           <p
-            className="mt-2 font-display leading-none text-gold-light"
+            className="mt-2 font-display leading-none"
             style={{
               ...fadeUp(t, 6900),
-              fontSize: big * 1.7,
-              transform: `scale(${1 + Math.sin(prog(t, 7800, 8100) * Math.PI) * 0.08})`,
+              color: CHAMP,
+              fontSize: big * 1.6,
+              transform: `scale(${1 + Math.sin(prog(t, 7800, 8100) * Math.PI) * 0.06})`,
             }}
           >
-            <span className="mr-3 align-top text-[0.35em]">R$</span>
+            <span className="mr-3 align-[0.55em] text-[0.34em]">R$</span>
             {money(shown)}
           </p>
         </div>
       </div>
 
-      {/* cena 4: cartão final */}
-      <div className="absolute inset-0" style={{ clipPath: `circle(${wipe3 * R}px at 50% 60%)` }}>
-        <LightBg />
+      {/* cena 4 */}
+      <div
+        className="absolute inset-0"
+        style={{ clipPath: `circle(${wipe3 * R}px at 50% 60%)`, background: CLARO }}
+      >
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-10 text-center">
           <Logo dark={false} style={fadeUp(t, 8600)} />
-          <h2 className="font-display leading-none text-pine-deep" style={{ fontSize: big * 0.9 }}>
-            <Words text="Comece hoje." t={t} start={8850} />
+          <h2 className="font-display leading-none" style={{ fontSize: big * 0.9, color: EVER }}>
+            <Words text="Comece" t={t} start={8850} />
+            <Words text="hoje." t={t} start={8980} italic color={GREEN} />
           </h2>
           <div style={pop(t, 9300)}>
             <Cta dark={false}>Garantir acesso</Cta>
           </div>
-          <p
-            className="flex items-center gap-3 text-[32px] font-semibold text-cocoa-muted"
-            style={fadeUp(t, 9600)}
-          >
-            <Icon name="shield" className="h-[38px] w-[38px] text-pine" /> 7 dias de garantia · R${" "}
-            {money(PRICE)}
+          <p className="text-[28px] font-medium" style={{ ...fadeUp(t, 9600), color: MUTED_L }}>
+            7 dias de garantia · R$ {money(PRICE)} · pagamento único
           </p>
         </div>
       </div>
@@ -442,40 +452,51 @@ const SHOTS = [
 ];
 
 function VideoRose({ t, f }: { t: number; f: Format }) {
-  const [, H] = SIZES[f];
-  const big = { square: 92, feed: 100, story: 112 }[f];
-  const safeTop = f === "story" ? 230 : 80;
-  const safeBottom = f === "story" ? 330 : 90;
+  const [W, H] = SIZES[f];
+  const big = { square: 90, feed: 98, story: 110 }[f];
+  const safeTop = f === "story" ? 230 : 76;
+  const safeBottom = f === "story" ? 330 : 86;
 
   const montage = t >= 3000 && t < 6800;
   const shotIdx = Math.min(SHOTS.length - 1, Math.floor((t - 3000) / 620));
   const shotT = (t - 3000 - shotIdx * 620) / 620;
   const count = Math.round(eo(prog(t, 3000, 6400)) * 102);
+  const appOut = prog(t, 9150, 9450);
   const endIn = eio(prog(t, 9400, 9800));
-  const phoneIn = eo(prog(t, 6800, 7600));
+  const phoneIn = eo(prog(t, 6800, 7900));
+  const ph = { square: 820, feed: 1020, story: 1280 }[f];
+  const pw = ph * 0.62;
 
   return (
     <>
-      <DarkBg />
-      {/* abertura: Roseli */}
+      <div className="absolute inset-0" style={{ background: NOITE }} />
+      {/* abertura */}
       <div className="absolute inset-0" style={{ opacity: 1 - prog(t, 2800, 3050) }}>
         <img
           src="/images/ro-panetone.jpg"
           alt=""
           className="absolute inset-0 h-full w-full object-cover"
-          style={{ objectPosition: "50% 30%", transform: `scale(${lerp(1.05, 1.16, t / 3000)})` }}
+          style={{ objectPosition: "50% 30%", transform: `scale(${lerp(1.05, 1.15, t / 3000)})` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-pine-deep via-pine-deep/30 to-transparent" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "linear-gradient(to top, #0B261E 0%, rgba(11,38,30,0.35) 45%, transparent 75%)",
+          }}
+        />
         <div className="absolute inset-x-0 px-16" style={{ bottom: safeBottom }}>
-          <h1 className="font-display leading-[1.03] text-snow" style={{ fontSize: big }}>
+          <Eyebrow dark style={fadeUp(t, 150)}>
+            Roseli Monteiro
+          </Eyebrow>
+          <h1 className="mt-6 font-display leading-[1.03]" style={{ fontSize: big, color: CREAM }}>
             <Words text="Eu sou a Roseli," t={t} start={300} />
             <br />
-            <Words text="a Rô das Receitinhas." t={t} start={800} wordClass="italic text-gold-light" />
+            <Words text="a Rô das Receitinhas." t={t} start={800} italic color={CHAMP} />
           </h1>
         </div>
       </div>
 
-      {/* montagem das receitas */}
+      {/* montagem */}
       {montage ? (
         <div className="absolute inset-0">
           {SHOTS.map((s, i) => (
@@ -490,72 +511,92 @@ function VideoRose({ t, f }: { t: number; f: Format }) {
               }}
             />
           ))}
-          <div className="absolute inset-0 bg-gradient-to-b from-pine-deep/80 via-transparent to-pine-deep/85" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(11,38,30,0.85) 0%, transparent 35%, transparent 60%, rgba(11,38,30,0.9) 100%)",
+            }}
+          />
           <p
-            className="absolute inset-x-0 px-16 font-display leading-none text-snow"
-            style={{ top: safeTop, fontSize: big }}
+            className="absolute inset-x-0 px-16 font-display leading-none"
+            style={{ top: safeTop, fontSize: big, color: CREAM }}
           >
-            <span className="text-gold-light">{count}</span> receitas
+            <span style={{ color: CHAMP }}>{count}</span> receitas
             <br />
             <span className="italic">de Natal</span>
           </p>
           <span
-            className="absolute left-16 rounded-full bg-snow px-8 py-4 text-[38px] font-bold text-pine-deep shadow-lift"
-            style={{ bottom: safeBottom, ...pop(t, 3000 + shotIdx * 620 + 60, 300) }}
+            className="absolute left-16 rounded-full px-8 py-4 text-[36px] font-semibold"
+            style={{
+              bottom: safeBottom,
+              background: "rgba(247,243,236,0.95)",
+              color: EVER,
+              ...pop(t, 3000 + shotIdx * 620 + 60, 320),
+            }}
           >
             {SHOTS[shotIdx]?.label}
           </span>
         </div>
       ) : null}
 
-      {/* o app */}
-      {t >= 6800 ? (
-        <div className="absolute inset-0" style={{ opacity: 1 - prog(t, 9150, 9450) }}>
-          <DarkBg />
-          <div className="absolute inset-x-0 px-16 text-center" style={{ top: safeTop }}>
-            <h2 className="font-display leading-[1.03] text-snow" style={{ fontSize: big * 0.85 }}>
-              <Words text="Tudo passo a passo," t={t} start={6900} />
-              <br />
-              <Words text="no seu celular." t={t} start={7300} wordClass="italic text-gold-light" />
-            </h2>
-          </div>
-          <div
-            className="absolute left-1/2"
-            style={{
-              width: f === "square" ? 380 : 460,
-              top: lerp(H, H * (f === "square" ? 0.4 : f === "feed" ? 0.38 : 0.36), phoneIn),
-              transform: `translateX(-50%) rotate(${lerp(10, -4, phoneIn)}deg)`,
-            }}
-          >
-            <IPhone label="App">
-              <HomeScreen />
-            </IPhone>
-          </div>
+      {/* o app (montado desde o início para o 3D já estar carregado) */}
+      <div
+        className="absolute inset-0"
+        style={{
+          opacity: t >= 6800 ? 1 - appOut : 0,
+          background: NOITE,
+          visibility: t >= 6700 ? "visible" : "hidden",
+        }}
+      >
+        <div className="absolute inset-x-0 px-16 text-center" style={{ top: safeTop }}>
+          <h2 className="font-display leading-[1.04]" style={{ fontSize: big * 0.85, color: CREAM }}>
+            <Words text="Tudo passo a passo," t={t} start={6900} />
+            <br />
+            <Words text="no seu celular." t={t} start={7300} italic color={CHAMP} />
+          </h2>
         </div>
-      ) : null}
+        <Glow x={W / 2} y={H * 0.72} r={ph * 0.6} color="rgba(227,199,138,0.2)" />
+        <div
+          className="absolute"
+          style={{ left: W / 2 - pw / 2, top: lerp(H, H - ph * (f === "square" ? 0.72 : 0.8), phoneIn) }}
+        >
+          <Phone3DLive
+            screens={SCREENS}
+            {...screenAt(t, [
+              [0, HOME],
+              [8300, RECIPE],
+            ])}
+            width={pw}
+            height={ph}
+            yaw={lerp(70, -12, phoneIn) + Math.sin(t / 900) * 3}
+            pitch={6}
+            roll={-2}
+          />
+        </div>
+      </div>
 
-      {/* final: preço */}
-      <div className="absolute inset-0" style={{ opacity: endIn }}>
-        <DarkBg />
+      {/* final */}
+      <div className="absolute inset-0" style={{ opacity: endIn, background: NOITE }}>
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-8 px-14 text-center">
           <Logo dark style={fadeUp(t, 9500)} />
-          <h2 className="font-display leading-[1.03] text-snow" style={{ fontSize: big * 0.8 }}>
+          <h2 className="font-display leading-[1.04]" style={{ fontSize: big * 0.82, color: CREAM }}>
             <Words text="Especial de Natal" t={t} start={9700} />
             <br />
-            <Words text="da Rô" t={t} start={10000} wordClass="italic text-gold-light" />
+            <Words text="da Rô" t={t} start={10000} italic color={CHAMP} />
           </h2>
-          <p className="text-[38px] font-semibold text-snow/80" style={fadeUp(t, 10300)}>
-            De <span className="line-through decoration-berry decoration-[3px]">R$ {ANCHOR}</span> por
+          <p className="text-[34px] font-medium" style={{ ...fadeUp(t, 10300), color: MUTED_D }}>
+            <span className="line-through">de R$ {ANCHOR}</span> por
           </p>
           <p
-            className="font-display leading-none text-gold-light"
-            style={{ ...pop(t, 10500), fontSize: big * 1.6 }}
+            className="font-display leading-none"
+            style={{ ...pop(t, 10500), fontSize: big * 1.55, color: CHAMP }}
           >
-            <span className="mr-3 align-top text-[0.35em]">R$</span>
+            <span className="mr-3 align-[0.55em] text-[0.34em]">R$</span>
             {money(PRICE)}
           </p>
           <div style={pop(t, 11000)}>
-            <Cta>Garantir acesso</Cta>
+            <Cta dark>Garantir acesso</Cta>
           </div>
         </div>
       </div>
@@ -566,7 +607,11 @@ function VideoRose({ t, f }: { t: number; f: Format }) {
 export function Stage({ v, f }: { v: VideoId; f: Format }) {
   const [t, setT] = useState(0);
   useEffect(() => {
-    const w = window as unknown as { __setT: (ms: number) => void; __ready: () => Promise<void> };
+    const w = window as unknown as {
+      __setT: (ms: number) => void;
+      __ready: () => Promise<void>;
+      __phonesPending?: number;
+    };
     w.__setT = setT;
     w.__ready = () => {
       const imgs = [...document.images];
@@ -575,10 +620,17 @@ export function Stage({ v, f }: { v: VideoId; f: Format }) {
         imgs.map((img) =>
           img.complete ? Promise.resolve() : new Promise<void>((r) => (img.onload = img.onerror = () => r())),
         ),
-      ).then(() => document.fonts.ready.then(() => undefined));
-      return Promise.race([all, new Promise<void>((r) => setTimeout(r, 10000))]);
+      )
+        .then(() => document.fonts.ready)
+        .then(
+          () =>
+            new Promise<void>((r) => {
+              const check = () => ((w.__phonesPending ?? 0) <= 0 ? r() : setTimeout(check, 100));
+              check();
+            }),
+        );
+      return Promise.race([all, new Promise<void>((r) => setTimeout(r, 60000))]);
     };
-    // pré-visualização: ?play=1 toca em loop
     if (new URLSearchParams(location.search).get("play")) {
       const t0 = performance.now();
       let raf = 0;
@@ -601,7 +653,6 @@ export function Stage({ v, f }: { v: VideoId; f: Format }) {
       ) : (
         <VideoRose t={t} f={f} />
       )}
-      {/* pré-carrega as fotos usadas mais tarde */}
       <div className="hidden">
         {SHOTS.map((s) => (
           <img key={s.src} src={s.src} alt="" />

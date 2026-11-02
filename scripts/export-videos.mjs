@@ -1,6 +1,6 @@
 // Grava os vídeos de /criativos/video em MP4 (30 fps), quadro a quadro.
 // Uso: com `npm run dev` rodando, `node scripts/export-videos.mjs [filtro]` → criativos/videos/
-// Precisa do ffmpeg instalado (winget install Gyan.FFmpeg).
+// Precisa do ffmpeg instalado (winget install Gyan.FFmpeg) e das telas: node scripts/export-telas.mjs
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { resolve } from "node:path";
@@ -24,7 +24,8 @@ mkdirSync(OUT, { recursive: true });
 const browser = await puppeteer.launch({
   executablePath: CHROME,
   headless: true,
-  args: ["--hide-scrollbars"],
+  protocolTimeout: 300000,
+  args: ["--hide-scrollbars", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"],
 });
 try {
   for (const v of Object.keys(DURATION))

@@ -24,3 +24,5 @@ next-env.d.ts
 
 # PNGs gerados por scripts/export-criativos.mjs
 /criativos/
+# modelo 3D e telas geradas para os criativos (fora do repositório)
+/public/criativos/

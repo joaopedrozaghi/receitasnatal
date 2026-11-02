@@ -1,9 +1,9 @@
-// Exporta os criativos de /criativos em PNG (2x, como os de referência: 2160 px de largura).
-// Uso: com `npm run dev` rodando, `node scripts/export-criativos.mjs` → pasta criativos/verde e criativos/branco
-// Carrosséis saem inteiros (-inteiro.png); corte em 3 slides com: python scripts/cortar-carrossel.py
-import { execFileSync } from "node:child_process";
+// Exporta os criativos de /criativos em PNG (2x: 2160 px de largura), com o iPhone 3D.
+// Antes: `npm run dev` e `node scripts/export-telas.mjs` (telas do app que vão no iPhone).
+// Uso: `node scripts/export-criativos.mjs [filtro]` → criativos/<tom>/<conceito>-<formato>.png
 import { existsSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
+import puppeteer from "puppeteer-core";
 
 const BASE = process.env.BASE ?? "http://localhost:3000/criativos";
 const OUT = resolve("criativos");
@@ -12,56 +12,39 @@ const CHROME = [
   "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
 ].find(existsSync);
-if (!CHROME) throw new Error("Chrome não encontrado");
 
 const SIZES = { story: [1080, 1920], feed: [1080, 1350], square: [1080, 1080] };
-const CONCEPTS = ["solado", "tudo", "preco", "renda", "ceia", "rose", "roseOferta", "roseCaderno"];
-const TONES = { verde: "dark", branco: "white" };
-const jobs = [];
-for (const [toneName, tone] of Object.entries(TONES)) {
-  for (const c of CONCEPTS)
-    for (const f of Object.keys(SIZES))
-      jobs.push({ name: `${toneName}/${c}-${f}`, q: `c=${c}&f=${f}&tone=${tone}`, size: SIZES[f] });
-  for (const promo of ["foto", "selo", "grade"])
-    for (const f of Object.keys(SIZES))
-      jobs.push({
-        name: `${toneName}/panetone-${promo}-${f}`,
-        q: `promo=${promo}&f=${f}&tone=${tone}`,
-        size: SIZES[f],
-      });
-  jobs.push({
-    name: `${toneName}/carrossel-quadrado`,
-    q: `carrossel=square&tone=${tone}`,
-    size: [3240, 1080],
-    split: 3,
-  });
-  jobs.push({
-    name: `${toneName}/carrossel-feed`,
-    q: `carrossel=feed&tone=${tone}`,
-    size: [3240, 1350],
-    split: 3,
-  });
-}
+const CONCEPTS = ["solado", "tudo", "preco", "renda", "cozinha", "rose", "roseOferta", "panetone"];
+const TONES = ["noite", "branco", "creme", "menta"];
 
 const only = process.argv[2];
-mkdirSync(OUT, { recursive: true });
-for (const j of jobs) {
-  if (only && !j.name.includes(only)) continue;
-  const file = resolve(OUT, `${j.name}${j.split ? "-inteiro" : ""}.png`);
-  mkdirSync(dirname(file), { recursive: true });
-  execFileSync(
-    CHROME,
-    [
-      "--headless=new",
-      "--disable-gpu",
-      "--hide-scrollbars",
-      "--force-device-scale-factor=2",
-      `--window-size=${j.size[0]},${j.size[1]}`,
-      "--virtual-time-budget=15000",
-      `--screenshot=${file}`,
-      `${BASE}?${j.q}`,
-    ],
-    { stdio: "ignore" },
-  );
-  console.log("ok", j.name);
+const browser = await puppeteer.launch({
+  executablePath: CHROME,
+  headless: true,
+  protocolTimeout: 300000,
+  args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--hide-scrollbars"],
+});
+try {
+  const page = await browser.newPage();
+  for (const tone of TONES)
+    for (const c of CONCEPTS)
+      for (const [f, [w, h]] of Object.entries(SIZES)) {
+        const name = `${tone}/${c}-${f}`;
+        if (only && !name.includes(only)) continue;
+        await page.setViewport({ width: w, height: h, deviceScaleFactor: 2 });
+        await page.goto(`${BASE}?c=${c}&f=${f}&tone=${tone}`, { waitUntil: "networkidle0", timeout: 180000 });
+        await page.waitForFunction(
+          () => window.__phonesPending === 0 || window.__phonesPending === undefined,
+          {
+            timeout: 180000,
+          },
+        );
+        await page.evaluate(() => document.fonts.ready);
+        const file = resolve(OUT, `${name}.png`);
+        mkdirSync(dirname(file), { recursive: true });
+        await page.screenshot({ path: file, clip: { x: 0, y: 0, width: w, height: h } });
+        console.log("ok", name);
+      }
+} finally {
+  await browser.close();
 }

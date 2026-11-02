@@ -44,6 +44,7 @@ export function IPhone({
       {/* tela */}
       <div
         aria-hidden="true"
+        data-screen
         className={`relative h-full w-full overflow-hidden rounded-[13.2%/6.2%] ${dark ? "bg-pine-deep" : "bg-ivory"}`}
         style={{ containerType: "inline-size" }}
       >
@@ -68,7 +69,10 @@ export function IPhone({
               </svg>
             </span>
           </div>
-          <span className="absolute left-1/2 top-[1.1%] z-30 h-[3.5%] w-[30%] -translate-x-1/2 rounded-full bg-black" />
+          <span
+            data-island
+            className="absolute left-1/2 top-[1.1%] z-30 h-[3.5%] w-[30%] -translate-x-1/2 rounded-full bg-black"
+          />
           <div className="relative min-h-0 flex-1">{children}</div>
           <span
             className={`absolute bottom-[0.8%] left-1/2 z-30 h-[0.5%] w-[35%] -translate-x-1/2 rounded-full ${
