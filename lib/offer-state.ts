@@ -30,7 +30,8 @@ export function computeOfferState(now: Date | number, pricing: PricingInput): Of
   const info = getCurrentPhase(pricing.phases, now);
   const price = info.phase.price;
   const inst = calcInstallments(toCents(price), pricing.installments);
-  const best = inst.filter((o) => o.interestFree).at(-1);
+  // mostra a maior quantidade de parcelas, com o valor igual ao do checkout (com ou sem juros)
+  const best = inst.at(-1);
   return {
     phaseId: info.phase.id,
     phaseLabel: info.phase.label,

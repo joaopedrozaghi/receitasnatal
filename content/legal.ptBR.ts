@@ -80,7 +80,7 @@ export const privacy: LegalDoc = {
     {
       heading: "2. Quais dados tratamos",
       paragraphs: [
-        "Navegação: páginas visitadas, dispositivo, parâmetros de campanha (UTMs) e, somente com o seu consentimento, cookies de medição (Google Analytics) e de marketing (Meta e TikTok).",
+        "Navegação: páginas visitadas, dispositivo, parâmetros de campanha (UTMs) e, somente com o seu consentimento, cookies de medição (Google Analytics e Microsoft Clarity, que registra cliques e rolagem de forma anônima) e de marketing (Meta, TikTok e UTMify).",
         "Compra: nome, e-mail, telefone, CPF (quando exigido) e dados de pagamento são coletados pela plataforma de pagamentos parceira, que atua conforme a própria política de privacidade. Recebemos dela os dados necessários para liberar o acesso e prestar suporte.",
       ],
     },

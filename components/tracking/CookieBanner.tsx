@@ -5,12 +5,15 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { copy } from "@/content/copy.ptBR";
 import { OPEN_PREFERENCES_EVENT, readConsent, writeConsent } from "@/lib/consent";
+import { CLARITY, UTMIFY } from "@/components/tracking/Pixels";
 
 // O banner só existe quando há algum pixel configurado (é o que exige o consentimento).
 const HAS_PIXELS = Boolean(
   process.env.NEXT_PUBLIC_META_PIXEL_ID ||
     process.env.NEXT_PUBLIC_GA4_ID ||
-    process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID,
+    process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID ||
+    UTMIFY ||
+    CLARITY,
 );
 
 /** Banner LGPD: cookies não essenciais ficam bloqueados até o aceite. */

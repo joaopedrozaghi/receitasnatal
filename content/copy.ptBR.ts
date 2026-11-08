@@ -369,7 +369,6 @@ export const copy = {
     by: "por apenas",
     installmentsLine: "ou {{count}}x de {{amount}} no cartão",
     methods: "Pix, cartão ou boleto · pagamento único",
-    phaseLine: "{{phaseLabel}} termina em {{countdown}}. Depois, o preço sobe para R$ {{nextPrice}}.",
     cta: "SIM, QUERO MEU ESPECIAL DE NATAL",
     micro: "🔒 Compra segura · Acesso imediato · Garantia de {{guaranteeDays}} dias",
     bump: {
@@ -466,8 +465,8 @@ export const copy = {
     reject: "Só os essenciais",
     customize: "Personalizar",
     save: "Salvar escolhas",
-    analytics: "Medição (Google Analytics)",
-    marketing: "Marketing (Meta e TikTok)",
+    analytics: "Medição (Google Analytics e Microsoft Clarity)",
+    marketing: "Marketing (Meta, TikTok e UTMify)",
     policy: "Política de privacidade",
   },
 } as const;

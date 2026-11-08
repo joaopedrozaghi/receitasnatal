@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { copy } from "@/content/copy.ptBR";
-import { formatCountdown, getCountdown } from "@/lib/countdown";
 import { getPriceVars } from "@/lib/offer-state";
 import { interpolate } from "@/lib/template";
 import { track } from "@/lib/track";
@@ -60,7 +59,7 @@ export function OfferPriceBox({
   staticVars: Record<string, string | number>;
   bump: { enabled: boolean; price: number };
 }) {
-  const { offer, now, checkoutUrl, checkoutUrlWithBump } = useOffer();
+  const { offer, checkoutUrl, checkoutUrlWithBump } = useOffer();
   const [withBump, setWithBump] = useState(false);
   const vars = { ...staticVars, ...getPriceVars(offer) };
   const c = copy.offer;
@@ -88,14 +87,6 @@ export function OfferPriceBox({
           </p>
         ) : null}
         <p className="mt-1 text-sm text-cocoa-muted">{c.methods}</p>
-        {offer.endsAt && offer.nextPhase ? (
-          <p className="mx-auto mt-4 max-w-sm rounded-2xl bg-berry-soft px-4 py-3 text-sm font-semibold text-berry-hover">
-            {interpolate(c.phaseLine, {
-              ...vars,
-              countdown: formatCountdown(getCountdown(offer.endsAt, now)),
-            })}
-          </p>
-        ) : null}
       </div>
 
       {showBump ? (

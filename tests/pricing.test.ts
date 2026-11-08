@@ -109,3 +109,10 @@ describe("formatação", () => {
     expect(formatCents(5690)).toBe("R$ 56,90");
   });
 });
+
+describe("parcelamento igual ao checkout", () => {
+  it("R$ 24,90 em 3x dá R$ 9,22 com a taxa da config", () => {
+    const opts = calcInstallments(toCents(24.9), siteConfig.pricing.installments);
+    expect(opts.at(-1)).toMatchObject({ count: 3, amount: 922 });
+  });
+});

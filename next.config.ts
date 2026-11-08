@@ -7,6 +7,10 @@ const trackingScript = [
   "https://connect.facebook.net",
   "https://www.googletagmanager.com",
   "https://analytics.tiktok.com",
+  "https://cdn.utmify.com.br",
+  "https://cdn.jsdelivr.net", // UTMify: biblioteca de hash em navegadores antigos
+  "https://www.clarity.ms",
+  "https://*.clarity.ms",
 ].join(" ");
 const trackingConnect = [
   "https://www.facebook.com",
@@ -17,6 +21,11 @@ const trackingConnect = [
   "https://www.googletagmanager.com",
   "https://analytics.tiktok.com",
   "https://*.tiktok.com",
+  "https://*.utmify.com.br",
+  "https://api.ipify.org", // UTMify: IP do visitante
+  "https://api6.ipify.org",
+  "https://ipapi.co", // UTMify: país do visitante
+  "https://*.clarity.ms",
 ].join(" ");
 
 const csp = [

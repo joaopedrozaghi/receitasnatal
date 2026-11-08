@@ -135,7 +135,7 @@ export const rawConfig = {
     editionYear: 2026,
     fullName: "Receitinhas da Rô · Especial de Natal",
     tagline: "Ceia farta, panetone de padaria e, se você quiser, uma renda extra no fim do ano.",
-    supportEmail: "contato@seudominio.com.br", // placeholder
+    supportEmail: "suportereceitasdaro@gmail.com",
     supportWhatsapp: "5535999999999", // placeholder
     legalName: "SUA RAZÃO SOCIAL", // placeholder
     cnpj: "00.000.000/0001-00", // placeholder
@@ -187,7 +187,9 @@ export const rawConfig = {
       { id: "natal", label: "Oferta de Natal", price: 24.9, until: "2026-12-25T23:59:00-03:00" },
       { id: "cheio", label: "Preço cheio", price: 97, until: null },
     ],
-    installments: { max: 3, interestFreeUpTo: 3, monthlyInterestRate: 0 }, // igual ao configurado na plataforma
+    // igual ao checkout: 3x de R$ 9,22 (juros da plataforma). Se o checkout mudar, ajuste a taxa
+    // até a parcela bater (ex.: npx vitest run tests/pricing.test.ts mostra o valor calculado).
+    installments: { max: 3, interestFreeUpTo: 1, monthlyInterestRate: 0.054 },
     timezone: "America/Sao_Paulo",
   },
 
