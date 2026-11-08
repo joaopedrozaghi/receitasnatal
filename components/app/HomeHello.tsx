@@ -25,7 +25,7 @@ export function HomeHello() {
       </div>
       <Link
         href="/app/conta"
-        aria-label="Minha conta"
+        aria-label="Ajustes"
         className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-gold-light to-gold text-lg font-bold text-pine-deep shadow-lift ring-2 ring-white/20"
       >
         {first ? first.charAt(0).toUpperCase() : "R"}

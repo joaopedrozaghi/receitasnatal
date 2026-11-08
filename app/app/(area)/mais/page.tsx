@@ -37,7 +37,7 @@ export default function MorePage() {
       title: "Embalagem e apresentação",
       text: "Como embalar, etiquetar e montar cestas.",
     },
-    { href: "/app/conta", icon: "lock", title: "Minha conta", text: "Instalar o app e sair." },
+    { href: "/app/conta", icon: "lock", title: "Ajustes", text: "Instalar o app e apagar dados." },
   ];
   return (
     <>

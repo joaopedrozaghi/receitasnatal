@@ -96,12 +96,12 @@ export function AppNav() {
             href="/app/conta"
             className="mx-3 mb-5 mt-auto flex items-center gap-3 rounded-2xl bg-white/5 p-3 ring-1 ring-white/10 hover:bg-white/10"
           >
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-gold-light to-gold font-bold text-pine-deep">
-              {user.name.charAt(0).toUpperCase()}
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gold-light text-pine-deep">
+              <Icon name="user" className="h-5 w-5" />
             </span>
             <span className="min-w-0">
-              <span className="block truncate text-sm font-semibold">{user.name}</span>
-              <span className="block truncate text-xs text-snow/60">Minha conta</span>
+              <span className="block truncate text-sm font-semibold">{user.name || "Meu app"}</span>
+              <span className="block truncate text-xs text-snow/60">Ajustes e instalação</span>
             </span>
           </Link>
         ) : null}

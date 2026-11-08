@@ -137,44 +137,24 @@ A página é estática e é regenerada a cada minuto; o preço da fase também �
 
 ## App de receitas (área de membros em `/app`)
 
-O produto é um web app dentro deste mesmo projeto: `https://SEU-DOMINIO/app`. Funciona como o app
-`edfisica`: **cada compradora cria a própria conta (nome, e-mail e senha) usando um código de acesso**, que
-é o mesmo para todo mundo que compra e vai no e-mail de entrega. Não há banco de dados na nuvem.
+O produto é um web app dentro deste mesmo projeto: `https://SEU-DOMINIO/app`. **Não tem cadastro:** a
+primeira tela tem só um botão "Entrar", e o aparelho lembra que a pessoa entrou. Não há banco de dados na
+nuvem. Na mensagem de entrega da plataforma de checkout, mande só o link `https://SEU-DOMINIO/app`.
+
+Como não há senha nem código, qualquer pessoa com o link consegue abrir o app.
 
 **O que tem:** 102 receitas em 7 categorias (`content/recipes/`), busca por nome ou ingrediente, porções
 ajustáveis, lista de compras que soma itens repetidos, favoritos, modo cozinha (tela acesa, um passo por
 vez, timer com alarme e o "por quê" de cada etapa), "continuar de onde parou", cronograma da ceia, Guia
 SOS, calculadora de preço, os 3 bônus e instalação na tela inicial.
 
-**Onde ficam os dados:** a conta e os dados dela (favoritos, lista, progresso, cronograma) ficam salvos no
-próprio aparelho, separados por conta (dá para ter mais de uma pessoa no mesmo celular). A senha é guardada
-com hash PBKDF2, nunca em texto. Em outro celular, a cliente cria a conta de novo com o mesmo código.
-
-### Configurar o código de acesso (uma vez)
-
-O código atual você já tem (não fica escrito aqui, porque o repositório é público). Para trocar:
-
-1. Escolha um código (ex.: `PANETONE-ROSE-7Q2`) e gere o hash dele:
-
-   ```bash
-   npm run app:codigo -- PANETONE-ROSE-7Q2
-   ```
-
-2. Cole o hash que aparecer em `config/site.config.ts` → `app.accessCodeHashes` (no lugar do atual) e faça
-   commit + push. Só o hash fica no código, não o código.
-3. Na plataforma de checkout (Kiwify, Hotmart, Eduzz…), coloque na mensagem/e-mail de entrega: o link
-   `https://SEU-DOMINIO/app` e o código de acesso.
-
-Dá para ter mais de um código válido ao mesmo tempo (ex.: o antigo e o novo): é só deixar os dois hashes
-na lista. Maiúsculas e espaços no código não importam.
-
-**Limite (igual ao edfisica):** é uma barreira leve. Como tudo roda no navegador, quem entende de
-programação consegue contornar. Para conteúdo de receitas, costuma ser suficiente; se um dia precisar de
-bloqueio forte, é preciso um servidor com banco de dados.
+**Onde ficam os dados:** favoritos, lista, progresso e cronograma ficam salvos no próprio aparelho. Em
+Ajustes dá para voltar à tela de entrada ou apagar os dados. Quem criou conta na versão anterior (com
+e-mail e senha) continua com os mesmos dados ao tocar em Entrar.
 
 ### Testar no computador
 
-`npm run dev`, abra `http://localhost:3000/app`, toque em **Criar conta** e use o código atual.
+`npm run dev`, abra `http://localhost:3000/app` e toque em **Entrar**.
 
 ### Editar receitas
 

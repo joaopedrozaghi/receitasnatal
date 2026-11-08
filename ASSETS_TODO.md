@@ -2,8 +2,7 @@
 
 ## 0. App (área de membros)
 
-- [x] **Código de acesso do app definido** (para trocar: `npm run app:codigo -- SEUCODIGO` e cole o hash em `config/site.config.ts`, passo a passo no README > App).
-- [ ] **Mensagem de entrega na plataforma de checkout** com o link `/app` e o código de acesso.
+- [ ] **Mensagem de entrega na plataforma de checkout** com o link `/app`.
 - [ ] **Testar e revisar as 102 receitas** (`content/recipes/`). Foram escritas com proporções usuais, mas cada uma precisa ser feita na cozinha e ajustada antes de vender: quantidades, tempos, temperaturas, rendimento.
 - [ ] Fotos das receitas: hoje só 5 receitas/categorias têm foto; as demais usam ilustração.
 

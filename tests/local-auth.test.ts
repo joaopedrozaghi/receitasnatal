@@ -1,6 +1,4 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { createHash } from "crypto";
-import { siteConfig } from "@/config/site.config";
 
 // localStorage simples para rodar no Node
 class MemStorage {
@@ -29,67 +27,41 @@ const g = globalThis as unknown as { window: unknown };
 g.window = Object.assign(globalThis, { localStorage: storage, dispatchEvent: () => true });
 
 const auth = await import("@/lib/app/local-auth");
-const CODE = "TESTE123";
-const hashes = [createHash("sha256").update(CODE).digest("hex")];
 
-describe("contas no aparelho com código de acesso", () => {
+describe("entrada sem cadastro", () => {
   beforeEach(() => storage.clear());
 
-  it("a config tem hashes válidos e não aceita qualquer código", async () => {
-    expect(siteConfig.app.accessCodeHashes.every((h) => /^[0-9a-f]{64}$/.test(h))).toBe(true);
-    expect(await auth.codeIsValid("errado", siteConfig.app.accessCodeHashes)).toBe(false);
+  it("começa fora do app e entra com um toque", () => {
+    expect(auth.currentUser()).toBeNull();
+    const me = auth.enter();
+    expect(auth.currentUser()?.id).toBe(me.id);
   });
 
-  it("criar conta exige código válido e não guarda a senha em texto", async () => {
-    const bad = await auth.signUp(
-      { name: "Ana", email: "ana@x.com", password: "123456", code: "NADA" },
-      hashes,
-    );
-    expect(bad).toMatchObject({ ok: false, field: "code" });
-    const ok = await auth.signUp(
-      { name: "Ana", email: "Ana@X.com", password: "123456", code: "teste123" },
-      hashes,
-    );
-    expect(ok.ok).toBe(true);
-    expect(auth.currentUser()?.email).toBe("ana@x.com");
-    expect(
-      JSON.stringify([...Array(storage.length)].map((_, i) => storage.getItem(storage.key(i)!))),
-    ).not.toContain("123456");
-  });
-
-  it("entrar, senha errada, e-mail duplicado e sair", async () => {
-    await auth.signUp({ name: "Ana", email: "ana@x.com", password: "segredo", code: CODE }, hashes);
+  it("sair volta para a entrada, mas os dados continuam no aparelho", () => {
+    const me = auth.enter();
+    storage.setItem(`${auth.userPrefix(me.id)}favoritos`, '["chocotone"]');
     auth.signOut();
     expect(auth.currentUser()).toBeNull();
-    expect(await auth.signIn({ email: "ana@x.com", password: "errada" })).toMatchObject({
-      ok: false,
-      field: "password",
-    });
-    expect(await auth.signIn({ email: "outra@x.com", password: "segredo" })).toMatchObject({
-      ok: false,
-      field: "email",
-    });
-    expect((await auth.signIn({ email: "ANA@x.com", password: "segredo" })).ok).toBe(true);
-    const dup = await auth.signUp(
-      { name: "Ana 2", email: "ana@x.com", password: "outra1", code: CODE },
-      hashes,
-    );
-    expect(dup).toMatchObject({ ok: false, field: "email" });
+    const again = auth.enter();
+    expect(again.id).toBe(me.id);
+    expect(storage.getItem(`${auth.userPrefix(me.id)}favoritos`)).toBe('["chocotone"]');
   });
 
-  it("trocar senha e excluir conta apaga os dados dela", async () => {
-    const res = await auth.signUp(
-      { name: "Bia", email: "bia@x.com", password: "antiga1", code: CODE },
-      hashes,
-    );
-    if (!res.ok) throw new Error("falhou");
-    storage.setItem(`${auth.userPrefix(res.user.id)}favoritos`, '["chocotone"]');
-    expect((await auth.changePassword("errada", "nova123")).ok).toBe(false);
-    expect((await auth.changePassword("antiga1", "nova123")).ok).toBe(true);
-    auth.signOut();
-    expect((await auth.signIn({ email: "bia@x.com", password: "nova123" })).ok).toBe(true);
-    expect((await auth.deleteAccount("nova123")).ok).toBe(true);
-    expect(storage.getItem(`${auth.userPrefix(res.user.id)}favoritos`)).toBeNull();
-    expect(auth.hasAccounts()).toBe(false);
+  it("quem tinha conta na versão anterior mantém os dados", () => {
+    storage.setItem("rr:auth:users", JSON.stringify([{ id: "antiga1", name: "Ana", email: "ana@x.com" }]));
+    storage.setItem("rr:u:antiga1:lista", "[1]");
+    const me = auth.enter();
+    expect(me.id).toBe("antiga1");
+    expect(me.name).toBe("Ana");
+  });
+
+  it("apagar dados remove favoritos, lista e progresso deste aparelho", () => {
+    const me = auth.enter();
+    storage.setItem(`${auth.userPrefix(me.id)}favoritos`, "[]");
+    storage.setItem(`${auth.userPrefix(me.id)}lista`, "[]");
+    auth.clearData();
+    expect(storage.getItem(`${auth.userPrefix(me.id)}favoritos`)).toBeNull();
+    expect(storage.getItem(`${auth.userPrefix(me.id)}lista`)).toBeNull();
+    expect(auth.currentUser()).not.toBeNull();
   });
 });

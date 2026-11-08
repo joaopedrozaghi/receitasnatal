@@ -187,3 +187,43 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Tela de abertura do app: entrada em sequência e foto que se aproxima devagar */
+@keyframes start-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes start-photo {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .start-in {
+    animation: start-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .start-in:nth-child(2) {
+    animation-delay: 80ms;
+  }
+  .start-in:nth-child(3) {
+    animation-delay: 160ms;
+  }
+  .start-in:nth-child(4) {
+    animation-delay: 240ms;
+  }
+  .start-in:nth-child(5) {
+    animation-delay: 320ms;
+  }
+  .start-photo {
+    animation: start-photo 2.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
