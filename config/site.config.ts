@@ -194,7 +194,7 @@ export const rawConfig = {
   },
 
   checkout: {
-    url: "", // PREENCHER: link do checkout (Kiwify/Hotmart/Eduzz)
+    url: "https://pay.cakto.com.br/c97t4fc_1296027", // checkout da Cakto
     urlWithBump: "", // opcional
   },
 
