@@ -2,7 +2,8 @@ import { siteConfig } from "@/config/site.config";
 import { copy } from "@/content/copy.ptBR";
 import { t } from "@/lib/offer";
 import { ArchPhoto, ChefAvatar } from "@/components/chef/ChefPhotos";
-import { CheckoutCta, HeroPriceLine } from "@/components/offer/OfferBits";
+import { HeroPriceLine } from "@/components/offer/OfferBits";
+import { CtaLink } from "@/components/ui/CtaButton";
 import { IPhone } from "@/components/phone/IPhone";
 import { HomeScreen } from "@/components/phone/Screens";
 import { OrangeSlice, Sprig, Star } from "@/components/decor/Ornaments";
@@ -51,7 +52,10 @@ export function Hero() {
           <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-snow/80 sm:text-lg">{t(h.sub)}</p>
 
           <div className="mt-7 flex flex-col items-start gap-3">
-            <CheckoutCta block>{h.cta}</CheckoutCta>
+            {/* primeiro mostra as receitas; o checkout vem depois da explicação */}
+            <CtaLink href="#receitas" block>
+              {h.cta}
+            </CtaLink>
             <HeroPriceLine />
           </div>
 

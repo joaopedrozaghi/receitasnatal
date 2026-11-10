@@ -169,11 +169,12 @@ export function Gallery() {
       </figure>
     ) : null;
   return (
-    <section className="section bg-ivory">
+    <section id="receitas" className="section scroll-mt-4 bg-ivory">
       <div className="container-page">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Kicker>{c.kicker}</Kicker>
           <Title text={c.title} className="h2 mt-5" />
+          <p className="lead-text mt-5">{t(c.sub)}</p>
         </Reveal>
         <div className="mt-12 grid auto-rows-[160px] grid-cols-2 gap-3 sm:auto-rows-[200px] sm:gap-4 lg:grid-cols-4">
           {tile(a, "col-span-2 row-span-2", "(min-width: 1024px) 560px, 92vw")}
@@ -181,6 +182,9 @@ export function Gallery() {
           {tile(d, "row-span-2", "(min-width: 1024px) 280px, 46vw")}
           {tile(e, "col-span-2 lg:col-span-2", "(min-width: 1024px) 560px, 92vw")}
           {tile(f, "col-span-2 lg:col-span-2", "(min-width: 1024px) 560px, 92vw")}
+        </div>
+        <div className="mt-12 flex flex-col items-center gap-3">
+          <CheckoutCta block>{c.cta}</CheckoutCta>
         </div>
       </div>
     </section>

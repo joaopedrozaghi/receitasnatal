@@ -24,7 +24,7 @@ export const copy = {
       C: "A ceia que todo mundo elogia, *sem passar o dia* inteiro na cozinha.",
     },
     sub: "Mais de {{recipesCount}} receitas de panetones, chocotones, docinhos, salgados e ceia completa num app passo a passo pensado para quem nunca fez: medidas em gramas, timer em cada etapa e um Guia SOS para quando a massa não colabora.", // CONFIRMAR
-    cta: "QUERO MEU ESPECIAL DE NATAL",
+    cta: "VER AS RECEITAS",
     priceLineWithAnchor: "De R$ {{anchor}} por **R$ {{price}}** · pagamento único",
     priceLineWithoutAnchor: "**R$ {{price}}** · pagamento único",
     trust: ["Acesso imediato", "Funciona no celular, sem baixar nada", "{{guaranteeDays}} dias de garantia"],
@@ -64,6 +64,8 @@ export const copy = {
   gallery: {
     kicker: "Direto do forno",
     title: "Receitas que *enchem os olhos* (e a mesa).",
+    sub: "São mais de {{recipesCount}} receitas num app que abre no seu celular: panetones e chocotones, docinhos, salgados e a ceia completa. Cada uma com as medidas em gramas, um timer em cada etapa e o porquê de cada passo, para dar certo já na primeira vez.",
+    cta: "QUERO MEU ESPECIAL DE NATAL",
     // CONFIRMAR: fotos com direito de uso; receitas que estarão no app
     items: [
       {
