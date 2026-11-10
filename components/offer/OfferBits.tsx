@@ -14,16 +14,50 @@ function useCheckoutClick(value: number) {
 }
 
 /** Botão do meio da página: desce até a seção da oferta (preço + compra). */
-/** Rola até um elemento e corrige a posição enquanto as seções do caminho carregam (content-visibility). */
-function jumpTo(el: HTMLElement) {
-  // O html tem scroll-behavior: smooth; os saltos usam "instant" para não serem animados
-  // (uma animação cancelaria a outra).
-  const jump = () => {
+/**
+ * Rola suavemente até um elemento. As seções do caminho só ganham a altura real quando aparecem
+ * (content-visibility), então o destino é recalculado a cada quadro e corrigido no fim.
+ */
+function scrollToEl(el: HTMLElement, smooth = true) {
+  const target = () => {
     const offset = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: "instant" });
+    return el.getBoundingClientRect().top + window.scrollY - offset;
   };
-  jump();
-  [120, 400, 900, 1500].forEach((ms) => window.setTimeout(jump, ms));
+  // o html tem scroll-behavior: smooth; cada passo usa "instant" para a animação ser só a nossa
+  const set = (y: number) => window.scrollTo({ top: y, behavior: "instant" });
+  const settle = () => [150, 500, 1000].forEach((ms) => window.setTimeout(() => set(target()), ms));
+  if (!smooth || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    set(target());
+    settle();
+    return;
+  }
+  const from = window.scrollY;
+  const duration = Math.min(1800, 700 + Math.abs(target() - from) / 12);
+  const start = performance.now();
+  const ease = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+  let done = false;
+  const finish = () => {
+    if (done) return;
+    done = true;
+    set(target());
+    settle();
+  };
+  // conta só o tempo que a animação realmente andou: se o celular travar desenhando uma seção,
+  // a rolagem pausa e continua de onde estava, sem dar um pulo
+  let elapsed = 0;
+  let last = start;
+  const step = (now: number) => {
+    if (done) return;
+    elapsed += Math.min(now - last, 34);
+    last = now;
+    const p = Math.min(1, elapsed / duration);
+    set(from + (target() - from) * ease(p));
+    if (p < 1) requestAnimationFrame(step);
+    else finish();
+  };
+  requestAnimationFrame(step);
+  // se a aba estiver em segundo plano (sem quadros de animação), chega no destino mesmo assim
+  window.setTimeout(finish, duration + 4000);
 }
 
 /** Na página inicial, quem chega por /#oferta (vindo de outra página) cai certinho na oferta. */
@@ -31,7 +65,7 @@ export function HashScrollFix() {
   useEffect(() => {
     const id = location.hash.slice(1);
     const el = id ? document.getElementById(id) : null;
-    if (el) jumpTo(el);
+    if (el) scrollToEl(el, false);
   }, []);
   return null;
 }
@@ -58,7 +92,7 @@ export function OfferCta({
     if (!el) return; // em outra página: segue o link normal até /#oferta
     e.preventDefault();
     history.replaceState(null, "", `#${id}`);
-    jumpTo(el);
+    scrollToEl(el);
   };
   return (
     <CtaLink href={href} size={size} block={block} className={className} onClick={onClick}>
