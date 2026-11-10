@@ -13,6 +13,60 @@ function useCheckoutClick(value: number) {
   return () => track("InitiateCheckout", { value });
 }
 
+/** Botão do meio da página: desce até a seção da oferta (preço + compra). */
+/** Rola até um elemento e corrige a posição enquanto as seções do caminho carregam (content-visibility). */
+function jumpTo(el: HTMLElement) {
+  // O html tem scroll-behavior: smooth; os saltos usam "instant" para não serem animados
+  // (uma animação cancelaria a outra).
+  const jump = () => {
+    const offset = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: "instant" });
+  };
+  jump();
+  [120, 400, 900, 1500].forEach((ms) => window.setTimeout(jump, ms));
+}
+
+/** Na página inicial, quem chega por /#oferta (vindo de outra página) cai certinho na oferta. */
+export function HashScrollFix() {
+  useEffect(() => {
+    const id = location.hash.slice(1);
+    const el = id ? document.getElementById(id) : null;
+    if (el) jumpTo(el);
+  }, []);
+  return null;
+}
+
+export function OfferCta({
+  children,
+  size = "lg",
+  block,
+  className,
+  href = "#oferta",
+}: {
+  children: React.ReactNode;
+  size?: "md" | "lg";
+  block?: boolean;
+  className?: string;
+  /** "/#oferta" em páginas que não são a inicial */
+  href?: string;
+}) {
+  // As seções abaixo da dobra têm altura estimada até aparecerem (content-visibility), então um salto
+  // longo erra o alvo. Rola até a oferta e corrige a posição enquanto as seções do caminho carregam.
+  const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const id = href.split("#")[1];
+    const el = id ? document.getElementById(id) : null;
+    if (!el) return; // em outra página: segue o link normal até /#oferta
+    e.preventDefault();
+    history.replaceState(null, "", `#${id}`);
+    jumpTo(el);
+  };
+  return (
+    <CtaLink href={href} size={size} block={block} className={className} onClick={onClick}>
+      {children}
+    </CtaLink>
+  );
+}
+
 /** CTA que leva ao checkout externo (com UTMs) e dispara InitiateCheckout. */
 export function CheckoutCta({
   children,
@@ -183,9 +237,9 @@ export function StickyCta({ heroId, hideOnIds }: { heroId: string; hideOnIds: st
         visible ? "translate-y-0" : "pointer-events-none translate-y-full"
       }`}
     >
-      <CheckoutCta size="md" block className="w-full">
+      <OfferCta size="md" block className="w-full">
         {interpolate(copy.stickyCta, getPriceVars(offer))}
-      </CheckoutCta>
+      </OfferCta>
     </div>
   );
 }

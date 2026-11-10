@@ -2,7 +2,7 @@ import Image from "next/image";
 import { copy } from "@/content/copy.ptBR";
 import { t } from "@/lib/offer";
 import { ArchPhoto } from "@/components/chef/ChefPhotos";
-import { CheckoutCta } from "@/components/offer/OfferBits";
+import { OfferCta } from "@/components/offer/OfferBits";
 import { IPhone } from "@/components/phone/IPhone";
 import { CookScreen, HomeScreen, RecipeScreen } from "@/components/phone/Screens";
 import { Cinnamon, Sprig, Star } from "@/components/decor/Ornaments";
@@ -142,7 +142,7 @@ export function Menu() {
           })}
         </ul>
         <div className="mt-12 flex justify-center">
-          <CheckoutCta block>{c.cta}</CheckoutCta>
+          <OfferCta block>{c.cta}</OfferCta>
         </div>
       </div>
     </section>
@@ -184,7 +184,7 @@ export function Gallery() {
           {tile(f, "col-span-2 lg:col-span-2", "(min-width: 1024px) 560px, 92vw")}
         </div>
         <div className="mt-12 flex flex-col items-center gap-3">
-          <CheckoutCta block>{c.cta}</CheckoutCta>
+          <OfferCta block>{c.cta}</OfferCta>
         </div>
       </div>
     </section>
@@ -290,7 +290,7 @@ export function Desire() {
             ))}
           </div>
           <div className="mt-9">
-            <CheckoutCta block>{c.cta}</CheckoutCta>
+            <OfferCta block>{c.cta}</OfferCta>
           </div>
         </Reveal>
       </div>

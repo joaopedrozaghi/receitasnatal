@@ -3,7 +3,7 @@ import { getOfferState, t } from "@/lib/offer";
 import { siteUrl } from "@/lib/seo";
 import { copy } from "@/content/copy.ptBR";
 import { OfferShell } from "@/components/offer/OfferShell";
-import { StickyCta } from "@/components/offer/OfferBits";
+import { HashScrollFix, StickyCta } from "@/components/offer/OfferBits";
 import { Hero } from "@/components/sections/Hero";
 import { AppShowcase, Desire, Gallery, Marquee, Menu, Pain } from "@/components/sections/Body";
 import { Chef } from "@/components/sections/Chef";
@@ -84,6 +84,7 @@ export default function Home() {
       </main>
       <Footer />
       <StickyCta heroId="topo" hideOnIds={STICKY_HIDE_ON} />
+      <HashScrollFix />
     </OfferShell>
   );
 }

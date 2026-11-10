@@ -6,7 +6,7 @@ import { copy } from "@/content/copy.ptBR";
 import { story, type StoryChapter } from "@/content/story.ptBR";
 import { ChefPhotos } from "@/components/sections/Chef";
 import { OfferShell } from "@/components/offer/OfferShell";
-import { CheckoutCta } from "@/components/offer/OfferBits";
+import { OfferCta } from "@/components/offer/OfferBits";
 import { Footer } from "@/components/sections/Closing";
 import { SubpageHeader } from "@/components/SubpageHeader";
 import { Sprig } from "@/components/decor/Ornaments";
@@ -114,7 +114,9 @@ export default function AboutPage() {
               ))}
             </ul>
             <div className="mt-12 flex flex-col items-center gap-4">
-              <CheckoutCta block>{copy.hero.cta}</CheckoutCta>
+              <OfferCta href="/#oferta" block>
+                {copy.gallery.cta}
+              </OfferCta>
               <Link
                 href="/"
                 className="inline-flex min-h-[44px] items-center font-semibold text-pine underline decoration-gold decoration-2 underline-offset-4 hover:text-berry"

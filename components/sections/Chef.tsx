@@ -5,7 +5,7 @@ import { copy } from "@/content/copy.ptBR";
 import { story } from "@/content/story.ptBR";
 import { chefDisclosure, shouldShowDisclosure } from "@/lib/offer";
 import { ArchPhoto } from "@/components/chef/ChefPhotos";
-import { CheckoutCta } from "@/components/offer/OfferBits";
+import { OfferCta } from "@/components/offer/OfferBits";
 import { Star } from "@/components/decor/Ornaments";
 import { Kicker } from "@/components/ui/Kicker";
 import { Title } from "@/components/ui/Rich";
@@ -105,7 +105,7 @@ export function Chef({ cfg = siteConfig, withCta = true }: { cfg?: SiteConfig; w
 
           {withCta ? (
             <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-              <CheckoutCta>{c.cta}</CheckoutCta>
+              <OfferCta href="/#oferta">{c.cta}</OfferCta>
               <Link
                 href="/sobre"
                 className="inline-flex min-h-[44px] items-center font-semibold text-pine underline decoration-gold decoration-2 underline-offset-4 hover:text-berry"
