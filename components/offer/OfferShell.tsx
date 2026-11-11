@@ -10,6 +10,7 @@ export function OfferShell({ children }: { children: React.ReactNode }) {
       serverNow={Date.now()}
       checkoutUrl={siteConfig.checkout.url}
       checkoutUrlWithBump={siteConfig.checkout.urlWithBump}
+      checkoutUrlBasic={siteConfig.basicPlan.url}
     >
       {children}
     </OfferProvider>

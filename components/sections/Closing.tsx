@@ -2,7 +2,7 @@ import { siteConfig } from "@/config/site.config";
 import { copy } from "@/content/copy.ptBR";
 import { chefDisclosure, getStaticVars, shouldShowDisclosure, t } from "@/lib/offer";
 import { ChefAvatar } from "@/components/chef/ChefPhotos";
-import { CheckoutCta, OfferPriceBox } from "@/components/offer/OfferBits";
+import { BasicPlanCard, CheckoutCta, OfferPriceBox } from "@/components/offer/OfferBits";
 import { IPhone } from "@/components/phone/IPhone";
 import { HomeScreen } from "@/components/phone/Screens";
 import { OrangeSlice, Sprig, Star } from "@/components/decor/Ornaments";
@@ -23,8 +23,14 @@ export function Offer() {
           <Kicker>{c.kicker}</Kicker>
           <Title text={c.title} className="h2 mt-5" />
         </Reveal>
-        <div className="mx-auto mt-12 max-w-5xl overflow-hidden rounded-[2.5rem] bg-white shadow-lift ring-1 ring-cocoa/5 lg:grid lg:grid-cols-[1.05fr_1fr]">
-          <div className="grain relative overflow-hidden bg-pine p-7 text-snow sm:p-10">
+        <div
+          id="oferta-completa"
+          className="relative mx-auto mt-12 max-w-5xl scroll-mt-24 overflow-hidden rounded-[2.5rem] bg-white shadow-lift ring-2 ring-gold lg:grid lg:grid-cols-[1.05fr_1fr]"
+        >
+          <span className="absolute left-1/2 top-0 z-10 -translate-x-1/2 whitespace-nowrap rounded-b-2xl bg-gold px-5 py-1.5 text-xs font-extrabold uppercase tracking-[0.16em] text-pine-deep">
+            {c.fullTag}
+          </span>
+          <div className="grain relative overflow-hidden bg-pine p-7 pt-14 text-snow sm:p-10 sm:pt-16">
             <div className="flex items-start gap-6">
               <IPhone label="App Especial de Natal" className="hidden w-[38%] shrink-0 -rotate-3 sm:block">
                 <HomeScreen />
@@ -49,6 +55,17 @@ export function Offer() {
             />
           </div>
         </div>
+        {siteConfig.basicPlan.enabled ? (
+          <BasicPlanCard
+            staticVars={getStaticVars()}
+            plan={{
+              name: siteConfig.basicPlan.name,
+              price: siteConfig.basicPlan.price,
+              recipesCount: siteConfig.basicPlan.recipesCount,
+              hasUrl: !!siteConfig.basicPlan.url,
+            }}
+          />
+        ) : null}
       </div>
     </section>
   );

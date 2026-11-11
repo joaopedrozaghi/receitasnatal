@@ -9,6 +9,7 @@ interface OfferContextValue {
   now: number;
   checkoutUrl: string;
   checkoutUrlWithBump: string;
+  checkoutUrlBasic: string;
 }
 
 const OfferContext = createContext<OfferContextValue | null>(null);
@@ -23,12 +24,14 @@ export function OfferProvider({
   serverNow,
   checkoutUrl,
   checkoutUrlWithBump,
+  checkoutUrlBasic,
   children,
 }: {
   pricing: PricingInput;
   serverNow: number;
   checkoutUrl: string;
   checkoutUrlWithBump: string;
+  checkoutUrlBasic: string;
   children: ReactNode;
 }) {
   const [now, setNow] = useState(serverNow);
@@ -55,8 +58,9 @@ export function OfferProvider({
       // sem link de checkout configurado, os botões levam à oferta da página principal
       checkoutUrl: appendParams(checkoutUrl, utms) || "/#oferta",
       checkoutUrlWithBump: appendParams(checkoutUrlWithBump, utms),
+      checkoutUrlBasic: appendParams(checkoutUrlBasic, utms),
     }),
-    [offer, now, checkoutUrl, checkoutUrlWithBump, utms],
+    [offer, now, checkoutUrl, checkoutUrlWithBump, checkoutUrlBasic, utms],
   );
   return <OfferContext.Provider value={value}>{children}</OfferContext.Provider>;
 }

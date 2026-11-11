@@ -8,6 +8,8 @@ import { track } from "@/lib/track";
 import { CtaLink } from "@/components/ui/CtaButton";
 import { Rich } from "@/components/ui/Rich";
 import { useOffer } from "@/components/offer/OfferProvider";
+import { Icon } from "@/components/ui/Icon";
+import { formatReais } from "@/lib/pricing";
 
 function useCheckoutClick(value: number) {
   return () => track("InitiateCheckout", { value });
@@ -274,6 +276,86 @@ export function StickyCta({ heroId, hideOnIds }: { heroId: string; hideOnIds: st
       <OfferCta size="md" block className="w-full">
         {interpolate(copy.stickyCta, getPriceVars(offer))}
       </OfferCta>
+    </div>
+  );
+}
+
+/** Plano básico (só panetones): cartão mais simples, abaixo do plano completo. */
+export function BasicPlanCard({
+  staticVars,
+  plan,
+}: {
+  staticVars: Record<string, string | number>;
+  plan: { name: string; price: number; recipesCount: number; hasUrl: boolean };
+}) {
+  const { offer, checkoutUrlBasic } = useOffer();
+  const c = copy.offer.basic;
+  const diff = Math.max(0, offer.price - plan.price);
+  const vars = {
+    ...staticVars,
+    basicRecipes: plan.recipesCount,
+    diff: formatReais(diff),
+  };
+  // sem link configurado o cartão só aparece em desenvolvimento (para revisar o visual)
+  if (!plan.hasUrl && process.env.NODE_ENV === "production") return null;
+
+  return (
+    <div className="mx-auto mt-8 max-w-5xl rounded-[2rem] bg-white p-6 shadow-soft ring-1 ring-cocoa/10 sm:p-8 lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-10">
+      <div>
+        <p className="text-sm font-extrabold uppercase tracking-[0.14em] text-cocoa-muted">{c.kicker}</p>
+        <h3 className="mt-2 font-display text-3xl text-cocoa sm:text-4xl">{c.title}</h3>
+        <p className="mt-2 text-[16px] text-cocoa-soft">{c.lead}</p>
+        <ul className="mt-5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
+          {c.includes.map((it) => (
+            <li key={it} className="flex gap-2.5 text-[15px] font-medium leading-snug text-cocoa">
+              <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-pine text-snow">
+                <Icon name="check" className="h-3.5 w-3.5" strokeWidth={2.6} />
+              </span>
+              {interpolate(it, vars)}
+            </li>
+          ))}
+          {c.excludes.map((it) => (
+            <li key={it} className="flex gap-2.5 text-[15px] leading-snug text-cocoa-muted">
+              <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-cocoa/10 text-cocoa-muted">
+                <Icon name="x" className="h-3.5 w-3.5" strokeWidth={2.4} />
+              </span>
+              <s>{it}</s>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="mt-7 border-t border-cocoa/10 pt-6 text-center lg:mt-0 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+        <p className="font-display text-5xl leading-none text-cocoa">
+          <span className="align-top font-sans text-xl font-semibold">R$ </span>
+          {formatReais(plan.price)}
+        </p>
+        <p className="mt-2 text-sm text-cocoa-muted">{c.price}</p>
+        <a
+          href={checkoutUrlBasic || "#oferta"}
+          onClick={() => track("InitiateCheckout", { value: plan.price })}
+          className="mt-5 flex min-h-[56px] w-full items-center justify-center rounded-full border-2 border-pine px-6 text-[15px] font-extrabold tracking-wide text-pine transition-colors hover:bg-pine hover:text-snow"
+        >
+          {c.cta}
+        </a>
+        {diff > 0 ? (
+          <p className="mt-4 text-sm leading-relaxed text-cocoa-soft">
+            <Rich text={interpolate(c.upsell, vars)} />{" "}
+            <a
+              href="#oferta"
+              onClick={(e) => {
+                const el = document.getElementById("oferta-completa");
+                if (!el) return;
+                e.preventDefault();
+                scrollToEl(el);
+              }}
+              className="font-bold text-berry underline underline-offset-2"
+            >
+              {c.upsellLink}
+            </a>
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }

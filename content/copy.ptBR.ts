@@ -379,6 +379,23 @@ export const copy = {
       body: "10 receitas premium de panetone + a **Planilha de Custos e Precificação**, que calcula quanto você gasta e por quanto vender cada panetone sem ter prejuízo.", // CONFIRMAR conteúdo
       price: "De ~~R$ {{bumpAnchor}}~~ por **R$ {{bumpPrice}}** · só neste pedido",
     },
+    fullTag: "Plano completo",
+    basic: {
+      kicker: "Opção econômica",
+      title: "Só os panetones",
+      lead: "Para quem quer focar só no panetone deste Natal.",
+      includes: [
+        "{{basicRecipes}} receitas de panetone e chocotone",
+        "Passo a passo com medidas em gramas",
+        "Acesso imediato no celular",
+        "Garantia de {{guaranteeDays}} dias",
+      ],
+      excludes: ["Ceia, docinhos, salgados e sobremesas", "Guia SOS do panetone", "Os 3 bônus"],
+      price: "pagamento único",
+      cta: "QUERO SÓ OS PANETONES",
+      upsell: "Por mais **R$ {{diff}}** você leva o app completo, com mais de {{recipesCount}} receitas.",
+      upsellLink: "Ver o plano completo",
+    },
   },
 
   guarantee: {

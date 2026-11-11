@@ -90,6 +90,16 @@ export const siteConfigSchema = z
       /** Opcional: link do mesmo checkout já com o order bump. Vazio = o bump fica só no checkout. */
       urlWithBump: urlOrEmpty,
     }),
+    /** Plano básico (mais barato, com menos conteúdo). Os botões "ver oferta" continuam levando ao completo. */
+    basicPlan: z.object({
+      enabled: z.boolean(),
+      name: z.string(),
+      price: z.number().positive(),
+      /** Quantas receitas entram no básico (as de panetone e chocotone do app). */
+      recipesCount: z.number().int().positive(),
+      /** Link do checkout do básico. Vazio = o cartão só aparece em desenvolvimento. */
+      url: urlOrEmpty,
+    }),
     bump: z.object({
       id: z.string(),
       name: z.string(),
@@ -196,6 +206,14 @@ export const rawConfig = {
   checkout: {
     url: "https://pay.cakto.com.br/c97t4fc_1296027", // checkout da Cakto
     urlWithBump: "", // opcional
+  },
+
+  basicPlan: {
+    enabled: true,
+    name: "Só Panetones",
+    price: 14.9,
+    recipesCount: 16, // receitas da categoria panetones (content/recipes/panetones.ts)
+    url: "https://pay.cakto.com.br/mgpve5j", // checkout da Cakto do plano de R$ 14,90
   },
 
   bump: {
