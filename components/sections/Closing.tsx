@@ -3,7 +3,7 @@ import { siteConfig } from "@/config/site.config";
 import { copy } from "@/content/copy.ptBR";
 import { chefDisclosure, getStaticVars, shouldShowDisclosure, t } from "@/lib/offer";
 import { ChefAvatar } from "@/components/chef/ChefPhotos";
-import { BasicPlanCard, CheckoutCta, OfferPriceBox, PlansCarousel } from "@/components/offer/OfferBits";
+import { BasicPlanCard, CheckoutCta, OfferPriceBox } from "@/components/offer/OfferBits";
 import { IPhone } from "@/components/phone/IPhone";
 import { HomeScreen } from "@/components/phone/Screens";
 import { OrangeSlice, Sprig, Star } from "@/components/decor/Ornaments";
@@ -24,13 +24,10 @@ export function Offer() {
           <Kicker>{c.kicker}</Kicker>
           <Title text={c.title} className="h2 mt-5" />
         </Reveal>
-        <PlansCarousel
-          basicPrice={siteConfig.basicPlan.enabled ? siteConfig.basicPlan.price : null}
-          labels={{ full: c.tabs.full, basic: c.tabs.basic }}
-        >
+        <div className="mt-12">
           <div
             id="oferta-completa"
-            className="offer-frame relative w-[86%] shrink-0 snap-start scroll-mt-24 overflow-hidden rounded-[2.5rem] sm:mx-auto sm:w-auto sm:max-w-5xl lg:grid lg:grid-cols-[1.05fr_1fr]"
+            className="offer-frame relative mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] lg:grid lg:grid-cols-[1.05fr_1fr]"
           >
             <span className="offer-tag absolute left-1/2 top-0 z-10 -translate-x-1/2 whitespace-nowrap rounded-b-2xl px-5 py-1.5 text-xs font-extrabold uppercase tracking-[0.16em] text-pine-deep">
               {c.fullTag}
@@ -56,7 +53,7 @@ export function Offer() {
               </div>
               <Sprig className="absolute -bottom-3 -right-4 w-36 opacity-90" />
             </div>
-            <div className="px-5 py-4 sm:p-10">
+            <div id="oferta-preco" className="px-5 py-4 sm:p-10">
               <OfferPriceBox
                 staticVars={getStaticVars()}
                 bump={{ enabled: siteConfig.bump.enabled, price: siteConfig.bump.price }}
@@ -74,7 +71,7 @@ export function Offer() {
               }}
             />
           ) : null}
-        </PlansCarousel>
+        </div>
       </div>
     </section>
   );

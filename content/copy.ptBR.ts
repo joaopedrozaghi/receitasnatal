@@ -380,7 +380,6 @@ export const copy = {
       price: "De ~~R$ {{bumpAnchor}}~~ por **R$ {{bumpPrice}}** · só neste pedido",
     },
     fullTag: "Plano completo",
-    tabs: { full: "Completo", basic: "Só panetones" },
     basic: {
       kicker: "Opção econômica",
       title: "Só os panetones",

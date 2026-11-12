@@ -20,10 +20,13 @@ function useCheckoutClick(value: number) {
  * Rola suavemente até um elemento. As seções do caminho só ganham a altura real quando aparecem
  * (content-visibility), então o destino é recalculado a cada quadro e corrigido no fim.
  */
-function scrollToEl(el: HTMLElement, smooth = true) {
+function scrollToEl(el: HTMLElement, smooth = true, center = false) {
   const target = () => {
     const offset = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
-    return el.getBoundingClientRect().top + window.scrollY - offset;
+    const r = el.getBoundingClientRect();
+    // centraliza na tela (ex.: preço + botão de compra); se não couber, alinha pelo topo
+    const room = window.innerHeight - offset - r.height;
+    return r.top + window.scrollY - offset - (center && room > 0 ? room / 2 : 0);
   };
   // o html tem scroll-behavior: smooth; cada passo usa "instant" para a animação ser só a nossa
   const set = (y: number) => window.scrollTo({ top: y, behavior: "instant" });
@@ -62,12 +65,20 @@ function scrollToEl(el: HTMLElement, smooth = true) {
   window.setTimeout(finish, duration + 4000);
 }
 
+/** "#oferta" leva direto ao preço e ao botão do plano completo, centralizados na tela. */
+function goTo(id: string, smooth = true) {
+  const price = id === "oferta" ? document.getElementById("oferta-preco") : null;
+  const el = price ?? document.getElementById(id);
+  if (!el) return false;
+  scrollToEl(el, smooth, !!price);
+  return true;
+}
+
 /** Na página inicial, quem chega por /#oferta (vindo de outra página) cai certinho na oferta. */
 export function HashScrollFix() {
   useEffect(() => {
     const id = location.hash.slice(1);
-    const el = id ? document.getElementById(id) : null;
-    if (el) scrollToEl(el, false);
+    if (id) goTo(id, false);
   }, []);
   return null;
 }
@@ -90,11 +101,10 @@ export function OfferCta({
   // longo erra o alvo. Rola até a oferta e corrige a posição enquanto as seções do caminho carregam.
   const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const id = href.split("#")[1];
-    const el = id ? document.getElementById(id) : null;
-    if (!el) return; // em outra página: segue o link normal até /#oferta
+    if (!id || !document.getElementById(id)) return; // em outra página: segue o link normal até /#oferta
     e.preventDefault();
     history.replaceState(null, "", `#${id}`);
-    scrollToEl(el);
+    goTo(id);
   };
   return (
     <CtaLink href={href} size={size} block={block} className={className} onClick={onClick}>
@@ -302,7 +312,7 @@ export function BasicPlanCard({
   if (!plan.hasUrl && process.env.NODE_ENV === "production") return null;
 
   return (
-    <div className="offer-frame-soft w-[86%] shrink-0 snap-end rounded-[2rem] bg-white p-6 sm:mx-auto sm:mt-8 sm:w-auto sm:max-w-5xl sm:p-8 lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-10">
+    <div className="offer-frame-soft mx-auto mt-8 max-w-5xl rounded-[2rem] bg-white p-6 sm:p-8 lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-10">
       <div>
         <p className="text-sm font-extrabold uppercase tracking-[0.14em] text-cocoa-muted">{c.kicker}</p>
         <div className="mt-2 flex items-baseline justify-between gap-3">
@@ -352,13 +362,7 @@ export function BasicPlanCard({
             <a
               href="#oferta"
               onClick={(e) => {
-                const el = document.getElementById("oferta-completa");
-                if (!el) return;
-                e.preventDefault();
-                // no celular desliza para o lado; no computador sobe até o plano completo
-                if (el.parentElement && el.parentElement.scrollWidth > el.parentElement.clientWidth)
-                  el.parentElement.scrollTo({ left: 0, behavior: "smooth" });
-                else scrollToEl(el);
+                if (goTo("oferta")) e.preventDefault();
               }}
               className="font-bold text-berry underline underline-offset-2"
             >
@@ -368,94 +372,5 @@ export function BasicPlanCard({
         ) : null}
       </div>
     </div>
-  );
-}
-
-/**
- * No celular, os planos ficam lado a lado e deslizam para o lado: o cartão seguinte aparece cortado
- * na borda (mostra que existe outra opção) e os botões no topo trocam de plano. Do sm para cima, empilha.
- * A faixa fica dentro da margem da página: arrastar a partir da borda da tela é o gesto de voltar/avançar
- * do iPhone, então o deslize dos planos precisa começar longe dela.
- */
-export function PlansCarousel({
-  children,
-  basicPrice,
-  labels,
-}: {
-  children: React.ReactNode;
-  basicPrice: number | null;
-  labels: { full: string; basic: string };
-}) {
-  const { offer } = useOffer();
-  const ref = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const onScroll = () => {
-      const kids = [...el.children] as HTMLElement[];
-      const mid = el.scrollLeft + el.clientWidth / 2;
-      let best = 0;
-      let dist = Infinity;
-      kids.forEach((k, i) => {
-        const d = Math.abs(k.offsetLeft + k.offsetWidth / 2 - mid);
-        if (d < dist) [best, dist] = [i, d];
-      });
-      setActive(best);
-    };
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const go = (i: number) => {
-    const el = ref.current;
-    const k = el?.children[i] as HTMLElement | undefined;
-    if (!el || !k) return;
-    el.scrollTo({ left: i === 0 ? 0 : el.scrollWidth, behavior: "smooth" });
-  };
-
-  const tabs =
-    basicPrice === null
-      ? []
-      : [
-          { label: labels.full, price: offer.price },
-          { label: labels.basic, price: basicPrice },
-        ];
-
-  return (
-    <>
-      {tabs.length ? (
-        <div
-          role="tablist"
-          aria-label="Planos"
-          className="mx-auto mt-6 grid max-w-sm grid-cols-2 gap-1 rounded-full bg-white p-1 shadow-soft ring-1 ring-cocoa/10 sm:hidden"
-        >
-          {tabs.map((tab, i) => (
-            <button
-              key={tab.label}
-              type="button"
-              role="tab"
-              aria-selected={active === i}
-              onClick={() => go(i)}
-              className={`flex min-h-[48px] flex-col items-center justify-center rounded-full px-2 text-[13px] font-bold leading-tight transition-colors ${
-                active === i ? "bg-pine text-snow" : "text-cocoa"
-              }`}
-            >
-              {tab.label}
-              <span className={active === i ? "text-gold-light" : "text-cocoa-muted"}>
-                R$ {formatReais(tab.price)}
-              </span>
-            </button>
-          ))}
-        </div>
-      ) : null}
-      <div
-        ref={ref}
-        className="relative -mx-2 -mb-8 mt-4 flex snap-x snap-mandatory items-start gap-3 overflow-x-auto overscroll-x-contain px-2 pb-12 pt-3 [scrollbar-width:none] sm:mx-0 sm:mb-0 sm:mt-12 sm:block sm:overflow-visible sm:px-0 sm:pb-0 sm:pt-0 [&::-webkit-scrollbar]:hidden"
-      >
-        {children}
-      </div>
-    </>
   );
 }
