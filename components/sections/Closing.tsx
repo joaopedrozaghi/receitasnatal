@@ -30,9 +30,9 @@ export function Offer() {
         >
           <div
             id="oferta-completa"
-            className="relative w-[86%] shrink-0 snap-start scroll-mt-24 overflow-hidden rounded-[2.5rem] bg-white shadow-lift ring-2 ring-gold sm:mx-auto sm:w-auto sm:max-w-5xl lg:grid lg:grid-cols-[1.05fr_1fr]"
+            className="offer-frame relative w-[86%] shrink-0 snap-start scroll-mt-24 overflow-hidden rounded-[2.5rem] sm:mx-auto sm:w-auto sm:max-w-5xl lg:grid lg:grid-cols-[1.05fr_1fr]"
           >
-            <span className="absolute left-1/2 top-0 z-10 -translate-x-1/2 whitespace-nowrap rounded-b-2xl bg-gold px-5 py-1.5 text-xs font-extrabold uppercase tracking-[0.16em] text-pine-deep">
+            <span className="offer-tag absolute left-1/2 top-0 z-10 -translate-x-1/2 whitespace-nowrap rounded-b-2xl px-5 py-1.5 text-xs font-extrabold uppercase tracking-[0.16em] text-pine-deep">
               {c.fullTag}
             </span>
             <div className="grain relative overflow-hidden bg-pine px-5 pb-4 pt-10 text-snow sm:p-10 sm:pt-16">
@@ -138,12 +138,12 @@ export function Guarantee() {
           {siteConfig.guarantee.days === 7 ? (
             // selo original (arte com "7 dias"); se o prazo mudar, volta o selo desenhado
             <Image
-              src="/images/selo-garantia-7-dias.webp"
+              src="/images/selo-garantia-7dias.webp"
               alt={t(c.seal)}
               width={640}
               height={640}
               sizes="(min-width: 640px) 176px, 160px"
-              className="h-40 w-40 shrink-0 drop-shadow-[0_10px_18px_rgba(120,80,20,0.25)] sm:h-44 sm:w-44"
+              className="h-40 w-40 shrink-0 sm:h-44 sm:w-44"
             />
           ) : (
             <GuaranteeSeal label={t(c.seal)} />

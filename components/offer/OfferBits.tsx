@@ -302,7 +302,7 @@ export function BasicPlanCard({
   if (!plan.hasUrl && process.env.NODE_ENV === "production") return null;
 
   return (
-    <div className="w-[86%] shrink-0 snap-end rounded-[2rem] bg-white p-6 shadow-soft ring-1 ring-cocoa/10 sm:mx-auto sm:mt-8 sm:w-auto sm:max-w-5xl sm:p-8 lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-10">
+    <div className="offer-frame-soft w-[86%] shrink-0 snap-end rounded-[2rem] bg-white p-6 sm:mx-auto sm:mt-8 sm:w-auto sm:max-w-5xl sm:p-8 lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-10">
       <div>
         <p className="text-sm font-extrabold uppercase tracking-[0.14em] text-cocoa-muted">{c.kicker}</p>
         <div className="mt-2 flex items-baseline justify-between gap-3">
@@ -452,7 +452,7 @@ export function PlansCarousel({
       ) : null}
       <div
         ref={ref}
-        className="relative mt-4 flex snap-x snap-mandatory items-start gap-3 overflow-x-auto overscroll-x-contain rounded-[2.5rem] pb-4 pt-1 [scrollbar-width:none] sm:mt-12 sm:block sm:overflow-visible sm:rounded-none sm:pb-0 sm:pt-0 [&::-webkit-scrollbar]:hidden"
+        className="relative -mx-2 -mb-8 mt-4 flex snap-x snap-mandatory items-start gap-3 overflow-x-auto overscroll-x-contain px-2 pb-12 pt-3 [scrollbar-width:none] sm:mx-0 sm:mb-0 sm:mt-12 sm:block sm:overflow-visible sm:px-0 sm:pb-0 sm:pt-0 [&::-webkit-scrollbar]:hidden"
       >
         {children}
       </div>
