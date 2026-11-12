@@ -213,7 +213,7 @@ export const rawConfig = {
     name: "Só Panetones",
     price: 14.9,
     recipesCount: 16, // receitas da categoria panetones (content/recipes/panetones.ts)
-    url: "https://pay.cakto.com.br/mgpve5j", // checkout da Cakto do plano de R$ 14,90
+    url: "https://pay.cakto.com.br/uajq5ug_1313139", // checkout da Cakto do plano de R$ 14,90
   },
 
   bump: {
