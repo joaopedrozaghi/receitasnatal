@@ -1,5 +1,5 @@
 /**
- * Eventos para os pixels. Só dispara se o pixel foi carregado (ou seja, após o consentimento).
+ * Eventos para os pixels. Só dispara se o pixel já foi carregado.
  * Cada evento leva um event_id único (deduplicação com a Conversions API da plataforma de checkout).
  */
 type Fbq = (cmd: string, name: string, params?: Record<string, unknown>, opts?: { eventID: string }) => void;

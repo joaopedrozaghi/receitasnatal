@@ -472,23 +472,11 @@ export const copy = {
       privacy: "Política de privacidade",
       refund: "Política de reembolso",
       contact: "Contato",
-      cookies: "Gerenciar cookies",
     },
     company: "{{legalName}} · CNPJ {{cnpj}}",
   },
 
   stickyCta: "Quero o Especial de Natal · R$ {{price}}",
-
-  cookies: {
-    text: "Usamos cookies essenciais para o site funcionar e, com a sua permissão, cookies de medição e marketing para melhorar a experiência e os anúncios.",
-    accept: "Aceitar todos",
-    reject: "Só os essenciais",
-    customize: "Personalizar",
-    save: "Salvar escolhas",
-    analytics: "Medição (Google Analytics e Microsoft Clarity)",
-    marketing: "Marketing (Meta, TikTok e UTMify)",
-    policy: "Política de privacidade",
-  },
 } as const;
 
 export type Copy = typeof copy;

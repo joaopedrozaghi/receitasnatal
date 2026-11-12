@@ -80,26 +80,26 @@ export const privacy: LegalDoc = {
     {
       heading: "2. Quais dados tratamos",
       paragraphs: [
-        "Navegação: páginas visitadas, dispositivo, parâmetros de campanha (UTMs) e, somente com o seu consentimento, cookies de medição (Google Analytics e Microsoft Clarity, que registra cliques e rolagem de forma anônima) e de marketing (Meta, TikTok e UTMify).",
+        "Navegação: páginas visitadas, dispositivo, parâmetros de campanha (UTMs) e cookies de medição (Google Analytics e Microsoft Clarity, que registra cliques e rolagem de forma anônima) e de marketing (Meta, TikTok e UTMify).",
         "Compra: nome, e-mail, telefone, CPF (quando exigido) e dados de pagamento são coletados pela plataforma de pagamentos parceira, que atua conforme a própria política de privacidade. Recebemos dela os dados necessários para liberar o acesso e prestar suporte.",
       ],
     },
     {
       heading: "3. Para que usamos",
       paragraphs: [
-        "Para entregar o produto, prestar suporte, cumprir obrigações legais e fiscais, medir o desempenho da página e, com o seu consentimento, exibir anúncios mais relevantes.",
+        "Para entregar o produto, prestar suporte, cumprir obrigações legais e fiscais, medir o desempenho da página e dos anúncios e exibir anúncios mais relevantes.",
       ],
     },
     {
       heading: "4. Bases legais",
       paragraphs: [
-        "Execução de contrato (entrega do produto e suporte), cumprimento de obrigação legal, legítimo interesse (segurança e prevenção a fraudes) e consentimento (cookies não essenciais e comunicações de marketing).",
+        "Execução de contrato (entrega do produto e suporte), cumprimento de obrigação legal, legítimo interesse (segurança, prevenção a fraudes e medição da página e dos anúncios) e consentimento (comunicações de marketing).",
       ],
     },
     {
       heading: "5. Cookies",
       paragraphs: [
-        'Cookies essenciais mantêm o site funcionando e guardam a sua escolha de cookies. Cookies de medição e marketing só são ativados se você aceitar no banner. Você pode mudar a escolha a qualquer momento em "Gerenciar cookies", no rodapé.',
+        "Usamos cookies para o site funcionar, medir as visitas e saber de qual anúncio cada visita veio (UTMify, Meta, TikTok, Google Analytics e Microsoft Clarity). Você pode bloquear ou apagar cookies a qualquer momento nas configurações do seu navegador; o site continua funcionando.",
       ],
     },
     {

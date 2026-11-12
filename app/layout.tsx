@@ -3,7 +3,6 @@ import { siteConfig } from "@/config/site.config";
 import { copy } from "@/content/copy.ptBR";
 import { t } from "@/lib/offer";
 import { siteUrl } from "@/lib/seo";
-import { CookieBanner } from "@/components/tracking/CookieBanner";
 import { Pixels } from "@/components/tracking/Pixels";
 import { RevealObserver } from "@/components/ui/RevealObserver";
 import { display, sans, script } from "./fonts";
@@ -44,7 +43,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         {children}
         <RevealObserver />
-        <CookieBanner />
         <Pixels />
       </body>
     </html>
