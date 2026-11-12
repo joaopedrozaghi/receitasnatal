@@ -2,7 +2,7 @@ import { siteConfig } from "@/config/site.config";
 import { copy } from "@/content/copy.ptBR";
 import { chefDisclosure, getStaticVars, shouldShowDisclosure, t } from "@/lib/offer";
 import { ChefAvatar } from "@/components/chef/ChefPhotos";
-import { BasicPlanCard, CheckoutCta, OfferPriceBox } from "@/components/offer/OfferBits";
+import { BasicPlanCard, CheckoutCta, OfferPriceBox, PlansCarousel } from "@/components/offer/OfferBits";
 import { IPhone } from "@/components/phone/IPhone";
 import { HomeScreen } from "@/components/phone/Screens";
 import { OrangeSlice, Sprig, Star } from "@/components/decor/Ornaments";
@@ -23,52 +23,57 @@ export function Offer() {
           <Kicker>{c.kicker}</Kicker>
           <Title text={c.title} className="h2 mt-5" />
         </Reveal>
-        <div
-          id="oferta-completa"
-          className="relative mx-auto mt-8 max-w-5xl scroll-mt-24 overflow-hidden rounded-[2.5rem] bg-white shadow-lift ring-2 ring-gold sm:mt-12 lg:grid lg:grid-cols-[1.05fr_1fr]"
+        <PlansCarousel
+          basicPrice={siteConfig.basicPlan.enabled ? siteConfig.basicPlan.price : null}
+          labels={{ full: c.tabs.full, basic: c.tabs.basic }}
         >
-          <span className="absolute left-1/2 top-0 z-10 -translate-x-1/2 whitespace-nowrap rounded-b-2xl bg-gold px-5 py-1.5 text-xs font-extrabold uppercase tracking-[0.16em] text-pine-deep">
-            {c.fullTag}
-          </span>
-          <div className="grain relative overflow-hidden bg-pine px-5 pb-4 pt-10 text-snow sm:p-10 sm:pt-16">
-            <div className="flex items-start gap-6">
-              <IPhone label="App Especial de Natal" className="hidden w-[38%] shrink-0 -rotate-3 sm:block">
-                <HomeScreen />
-              </IPhone>
-              <ul className="space-y-2 sm:space-y-4">
-                {c.items.map((item) => (
-                  <li
-                    key={item}
-                    className="flex gap-2.5 text-[14.5px] font-medium leading-snug sm:gap-3 sm:text-[16px]"
-                  >
-                    <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-gold text-pine-deep sm:h-6 sm:w-6">
-                      <Icon name="check" className="h-4 w-4" strokeWidth={2.6} />
-                    </span>
-                    {t(item)}
-                  </li>
-                ))}
-              </ul>
+          <div
+            id="oferta-completa"
+            className="relative w-[86%] shrink-0 snap-center scroll-mt-24 overflow-hidden rounded-[2.5rem] bg-white shadow-lift ring-2 ring-gold sm:mx-auto sm:w-auto sm:max-w-5xl lg:grid lg:grid-cols-[1.05fr_1fr]"
+          >
+            <span className="absolute left-1/2 top-0 z-10 -translate-x-1/2 whitespace-nowrap rounded-b-2xl bg-gold px-5 py-1.5 text-xs font-extrabold uppercase tracking-[0.16em] text-pine-deep">
+              {c.fullTag}
+            </span>
+            <div className="grain relative overflow-hidden bg-pine px-5 pb-4 pt-10 text-snow sm:p-10 sm:pt-16">
+              <div className="flex items-start gap-6">
+                <IPhone label="App Especial de Natal" className="hidden w-[38%] shrink-0 -rotate-3 sm:block">
+                  <HomeScreen />
+                </IPhone>
+                <ul className="space-y-2 sm:space-y-4">
+                  {c.items.map((item) => (
+                    <li
+                      key={item}
+                      className="flex gap-2.5 text-[14.5px] font-medium leading-snug sm:gap-3 sm:text-[16px]"
+                    >
+                      <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-gold text-pine-deep sm:h-6 sm:w-6">
+                        <Icon name="check" className="h-4 w-4" strokeWidth={2.6} />
+                      </span>
+                      {t(item)}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <Sprig className="absolute -bottom-3 -right-4 w-36 opacity-90" />
             </div>
-            <Sprig className="absolute -bottom-3 -right-4 w-36 opacity-90" />
+            <div className="px-5 py-4 sm:p-10">
+              <OfferPriceBox
+                staticVars={getStaticVars()}
+                bump={{ enabled: siteConfig.bump.enabled, price: siteConfig.bump.price }}
+              />
+            </div>
           </div>
-          <div className="px-5 py-4 sm:p-10">
-            <OfferPriceBox
+          {siteConfig.basicPlan.enabled ? (
+            <BasicPlanCard
               staticVars={getStaticVars()}
-              bump={{ enabled: siteConfig.bump.enabled, price: siteConfig.bump.price }}
+              plan={{
+                name: siteConfig.basicPlan.name,
+                price: siteConfig.basicPlan.price,
+                recipesCount: siteConfig.basicPlan.recipesCount,
+                hasUrl: !!siteConfig.basicPlan.url,
+              }}
             />
-          </div>
-        </div>
-        {siteConfig.basicPlan.enabled ? (
-          <BasicPlanCard
-            staticVars={getStaticVars()}
-            plan={{
-              name: siteConfig.basicPlan.name,
-              price: siteConfig.basicPlan.price,
-              recipesCount: siteConfig.basicPlan.recipesCount,
-              hasUrl: !!siteConfig.basicPlan.url,
-            }}
-          />
-        ) : null}
+          ) : null}
+        </PlansCarousel>
       </div>
     </section>
   );

@@ -302,7 +302,7 @@ export function BasicPlanCard({
   if (!plan.hasUrl && process.env.NODE_ENV === "production") return null;
 
   return (
-    <div className="mx-auto mt-4 max-w-5xl rounded-[2rem] bg-white p-6 shadow-soft ring-1 ring-cocoa/10 sm:mt-8 sm:p-8 lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-10">
+    <div className="w-[86%] shrink-0 snap-center rounded-[2rem] bg-white p-6 shadow-soft ring-1 ring-cocoa/10 sm:mx-auto sm:mt-8 sm:w-auto sm:max-w-5xl sm:p-8 lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-10">
       <div>
         <p className="text-sm font-extrabold uppercase tracking-[0.14em] text-cocoa-muted">{c.kicker}</p>
         <div className="mt-2 flex items-baseline justify-between gap-3">
@@ -355,7 +355,10 @@ export function BasicPlanCard({
                 const el = document.getElementById("oferta-completa");
                 if (!el) return;
                 e.preventDefault();
-                scrollToEl(el);
+                // no celular desliza para o lado; no computador sobe até o plano completo
+                if (el.parentElement && el.parentElement.scrollWidth > el.parentElement.clientWidth)
+                  el.parentElement.scrollTo({ left: 0, behavior: "smooth" });
+                else scrollToEl(el);
               }}
               className="font-bold text-berry underline underline-offset-2"
             >
@@ -365,5 +368,92 @@ export function BasicPlanCard({
         ) : null}
       </div>
     </div>
+  );
+}
+
+/**
+ * No celular, os planos ficam lado a lado e deslizam para o lado: o cartão seguinte aparece cortado
+ * na borda (mostra que existe outra opção) e os botões no topo trocam de plano. Do sm para cima, empilha.
+ */
+export function PlansCarousel({
+  children,
+  basicPrice,
+  labels,
+}: {
+  children: React.ReactNode;
+  basicPrice: number | null;
+  labels: { full: string; basic: string };
+}) {
+  const { offer } = useOffer();
+  const ref = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onScroll = () => {
+      const kids = [...el.children] as HTMLElement[];
+      const mid = el.scrollLeft + el.clientWidth / 2;
+      let best = 0;
+      let dist = Infinity;
+      kids.forEach((k, i) => {
+        const d = Math.abs(k.offsetLeft + k.offsetWidth / 2 - mid);
+        if (d < dist) [best, dist] = [i, d];
+      });
+      setActive(best);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const go = (i: number) => {
+    const el = ref.current;
+    const k = el?.children[i] as HTMLElement | undefined;
+    if (!el || !k) return;
+    el.scrollTo({ left: k.offsetLeft - (el.clientWidth - k.offsetWidth) / 2, behavior: "smooth" });
+  };
+
+  const tabs =
+    basicPrice === null
+      ? []
+      : [
+          { label: labels.full, price: offer.price },
+          { label: labels.basic, price: basicPrice },
+        ];
+
+  return (
+    <>
+      {tabs.length ? (
+        <div
+          role="tablist"
+          aria-label="Planos"
+          className="mx-auto mt-6 grid max-w-sm grid-cols-2 gap-1 rounded-full bg-white p-1 shadow-soft ring-1 ring-cocoa/10 sm:hidden"
+        >
+          {tabs.map((tab, i) => (
+            <button
+              key={tab.label}
+              type="button"
+              role="tab"
+              aria-selected={active === i}
+              onClick={() => go(i)}
+              className={`flex min-h-[48px] flex-col items-center justify-center rounded-full px-2 text-[13px] font-bold leading-tight transition-colors ${
+                active === i ? "bg-pine text-snow" : "text-cocoa"
+              }`}
+            >
+              {tab.label}
+              <span className={active === i ? "text-gold-light" : "text-cocoa-muted"}>
+                R$ {formatReais(tab.price)}
+              </span>
+            </button>
+          ))}
+        </div>
+      ) : null}
+      <div
+        ref={ref}
+        className="relative -mx-5 mt-4 flex snap-x snap-mandatory items-start gap-3 overflow-x-auto px-5 pb-4 pt-1 [scrollbar-width:none] sm:mx-0 sm:mt-12 sm:block sm:overflow-visible sm:px-0 sm:pb-0 sm:pt-0 [&::-webkit-scrollbar]:hidden"
+      >
+        {children}
+      </div>
+    </>
   );
 }
