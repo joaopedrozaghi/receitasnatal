@@ -164,19 +164,19 @@ export function OfferPriceBox({
             {c.from} <s>R$ {vars.anchor}</s> {c.by}
           </p>
         ) : null}
-        <p className="mt-1 font-display text-7xl leading-none tracking-tight text-pine sm:text-8xl">
+        <p className="mt-1 font-display text-[3.4rem] leading-none tracking-tight text-pine sm:text-8xl">
           <span className="align-top font-sans text-2xl font-semibold sm:text-3xl">R$ </span>
           <AnimatedValue value={vars.price} />
         </p>
         {offer.installments ? (
-          <p className="mt-3 text-base font-medium text-cocoa">
+          <p className="mt-2 text-base font-medium text-cocoa sm:mt-3">
             {interpolate(c.installmentsLine, {
               count: offer.installments.count,
               amount: offer.installments.amountLabel,
             })}
           </p>
         ) : null}
-        <p className="mt-1 text-sm text-cocoa-muted">{c.methods}</p>
+        <p className="mt-1 hidden text-sm text-cocoa-muted sm:block">{c.methods}</p>
       </div>
 
       {showBump ? (
@@ -209,7 +209,7 @@ export function OfferPriceBox({
         </label>
       ) : null}
 
-      <div className="mt-6 flex justify-center">
+      <div className="mt-4 flex justify-center sm:mt-6">
         <CtaLink
           href={href}
           block
@@ -219,7 +219,9 @@ export function OfferPriceBox({
           {c.cta}
         </CtaLink>
       </div>
-      <p className="mt-3 text-center text-sm text-cocoa-muted">{interpolate(c.micro, vars)}</p>
+      <p className="mt-2.5 text-center text-xs text-cocoa-muted sm:mt-3 sm:text-sm">
+        {interpolate(c.micro, vars)}
+      </p>
     </div>
   );
 }
@@ -300,10 +302,16 @@ export function BasicPlanCard({
   if (!plan.hasUrl && process.env.NODE_ENV === "production") return null;
 
   return (
-    <div className="mx-auto mt-8 max-w-5xl rounded-[2rem] bg-white p-6 shadow-soft ring-1 ring-cocoa/10 sm:p-8 lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-10">
+    <div className="mx-auto mt-4 max-w-5xl rounded-[2rem] bg-white p-6 shadow-soft ring-1 ring-cocoa/10 sm:mt-8 sm:p-8 lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-10">
       <div>
         <p className="text-sm font-extrabold uppercase tracking-[0.14em] text-cocoa-muted">{c.kicker}</p>
-        <h3 className="mt-2 font-display text-3xl text-cocoa sm:text-4xl">{c.title}</h3>
+        <div className="mt-2 flex items-baseline justify-between gap-3">
+          <h3 className="font-display text-[1.6rem] leading-tight text-cocoa sm:text-4xl">{c.title}</h3>
+          {/* no celular o preço já aparece no topo do cartão */}
+          <span className="shrink-0 rounded-full bg-pine/10 px-3 py-1 text-[15px] font-extrabold text-pine lg:hidden">
+            R$ {formatReais(plan.price)}
+          </span>
+        </div>
         <p className="mt-2 text-[16px] text-cocoa-soft">{c.lead}</p>
         <ul className="mt-5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
           {c.includes.map((it) => (
