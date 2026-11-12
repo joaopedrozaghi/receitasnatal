@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { siteConfig } from "@/config/site.config";
 import { copy } from "@/content/copy.ptBR";
 import { chefDisclosure, getStaticVars, shouldShowDisclosure, t } from "@/lib/offer";
@@ -29,7 +30,7 @@ export function Offer() {
         >
           <div
             id="oferta-completa"
-            className="relative w-[86%] shrink-0 snap-center scroll-mt-24 overflow-hidden rounded-[2.5rem] bg-white shadow-lift ring-2 ring-gold sm:mx-auto sm:w-auto sm:max-w-5xl lg:grid lg:grid-cols-[1.05fr_1fr]"
+            className="relative w-[86%] shrink-0 snap-start scroll-mt-24 overflow-hidden rounded-[2.5rem] bg-white shadow-lift ring-2 ring-gold sm:mx-auto sm:w-auto sm:max-w-5xl lg:grid lg:grid-cols-[1.05fr_1fr]"
           >
             <span className="absolute left-1/2 top-0 z-10 -translate-x-1/2 whitespace-nowrap rounded-b-2xl bg-gold px-5 py-1.5 text-xs font-extrabold uppercase tracking-[0.16em] text-pine-deep">
               {c.fullTag}
@@ -134,7 +135,19 @@ export function Guarantee() {
     <section className="py-16 sm:py-24">
       <Reveal className="container-page">
         <div className="mx-auto flex max-w-4xl flex-col items-center gap-8 rounded-[2.5rem] bg-white p-8 text-center shadow-soft ring-1 ring-gold/40 sm:flex-row sm:p-12 sm:text-left">
-          <GuaranteeSeal label={t(c.seal)} />
+          {siteConfig.guarantee.days === 7 ? (
+            // selo original (arte com "7 dias"); se o prazo mudar, volta o selo desenhado
+            <Image
+              src="/images/selo-garantia-7-dias.webp"
+              alt={t(c.seal)}
+              width={640}
+              height={640}
+              sizes="(min-width: 640px) 176px, 160px"
+              className="h-40 w-40 shrink-0 drop-shadow-[0_10px_18px_rgba(120,80,20,0.25)] sm:h-44 sm:w-44"
+            />
+          ) : (
+            <GuaranteeSeal label={t(c.seal)} />
+          )}
           <div>
             <Title text={t(c.title)} className="text-3xl leading-tight sm:text-4xl" />
             <p className="mt-4 leading-relaxed">{t(c.text)}</p>
