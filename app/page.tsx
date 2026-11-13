@@ -5,7 +5,7 @@ import { copy } from "@/content/copy.ptBR";
 import { OfferShell } from "@/components/offer/OfferShell";
 import { HashScrollFix, StickyCta } from "@/components/offer/OfferBits";
 import { Hero } from "@/components/sections/Hero";
-import { AppShowcase, Desire, Gallery, Marquee, Menu, Pain } from "@/components/sections/Body";
+import { AppShowcase, Gallery, Marquee, Menu, Pain } from "@/components/sections/Body";
 import { Chef } from "@/components/sections/Chef";
 import { Audience, Bonus, Income, Testimonials } from "@/components/sections/Value";
 import { Faq, FinalCta, Footer, Guarantee, Offer, getFaqItems } from "@/components/sections/Closing";
@@ -52,13 +52,17 @@ function JsonLd() {
   );
 }
 
+/** Na página inicial, a Rô aparece sem os cartões 01/02/03 e sem o botão (menos coisa até a oferta). */
+function ChefHome() {
+  return <Chef withCta={false} withBeliefs={false} />;
+}
+
 const below = [
   Pain,
   Gallery,
   Menu,
   AppShowcase,
-  Desire,
-  Chef,
+  ChefHome,
   Bonus,
   Income,
   Audience,

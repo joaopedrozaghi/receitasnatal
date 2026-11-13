@@ -2,7 +2,6 @@ import { siteConfig } from "@/config/site.config";
 import { copy } from "@/content/copy.ptBR";
 import { t } from "@/lib/offer";
 import { ArchPhoto, ChefAvatar } from "@/components/chef/ChefPhotos";
-import { HeroPriceLine } from "@/components/offer/OfferBits";
 import { CtaLink } from "@/components/ui/CtaButton";
 import { IPhone } from "@/components/phone/IPhone";
 import { HomeScreen } from "@/components/phone/Screens";
@@ -51,24 +50,12 @@ export function Hero() {
           />
           <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-snow/80 sm:text-lg">{t(h.sub)}</p>
 
-          <div className="mt-7 flex flex-col items-start gap-3">
+          <div className="mt-7">
             {/* primeiro mostra as receitas; o checkout vem depois da explicação */}
             <CtaLink href="#receitas" block>
               {h.cta}
             </CtaLink>
-            <HeroPriceLine />
           </div>
-
-          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-3">
-            {h.trust.map((item) => (
-              <li key={item} className="flex items-center gap-2 text-sm font-medium text-snow/90">
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-gold/20 text-gold-light">
-                  <Icon name="check" className="h-4 w-4" strokeWidth={2.4} />
-                </span>
-                {t(item)}
-              </li>
-            ))}
-          </ul>
         </div>
 
         <div className="relative mx-auto w-full max-w-[460px] lg:col-span-5 lg:max-w-none">

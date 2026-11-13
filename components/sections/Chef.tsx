@@ -65,7 +65,15 @@ export function ChefPhotos({ cfg = siteConfig, priority = false }: { cfg?: SiteC
   );
 }
 
-export function Chef({ cfg = siteConfig, withCta = true }: { cfg?: SiteConfig; withCta?: boolean }) {
+export function Chef({
+  cfg = siteConfig,
+  withCta = true,
+  withBeliefs = true,
+}: {
+  cfg?: SiteConfig;
+  withCta?: boolean;
+  withBeliefs?: boolean;
+}) {
   const c = copy.chef;
   const content = getChefContent(cfg);
   return (
@@ -83,15 +91,17 @@ export function Chef({ cfg = siteConfig, withCta = true }: { cfg?: SiteConfig; w
           <p className="mt-6 font-script text-5xl leading-none text-berry">{c.signature}</p>
           <p className="mt-1 text-sm font-medium text-cocoa-muted">{c.signatureRole}</p>
 
-          <ol className="mt-8 grid gap-3 sm:grid-cols-3">
-            {content.beliefs.map((b, i) => (
-              <li key={b.title} className="rounded-2xl bg-white p-5 shadow-soft ring-1 ring-cocoa/5">
-                <span className="font-display text-3xl text-gold-text">0{i + 1}</span>
-                <span className="mt-2 block font-semibold leading-snug text-cocoa">{b.title}</span>
-                <span className="mt-1 block text-sm leading-relaxed">{b.text}</span>
-              </li>
-            ))}
-          </ol>
+          {withBeliefs ? (
+            <ol className="mt-8 grid gap-3 sm:grid-cols-3">
+              {content.beliefs.map((b, i) => (
+                <li key={b.title} className="rounded-2xl bg-white p-5 shadow-soft ring-1 ring-cocoa/5">
+                  <span className="font-display text-3xl text-gold-text">0{i + 1}</span>
+                  <span className="mt-2 block font-semibold leading-snug text-cocoa">{b.title}</span>
+                  <span className="mt-1 block text-sm leading-relaxed">{b.text}</span>
+                </li>
+              ))}
+            </ol>
+          ) : null}
 
           {content.credentials.length ? (
             <ul className="mt-6 space-y-2" data-testid="chef-credentials">
