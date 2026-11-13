@@ -10,6 +10,7 @@ import { Icon } from "@/components/ui/Icon";
 import { Kicker } from "@/components/ui/Kicker";
 import { Reveal } from "@/components/ui/Reveal";
 import { Rich, Title } from "@/components/ui/Rich";
+import { SideScroller } from "@/components/ui/SideScroller";
 
 /** Faixa com o cardápio rolando (para em reduced motion). */
 export function Marquee() {
@@ -94,54 +95,54 @@ export function Menu() {
           <Title text={c.title} className="h2 mt-5" />
           <p className="lead-text mt-5">{t(c.sub)}</p>
         </Reveal>
-        <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {c.items.map((item, i) => {
-            const featured = "tag" in item;
-            const photo = "photo" in item ? item.photo : null;
-            return (
-              <Reveal
-                as="li"
-                key={item.title}
-                delay={(i % 4) * 0.05}
-                className={`relative flex flex-col overflow-hidden rounded-[1.75rem] ${
-                  featured ? "bg-pine text-snow shadow-lift" : "bg-ivory ring-1 ring-cocoa/5"
-                }`}
-              >
-                {photo ? (
-                  <span className="relative block h-40">
-                    <Image
-                      src={photo}
-                      alt=""
-                      fill
-                      sizes="(min-width: 1024px) 280px, (min-width: 640px) 45vw, 90vw"
-                      className="object-cover"
-                    />
+        <Reveal className="mt-12">
+          <SideScroller label="Categorias do app">
+            {c.items.map((item, i) => {
+              const featured = "tag" in item;
+              const photo = "photo" in item ? item.photo : null;
+              return (
+                <div
+                  key={item.title}
+                  className={`relative flex w-full flex-col overflow-hidden rounded-[1.75rem] ${
+                    featured ? "bg-pine text-snow shadow-lift" : "bg-ivory ring-1 ring-cocoa/5"
+                  }`}
+                >
+                  {photo ? (
+                    <span className="relative block h-40">
+                      <Image
+                        src={photo}
+                        alt=""
+                        fill
+                        sizes="(min-width: 1024px) 280px, (min-width: 640px) 45vw, 80vw"
+                        className="object-cover"
+                      />
+                    </span>
+                  ) : (
+                    <span className={`grid h-40 place-items-center ${menuTints[i]}`}>
+                      <Icon name={item.icon} className="h-14 w-14" strokeWidth={1.3} />
+                    </span>
+                  )}
+                  {featured ? (
+                    <span className="absolute right-4 top-4 rounded-full bg-gold px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-pine-deep">
+                      {item.tag}
+                    </span>
+                  ) : null}
+                  <span className="flex flex-1 flex-col p-6">
+                    <h3 className={`text-[1.45rem] leading-tight ${featured ? "!text-snow" : ""}`}>
+                      {item.title}
+                    </h3>
+                    <span
+                      className={`mt-2 block text-[15px] leading-relaxed ${featured ? "text-snow/80" : ""}`}
+                    >
+                      {item.examples}
+                    </span>
                   </span>
-                ) : (
-                  <span className={`grid h-40 place-items-center ${menuTints[i]}`}>
-                    <Icon name={item.icon} className="h-14 w-14" strokeWidth={1.3} />
-                  </span>
-                )}
-                {featured ? (
-                  <span className="absolute right-4 top-4 rounded-full bg-gold px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-pine-deep">
-                    {item.tag}
-                  </span>
-                ) : null}
-                <span className="flex flex-1 flex-col p-6">
-                  <h3 className={`text-[1.45rem] leading-tight ${featured ? "!text-snow" : ""}`}>
-                    {item.title}
-                  </h3>
-                  <span
-                    className={`mt-2 block text-[15px] leading-relaxed ${featured ? "text-snow/80" : ""}`}
-                  >
-                    {item.examples}
-                  </span>
-                </span>
-              </Reveal>
-            );
-          })}
-        </ul>
-        <div className="mt-12 flex justify-center">
+                </div>
+              );
+            })}
+          </SideScroller>
+        </Reveal>
+        <div className="mt-10 flex justify-center">
           <OfferCta block>{c.cta}</OfferCta>
         </div>
       </div>
@@ -231,17 +232,23 @@ export function AppShowcase() {
           </IPhone>
         </div>
 
-        <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {c.features.map((f) => (
-            <Reveal as="li" key={f.title} className="rounded-3xl bg-white/[0.06] p-6 ring-1 ring-white/10">
-              <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold/15 text-gold-light">
-                <Icon name={f.icon} className="h-6 w-6" strokeWidth={1.8} />
-              </span>
-              <h3 className="mt-4 text-xl !text-snow">{f.title}</h3>
-              <p className="mt-1.5 text-[15px] leading-relaxed text-snow/75">{f.text}</p>
-            </Reveal>
-          ))}
-        </ul>
+        <Reveal className="mt-12">
+          <SideScroller
+            label="Recursos do app"
+            tone="dark"
+            itemClassName="w-[78%] sm:w-[45%] lg:w-[calc(33.333%-11px)]"
+          >
+            {c.features.map((f) => (
+              <div key={f.title} className="w-full rounded-3xl bg-white/[0.06] p-6 ring-1 ring-white/10">
+                <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold/15 text-gold-light">
+                  <Icon name={f.icon} className="h-6 w-6" strokeWidth={1.8} />
+                </span>
+                <h3 className="mt-4 text-xl !text-snow">{f.title}</h3>
+                <p className="mt-1.5 text-[15px] leading-relaxed text-snow/75">{f.text}</p>
+              </div>
+            ))}
+          </SideScroller>
+        </Reveal>
 
         <ol className="mt-14 grid gap-4 md:grid-cols-3">
           {c.steps.map((s, i) => (
