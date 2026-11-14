@@ -5,7 +5,7 @@ import { copy } from "@/content/copy.ptBR";
 import { OfferShell } from "@/components/offer/OfferShell";
 import { HashScrollFix, StickyCta } from "@/components/offer/OfferBits";
 import { Hero } from "@/components/sections/Hero";
-import { AppShowcase, Gallery, Marquee, Menu, Pain } from "@/components/sections/Body";
+import { AppShowcase, Gallery, Marquee, Menu } from "@/components/sections/Body";
 import { Chef } from "@/components/sections/Chef";
 import { Audience, Bonus, Income, Testimonials } from "@/components/sections/Value";
 import { Faq, FinalCta, Footer, Guarantee, Offer, getFaqItems } from "@/components/sections/Closing";
@@ -58,7 +58,6 @@ function ChefHome() {
 }
 
 const below = [
-  Pain,
   Gallery,
   Menu,
   AppShowcase,
