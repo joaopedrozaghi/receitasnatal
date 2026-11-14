@@ -3,13 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "@/config/site.config";
 import { copy } from "@/content/copy.ptBR";
-import { story, type StoryChapter } from "@/content/story.ptBR";
+import { story } from "@/content/story.ptBR";
 import { ChefPhotos } from "@/components/sections/Chef";
 import { OfferShell } from "@/components/offer/OfferShell";
 import { OfferCta } from "@/components/offer/OfferBits";
 import { Footer } from "@/components/sections/Closing";
 import { SubpageHeader } from "@/components/SubpageHeader";
-import { Sprig } from "@/components/decor/Ornaments";
 import { Kicker } from "@/components/ui/Kicker";
 import { Reveal } from "@/components/ui/Reveal";
 import { Rich } from "@/components/ui/Rich";
@@ -21,39 +20,8 @@ export const metadata: Metadata = {
   openGraph: { title: story.meta.title, description: story.meta.description },
 };
 
-function Chapter({ chapter }: { chapter: StoryChapter }) {
-  return (
-    <Reveal>
-      <article className="border-t border-cocoa/10 pt-10">
-        <h2 className="text-3xl">{chapter.title}</h2>
-        {chapter.paragraphs.map((p, i) => (
-          <p key={i} className="mt-5 text-lg leading-[1.75]">
-            <Rich text={p} />
-          </p>
-        ))}
-        {chapter.beliefs ? (
-          <ol className="mt-6 space-y-3">
-            {chapter.beliefs.map((b, i) => (
-              <li
-                key={b.title}
-                className="flex gap-4 rounded-2xl bg-white p-5 shadow-soft ring-1 ring-cocoa/5"
-              >
-                <span className="font-display text-3xl text-gold-text">0{i + 1}</span>
-                <span className="text-lg leading-snug">
-                  <strong className="font-semibold text-cocoa">{b.title}</strong> {b.text}
-                </span>
-              </li>
-            ))}
-          </ol>
-        ) : null}
-      </article>
-    </Reveal>
-  );
-}
-
 export default function AboutPage() {
   const real = siteConfig.chef.mode === "real";
-  const chapters = real ? story.real.chapters : story.character.chapters;
   const extra = siteConfig.chef.photosAbout[0];
 
   return (
@@ -76,54 +44,42 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="container-page max-w-3xl space-y-10 py-16">
-          {chapters.map((c, i) => (
-            <div key={c.id}>
-              <Chapter chapter={c} />
-              {i === 2 && extra ? (
-                <Reveal className="relative mx-auto mt-10 max-w-md">
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-arch shadow-lift">
-                    <Image
-                      src={extra.src}
-                      alt={extra.alt}
-                      fill
-                      sizes="(min-width: 640px) 448px, 90vw"
-                      className="object-cover"
-                    />
-                  </div>
-                </Reveal>
-              ) : null}
-            </div>
-          ))}
-          <p className="border-t border-cocoa/10 pt-10 text-center font-display text-4xl italic text-berry">
+        <section className="container-page max-w-2xl py-14 sm:py-20">
+          <div className="space-y-6">
+            {story.short.map((p, i) => (
+              <Reveal key={i}>
+                <p className="text-lg leading-[1.75]">
+                  <Rich text={p} />
+                </p>
+              </Reveal>
+            ))}
+          </div>
+          {extra ? (
+            <Reveal className="relative mx-auto mt-12 max-w-sm">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-arch shadow-lift">
+                <Image
+                  src={extra.src}
+                  alt={extra.alt}
+                  fill
+                  sizes="(min-width: 640px) 384px, 90vw"
+                  className="object-cover"
+                />
+              </div>
+            </Reveal>
+          ) : null}
+          <p className="mt-12 text-center font-display text-4xl italic text-berry">
             {story.character.closing}
           </p>
-        </section>
-
-        <section className="bg-white py-16">
-          <div className="container-page">
-            <Sprig className="mx-auto w-32" />
-            <ul className="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {story.signatures.map((s) => (
-                <li
-                  key={s}
-                  className="rounded-3xl bg-ivory p-6 text-center font-display text-2xl italic leading-snug text-cocoa"
-                >
-                  “{s}”
-                </li>
-              ))}
-            </ul>
-            <div className="mt-12 flex flex-col items-center gap-4">
-              <OfferCta href="/#oferta" block>
-                {copy.gallery.cta}
-              </OfferCta>
-              <Link
-                href="/"
-                className="inline-flex min-h-[44px] items-center font-semibold text-pine underline decoration-gold decoration-2 underline-offset-4 hover:text-berry"
-              >
-                ← Voltar para a página do Especial de Natal
-              </Link>
-            </div>
+          <div className="mt-10 flex flex-col items-center gap-4">
+            <OfferCta href="/#oferta" block>
+              {copy.about.offerButton}
+            </OfferCta>
+            <Link
+              href="/#roseli"
+              className="inline-flex min-h-[44px] items-center gap-2 font-semibold text-pine underline decoration-gold decoration-2 underline-offset-4 hover:text-berry"
+            >
+              ← {copy.about.back}
+            </Link>
           </div>
         </section>
       </main>

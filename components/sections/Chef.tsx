@@ -6,6 +6,7 @@ import { story } from "@/content/story.ptBR";
 import { chefDisclosure, shouldShowDisclosure } from "@/lib/offer";
 import { ArchPhoto } from "@/components/chef/ChefPhotos";
 import { OfferCta } from "@/components/offer/OfferBits";
+import { CtaLink } from "@/components/ui/CtaButton";
 import { Star } from "@/components/decor/Ornaments";
 import { Kicker } from "@/components/ui/Kicker";
 import { Title } from "@/components/ui/Rich";
@@ -69,10 +70,13 @@ export function Chef({
   cfg = siteConfig,
   withCta = true,
   withBeliefs = true,
+  compact = false,
 }: {
   cfg?: SiteConfig;
   withCta?: boolean;
   withBeliefs?: boolean;
+  /** página inicial: só foto, título, assinatura e o botão para a história (sem os parágrafos) */
+  compact?: boolean;
 }) {
   const c = copy.chef;
   const content = getChefContent(cfg);
@@ -85,8 +89,12 @@ export function Chef({
         <div className="lg:col-span-7">
           <Kicker>{c.kicker}</Kicker>
           <Title text={content.title} className="h2 mt-5" />
-          <p className="lead-text mt-6">{content.paragraphs[0]}</p>
-          <p className="mt-4 text-base leading-relaxed text-cocoa-muted">{content.paragraphs[1]}</p>
+          {compact ? null : (
+            <>
+              <p className="lead-text mt-6">{content.paragraphs[0]}</p>
+              <p className="mt-4 text-base leading-relaxed text-cocoa-muted">{content.paragraphs[1]}</p>
+            </>
+          )}
 
           <p className="mt-6 font-script text-5xl leading-none text-berry">{c.signature}</p>
           <p className="mt-1 text-sm font-medium text-cocoa-muted">{c.signatureRole}</p>
@@ -111,6 +119,14 @@ export function Chef({
                 </li>
               ))}
             </ul>
+          ) : null}
+
+          {compact ? (
+            <div className="mt-8">
+              <CtaLink href="/sobre" size="md">
+                {c.storyButton}
+              </CtaLink>
+            </div>
           ) : null}
 
           {withCta ? (

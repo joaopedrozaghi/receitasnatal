@@ -290,6 +290,7 @@ export const copy = {
     signatureRole: "a Rô das Receitinhas",
     cta: "QUERO COZINHAR COM A RÔ",
     storyLink: "Conheça a minha história",
+    storyButton: "Conhecer a história da Rô",
   },
 
   bonus: {
@@ -324,11 +325,10 @@ export const copy = {
   income: {
     kicker: "Do forno ao WhatsApp",
     title: "No fim do ano, panetone vende. *E docinho também.*",
-    text: "Nesta época cresce a procura por panetones artesanais, caixinhas de doces e cestas de presente. No Especial de Natal você aprende a calcular o custo, definir o preço e apresentar seu produto para vender a vizinhos, colegas e amigos, começando pequeno, do seu fogão.",
+    text: "Panetone artesanal, caixinha de doces e cesta de presente têm procura em dezembro. O app mostra o custo, o preço e como embalar.",
     cards: ["Calcule antes de gastar", "Defina o preço sem prejuízo", "Embale para encantar"],
     disclaimerLabel: "Aviso:",
-    disclaimer:
-      "Não prometemos ganhos. Os resultados dependem do seu esforço, divulgação, região e da qualidade do que você produz.",
+    disclaimer: "Não prometemos ganhos. O resultado depende do seu esforço e da sua divulgação.",
   },
 
   audience: {
@@ -471,6 +471,11 @@ export const copy = {
       contact: "Contato",
     },
     company: "{{legalName}} · CNPJ {{cnpj}}",
+  },
+
+  about: {
+    offerButton: "Ver a oferta do Especial de Natal",
+    back: "Voltar",
   },
 
   stickyCta: "Quero o Especial de Natal",

@@ -25,6 +25,14 @@ export const story = {
   intro:
     "Eu sou a Roseli Monteiro, a Rô. Esta é uma história de cozinha de interior, de panetone que virou tijolo e de um caderninho cheio de descobertas.",
 
+  /** Versão curta mostrada em /sobre (CONFIRMAR com a Roseli, igual aos capítulos). */
+  short: [
+    "Tudo começou na cozinha da minha vó Nena, no interior. Em dezembro, a casa cheirava a laranja, canela e manteiga, e ela repetia: *'Massa boa não tem pressa, Rô.'*",
+    "Meu primeiro panetone sozinha saiu duro como um tijolo. Em vez de desistir, comecei a anotar tudo num caderninho: o tempo de descanso, o calor da cozinha, o ponto da massa.",
+    "Daquele caderninho nasceram as Receitinhas da Rô. Quando o panetone saiu fofinho, a família repetiu e vieram os pedidos. Foi aí que entendi: receita boa é a que você consegue repetir.",
+    "O Especial de Natal é o que eu queria ter tido no meu primeiro panetone: tudo em gramas, cada passo com o porquê e o Guia SOS para os tropeços.",
+  ],
+
   character: {
     chapters: [
       {

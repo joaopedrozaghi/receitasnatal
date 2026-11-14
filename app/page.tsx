@@ -52,9 +52,9 @@ function JsonLd() {
   );
 }
 
-/** Na página inicial, a Rô aparece sem os cartões 01/02/03 e sem o botão (menos coisa até a oferta). */
+/** Na página inicial, a Rô aparece só com foto, título e o botão para a história dela (menos texto até a oferta). */
 function ChefHome() {
-  return <Chef withCta={false} withBeliefs={false} />;
+  return <Chef withCta={false} withBeliefs={false} compact />;
 }
 
 const below = [
