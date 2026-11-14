@@ -137,7 +137,7 @@ export function SideScroller({
           </li>
         ))}
       </ul>
-      <div className="mt-2 flex items-center justify-center gap-4">
+      <div className={`mt-2 items-center justify-center gap-4 ${count > 1 ? "flex" : "hidden"}`}>
         <span className="hidden sm:block">{arrow(-1)}</span>
         <div className="flex items-center gap-1.5">
           {Array.from({ length: count }, (_, i) => (

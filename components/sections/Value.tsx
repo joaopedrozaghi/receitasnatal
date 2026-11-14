@@ -9,6 +9,7 @@ import { Sprig } from "@/components/decor/Ornaments";
 import { Icon } from "@/components/ui/Icon";
 import { Kicker } from "@/components/ui/Kicker";
 import { Reveal } from "@/components/ui/Reveal";
+import { SideScroller } from "@/components/ui/SideScroller";
 import { Title } from "@/components/ui/Rich";
 
 /** Bônus */
@@ -22,46 +23,49 @@ export function Bonus() {
           <Kicker>{c.kicker}</Kicker>
           <Title text={c.title} className="h2 mt-5" />
         </Reveal>
-        <ul className="mt-14 grid gap-5 md:grid-cols-3">
-          {c.items.map((b, i) => {
-            const ref = siteConfig.bonuses.find((x) => x.id === b.id)?.referenceValue;
-            return (
-              <Reveal
-                as="li"
-                key={b.id}
-                delay={i * 0.06}
-                className="relative overflow-hidden rounded-[1.75rem] bg-gradient-to-b from-[#FFF4DD] to-white p-7 ring-1 ring-gold/40"
-              >
-                {b.photo ? (
-                  <span className="relative -mx-7 -mt-7 mb-6 block h-44">
-                    <Image
-                      src={b.photo}
-                      alt=""
-                      fill
-                      sizes="(min-width: 768px) 380px, 92vw"
-                      className="object-cover"
-                    />
+        <Reveal className="mt-12">
+          <SideScroller label="Bônus" itemClassName="w-[80%] sm:w-[45%] lg:w-[calc(33.333%-11px)]">
+            {c.items.map((b, i) => {
+              const ref = siteConfig.bonuses.find((x) => x.id === b.id)?.referenceValue;
+              return (
+                <div
+                  key={b.id}
+                  className="relative w-full overflow-hidden rounded-[1.75rem] bg-gradient-to-b from-[#FFF4DD] to-white p-6 ring-1 ring-gold/40"
+                >
+                  {b.photo ? (
+                    <span className="relative -mx-6 -mt-6 mb-5 block h-40">
+                      <Image
+                        src={b.photo}
+                        alt=""
+                        fill
+                        sizes="(min-width: 1024px) 380px, (min-width: 640px) 45vw, 80vw"
+                        className="object-cover"
+                      />
+                    </span>
+                  ) : null}
+                  {/* laço de presente */}
+                  <span aria-hidden="true" className="absolute inset-y-0 right-10 w-3 bg-berry/10" />
+                  <span className="inline-flex rounded-full bg-berry px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
+                    {b.tag}
                   </span>
-                ) : null}
-                {/* laço de presente */}
-                <span aria-hidden="true" className="absolute inset-y-0 right-10 w-3 bg-berry/10" />
-                <span className="inline-flex rounded-full bg-berry px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
-                  {b.tag}
-                </span>
-                {b.photo ? null : (
-                  <Icon name={icons[i] ?? "gift"} className="absolute right-6 top-6 h-8 w-8 text-gold-text" />
-                )}
-                <h3 className="mt-6 text-2xl leading-tight">{b.title}</h3>
-                <p className="mt-2 leading-relaxed">{b.text}</p>
-                {ref ? (
-                  <p className="mt-4 text-sm font-semibold text-gold-text">
-                    {interpolate(c.referenceLabel, { value: formatReais(ref) })}
-                  </p>
-                ) : null}
-              </Reveal>
-            );
-          })}
-        </ul>
+                  {b.photo ? null : (
+                    <Icon
+                      name={icons[i] ?? "gift"}
+                      className="absolute right-6 top-6 h-8 w-8 text-gold-text"
+                    />
+                  )}
+                  <h3 className="mt-4 text-[1.4rem] leading-tight">{b.title}</h3>
+                  <p className="mt-2 text-[15px] leading-relaxed">{b.text}</p>
+                  {ref ? (
+                    <p className="mt-3 text-sm font-semibold text-gold-text">
+                      {interpolate(c.referenceLabel, { value: formatReais(ref) })}
+                    </p>
+                  ) : null}
+                </div>
+              );
+            })}
+          </SideScroller>
+        </Reveal>
       </div>
     </section>
   );

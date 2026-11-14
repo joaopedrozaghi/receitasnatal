@@ -302,21 +302,21 @@ export const copy = {
         tag: "Bônus 1",
         photo: "/images/receitas/mesa-ceia.jpg",
         title: "Cronograma da Ceia em 72 horas",
-        text: "O que comprar, o que adiantar e o que deixar para o dia. Checklist para chegar na noite do dia 24 sem correria.",
+        text: "O que comprar, adiantar e fazer no dia, para a ceia sair sem correria.",
       },
       {
         id: "substituicoes",
         tag: "Bônus 2",
         photo: "/images/receitas/paes.jpg",
         title: "Guia de Substituições",
-        text: "Faltou um ingrediente? Precisa de versão sem lactose? Trocas práticas para não travar no meio da receita.", // CONFIRMAR
+        text: "Faltou um ingrediente? Veja o que usar no lugar e siga a receita.", // CONFIRMAR
       },
       {
         id: "embalagem",
         tag: "Bônus 3",
         photo: "/images/embalagens/presentes.jpg",
         title: "Guia de Embalagem e Apresentação",
-        text: "Embalagens, etiquetas e montagem de cestas para presentear lindo ou vender bem.",
+        text: "Embalagens, etiquetas e cestas para presentear ou vender.",
       },
     ],
   },
@@ -473,7 +473,7 @@ export const copy = {
     company: "{{legalName}} · CNPJ {{cnpj}}",
   },
 
-  stickyCta: "Quero o Especial de Natal · R$ {{price}}",
+  stickyCta: "Quero o Especial de Natal",
 } as const;
 
 export type Copy = typeof copy;
