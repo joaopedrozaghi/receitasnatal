@@ -53,10 +53,8 @@ export const copy = {
     kicker: "Seja sincera(o)",
     title: "Todo fim de ano é *a mesma história*, né?",
     paragraphs: [
-      "Dezembro chega, a lista de compras explode e o panetone de mercado custa uma fortuna. E ainda vem seco, doce demais ou com aquele gosto de essência.",
-      "Você já tentou fazer em casa. A massa não cresceu, ficou pesada, densa. Aí desistiu e voltou para o de caixinha.",
-      "Os docinhos? Ou empelotam, ou não dão ponto. Os salgados? Abrem na fritura. E a ceia vira uma maratona que começa às 7 da manhã e termina com você exausta(o) na hora da foto.",
-      "E tem aquela vontade de vender um panetone aqui, uma caixinha de doces ali, mas sem saber quanto cobrar sem ter prejuízo.",
+      "O panetone de mercado custa caro e ainda vem seco. Você tenta fazer em casa e a massa não cresce.",
+      "Os docinhos não dão ponto, os salgados abrem na fritura, e vender fica para depois porque você não sabe quanto cobrar.",
     ],
     turn: "Não é falta de talento. É falta de um passo a passo que explique *o que ninguém explica*.",
   },
