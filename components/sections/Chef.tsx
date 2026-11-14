@@ -6,7 +6,6 @@ import { story } from "@/content/story.ptBR";
 import { chefDisclosure, shouldShowDisclosure } from "@/lib/offer";
 import { ArchPhoto } from "@/components/chef/ChefPhotos";
 import { OfferCta } from "@/components/offer/OfferBits";
-import { CtaLink } from "@/components/ui/CtaButton";
 import { Star } from "@/components/decor/Ornaments";
 import { Kicker } from "@/components/ui/Kicker";
 import { Title } from "@/components/ui/Rich";
@@ -122,11 +121,22 @@ export function Chef({
           ) : null}
 
           {compact ? (
-            <div className="mt-8">
-              <CtaLink href="/sobre" size="md">
-                {c.storyButton}
-              </CtaLink>
-            </div>
+            <Link
+              href="/sobre"
+              className="mt-6 inline-flex min-h-[40px] items-center gap-2 rounded-full border border-pine/30 bg-white px-4 text-sm font-semibold text-pine transition-colors hover:border-pine hover:bg-pine hover:text-snow"
+            >
+              {c.storyButton}
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+              >
+                <path d="M5 12h13M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
           ) : null}
 
           {withCta ? (
