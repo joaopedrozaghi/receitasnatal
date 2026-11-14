@@ -7,7 +7,7 @@ import { HashScrollFix, StickyCta } from "@/components/offer/OfferBits";
 import { Hero } from "@/components/sections/Hero";
 import { AppShowcase, Gallery, Marquee } from "@/components/sections/Body";
 import { Chef } from "@/components/sections/Chef";
-import { Audience, Bonus, Income, Testimonials } from "@/components/sections/Value";
+import { Audience, Bonus, Testimonials } from "@/components/sections/Value";
 import { Faq, FinalCta, Footer, Guarantee, Offer, getFaqItems } from "@/components/sections/Closing";
 
 // Página estática regenerada a cada minuto (a fase de preço também é recalculada no navegador).
@@ -62,7 +62,6 @@ const below = [
   AppShowcase,
   ChefHome,
   Bonus,
-  Income,
   Audience,
   Testimonials,
   Offer,
