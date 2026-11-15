@@ -75,7 +75,7 @@ export default function AboutPage() {
               {copy.about.offerButton}
             </OfferCta>
             <Link
-              href="/#roseli"
+              href="/"
               className="inline-flex min-h-[44px] items-center gap-2 font-semibold text-pine underline decoration-gold decoration-2 underline-offset-4 hover:text-berry"
             >
               ← {copy.about.back}

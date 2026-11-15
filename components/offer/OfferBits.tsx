@@ -129,32 +129,6 @@ export function OfferCta({
   );
 }
 
-/** Link simples para uma seção da página que chega certinho no lugar (mesma correção do OfferCta). */
-export function JumpLink({
-  to,
-  className,
-  children,
-}: {
-  to: string;
-  className?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <a
-      href={`#${to}`}
-      className={className}
-      onClick={(e) => {
-        if (!document.getElementById(to)) return;
-        e.preventDefault();
-        history.replaceState(null, "", `#${to}`);
-        goTo(to);
-      }}
-    >
-      {children}
-    </a>
-  );
-}
-
 /** CTA que leva ao checkout externo (com UTMs) e dispara InitiateCheckout. */
 export function CheckoutCta({
   children,

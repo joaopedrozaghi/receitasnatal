@@ -3,7 +3,7 @@ import { copy } from "@/content/copy.ptBR";
 import { t } from "@/lib/offer";
 import { ArchPhoto, ChefAvatar } from "@/components/chef/ChefPhotos";
 import { CtaLink } from "@/components/ui/CtaButton";
-import { JumpLink } from "@/components/offer/OfferBits";
+import Link from "next/link";
 import { IPhone } from "@/components/phone/IPhone";
 import { HomeScreen } from "@/components/phone/Screens";
 import { OrangeSlice, Sprig, Star } from "@/components/decor/Ornaments";
@@ -24,13 +24,17 @@ export function SiteLogo({ tone = "dark" }: { tone?: "dark" | "light" }) {
 export function Hero() {
   const h = copy.hero;
   const { photoHero } = siteConfig.chef;
+  // layout "panetone" (guardado para depois): título com PANETONE em destaque, tudo centralizado no celular
+  const panetone = siteConfig.hero.layout === "panetone";
   return (
     <section id="topo" className="grain relative overflow-hidden bg-pine-deep text-snow">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_45%_at_80%_30%,rgba(212,162,76,0.22)_0%,transparent_70%),radial-gradient(40%_40%_at_0%_100%,rgba(200,16,46,0.18)_0%,transparent_70%)]"
       />
-      <header className="container-page relative flex items-center justify-between py-5">
+      <header
+        className={`container-page relative flex items-center py-5 sm:justify-between ${panetone ? "justify-center" : "justify-between"}`}
+      >
         <SiteLogo />
         <Kicker tone="dark" className="hidden sm:inline-flex">
           {t(h.eyebrow)}
@@ -38,26 +42,63 @@ export function Hero() {
       </header>
 
       <div className="container-page relative grid items-center gap-14 pb-20 pt-2 lg:grid-cols-12 lg:gap-10 lg:pb-24 lg:pt-4">
-        <div className="lg:col-span-7">
-          <p className="inline-flex items-center gap-2.5 rounded-full bg-white/10 py-1 pl-1 pr-4 text-sm font-semibold text-snow ring-1 ring-white/15">
-            <ChefAvatar size={30} className="ring-2 ring-gold/70" />
-            {h.pill}
-          </p>
-          <Title
-            as="h1"
-            tone="dark"
-            text={h.headlines[siteConfig.hero.headline]}
-            className="mt-6 text-[2.35rem] leading-[1.03] tracking-[-0.015em] sm:text-[3.4rem] lg:text-[3.7rem]"
-          />
-          <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-snow/80 sm:text-lg">{t(h.sub)}</p>
+        {panetone ? (
+          <>
+            {/* celular: tudo centralizado · computador: alinhado à esquerda ao lado da foto */}
+            <div className="text-center lg:col-span-7 lg:text-left">
+              <p className="inline-flex items-center gap-2.5 rounded-full bg-white/10 py-1 pl-1 pr-4 text-sm font-semibold text-snow ring-1 ring-white/15">
+                <ChefAvatar size={30} className="ring-2 ring-gold/70" />
+                {h.pill}
+              </p>
+              <h1 className="mt-6">
+                <span className="block font-display text-[1.6rem] leading-tight text-snow/90 sm:text-[2.1rem]">
+                  {h.v2.before}
+                </span>{" "}
+                <span className="mt-1 block bg-gradient-to-b from-[#FFE9A6] via-[#F6CC5C] to-[#D9A13A] bg-clip-text font-display text-[4.1rem] uppercase leading-[0.95] tracking-[0.01em] text-transparent drop-shadow-[0_4px_18px_rgba(0,0,0,0.35)] sm:text-[5.6rem] lg:text-[6rem]">
+                  {h.v2.word}
+                </span>{" "}
+                <span className="mt-2 block font-display text-[1.6rem] leading-tight text-snow sm:text-[2.1rem]">
+                  {h.v2.after}
+                </span>
+              </h1>
+              <span
+                aria-hidden="true"
+                className="mx-auto mt-5 block h-[3px] w-16 rounded-full bg-berry lg:mx-0"
+              />
+              <p className="mx-auto mt-5 max-w-md text-[17px] leading-relaxed text-snow/80 sm:text-lg lg:mx-0 lg:max-w-xl">
+                {t(h.v2.sub)}
+              </p>
 
-          <div className="mt-7">
-            {/* primeiro mostra as receitas; o checkout vem depois da explicação */}
-            <CtaLink href="#receitas" block>
-              {h.cta}
-            </CtaLink>
+              <div className="mt-7">
+                {/* primeiro mostra as receitas; o checkout vem depois da explicação */}
+                <CtaLink href="#receitas" block>
+                  {h.cta}
+                </CtaLink>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="lg:col-span-7">
+            <p className="inline-flex items-center gap-2.5 rounded-full bg-white/10 py-1 pl-1 pr-4 text-sm font-semibold text-snow ring-1 ring-white/15">
+              <ChefAvatar size={30} className="ring-2 ring-gold/70" />
+              {h.pill}
+            </p>
+            <Title
+              as="h1"
+              tone="dark"
+              text={h.headlines[siteConfig.hero.headline]}
+              className="mt-6 text-[2.35rem] leading-[1.03] tracking-[-0.015em] sm:text-[3.4rem] lg:text-[3.7rem]"
+            />
+            <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-snow/80 sm:text-lg">{t(h.sub)}</p>
+
+            <div className="mt-7">
+              {/* primeiro mostra as receitas; o checkout vem depois da explicação */}
+              <CtaLink href="#receitas" block>
+                {h.cta}
+              </CtaLink>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="relative mx-auto w-full max-w-[460px] lg:col-span-5 lg:max-w-none">
           <Sprig className="absolute -top-8 right-6 z-10 w-32 rotate-6" />
@@ -70,8 +111,8 @@ export function Hero() {
             className="ml-auto aspect-[4/5] w-[78%] ring-4 ring-gold/30"
           />
           {/* à direita do celular, que cobre o canto de baixo à esquerda */}
-          <JumpLink
-            to="roseli"
+          <Link
+            href="/sobre"
             className="ml-auto mt-3 flex w-[54%] items-center justify-center gap-1 whitespace-nowrap text-center text-[13px] text-snow/75 underline decoration-gold/60 underline-offset-4 transition-colors hover:text-gold sm:text-sm"
           >
             {h.chefLink}
@@ -83,9 +124,9 @@ export function Hero() {
               strokeWidth="2.2"
               aria-hidden="true"
             >
-              <path d="M12 5v14M6 13l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </JumpLink>
+          </Link>
           <IPhone
             label="Tela inicial do app Especial de Natal"
             className="absolute -bottom-10 left-0 w-[46%] -rotate-[5deg] motion-safe:animate-float"

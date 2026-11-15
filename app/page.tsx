@@ -6,7 +6,6 @@ import { OfferShell } from "@/components/offer/OfferShell";
 import { HashScrollFix, StickyCta } from "@/components/offer/OfferBits";
 import { Hero } from "@/components/sections/Hero";
 import { AppShowcase, Gallery, Marquee } from "@/components/sections/Body";
-import { Chef } from "@/components/sections/Chef";
 import { Audience, Bonus, Testimonials } from "@/components/sections/Value";
 import { Faq, FinalCta, Footer, Guarantee, Offer, getFaqItems } from "@/components/sections/Closing";
 
@@ -52,23 +51,7 @@ function JsonLd() {
   );
 }
 
-/** Na página inicial, a Rô aparece só com foto, título e o botão para a história dela (menos texto até a oferta). */
-function ChefHome() {
-  return <Chef withCta={false} withBeliefs={false} compact />;
-}
-
-const below = [
-  Gallery,
-  AppShowcase,
-  Bonus,
-  Audience,
-  Testimonials,
-  Offer,
-  ChefHome,
-  Guarantee,
-  Faq,
-  FinalCta,
-];
+const below = [Gallery, AppShowcase, Bonus, Audience, Testimonials, Offer, Guarantee, Faq, FinalCta];
 
 export default function Home() {
   return (

@@ -24,6 +24,13 @@ export const copy = {
       C: "A ceia que todo mundo elogia, *sem passar o dia* inteiro na cozinha.",
     },
     sub: "Mais de {{recipesCount}} receitas de panetones, chocotones, docinhos, salgados e ceia completa num app passo a passo pensado para quem nunca fez: medidas em gramas, timer em cada etapa e um Guia SOS para quando a massa não colabora.", // CONFIRMAR
+    /** versão em teste: "panetone" em destaque */
+    v2: {
+      before: "Neste Natal, faça o seu próprio",
+      word: "Panetone",
+      after: "fofinho, recheado e sem erro.",
+      sub: "Mais de {{recipesCount}} receitas de Natal num app passo a passo, com medidas em gramas, timer em cada etapa e um Guia SOS para quando a massa não colabora.", // CONFIRMAR
+    },
     cta: "VER AS RECEITAS",
     priceLineWithAnchor: "De R$ {{anchor}} por **R$ {{price}}** · pagamento único",
     priceLineWithoutAnchor: "**R$ {{price}}** · pagamento único",

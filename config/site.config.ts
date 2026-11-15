@@ -66,7 +66,7 @@ export const siteConfigSchema = z
       showDisclosure: z.boolean(),
       aiGeneratedImages: z.boolean(),
     }),
-    hero: z.object({ headline: z.enum(["A", "B", "C"]) }),
+    hero: z.object({ headline: z.enum(["A", "B", "C"]), layout: z.enum(["classico", "panetone"]) }),
     product: z.object({
       recipesCount: z.number().int().positive(),
       modulesCount: z.number().int().positive(),
@@ -180,7 +180,9 @@ export const rawConfig = {
     aiGeneratedImages: false,
   },
 
-  hero: { headline: "A" }, // variantes de H1: A (padrão), B ou C — textos em content/copy.ptBR.ts
+  // headline: variantes de H1 do layout clássico (A, B ou C). layout "panetone": versão guardada com
+  // PANETONE em destaque e tudo centralizado no celular (textos em copy.hero.v2)
+  hero: { headline: "A", layout: "classico" },
 
   product: {
     recipesCount: 100, // CONFIRMAR: número real de receitas no app (aparece como "mais de 100")
