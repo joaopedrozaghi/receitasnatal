@@ -137,7 +137,7 @@ export type PricePhase = z.infer<typeof phaseSchema>;
 // ───────────────────────────────── Valores ─────────────────────────────────
 
 export const rawConfig = {
-  siteUrl: "https://www.seudominio.com.br", // placeholder: domínio final (usado no SEO)
+  siteUrl: "https://receitinhasdaro.vercel.app", // endereço do site (canonical, og:url, imagens de compartilhamento). Trocar se mudar de domínio
 
   brand: {
     name: "Receitinhas da Rô",
