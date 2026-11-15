@@ -21,6 +21,9 @@ function useCheckoutClick(value: number) {
  * (content-visibility), então o destino é recalculado a cada quadro e corrigido no fim.
  */
 function scrollToEl(el: HTMLElement, smooth = true, center = false) {
+  // calcula a altura real de todas as seções agora; o navegador guarda esse tamanho depois
+  const html = document.documentElement;
+  html.classList.add("cv-off");
   const target = () => {
     const offset = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
     const r = el.getBoundingClientRect();
@@ -30,7 +33,20 @@ function scrollToEl(el: HTMLElement, smooth = true, center = false) {
   };
   // o html tem scroll-behavior: smooth; cada passo usa "instant" para a animação ser só a nossa
   const set = (y: number) => window.scrollTo({ top: y, behavior: "instant" });
-  const settle = () => [150, 500, 1000].forEach((ms) => window.setTimeout(() => set(target()), ms));
+  // depois de chegar, as seções logo acima ainda podem ganhar a altura real e empurrar o destino:
+  // por uns segundos, corrige sempre que alguma mudar de tamanho (para se a pessoa rolar)
+  const settle = () => {
+    [150, 500, 1000].forEach((ms) => window.setTimeout(() => set(target()), ms));
+    const ro = new ResizeObserver(() => set(target()));
+    document.querySelectorAll(".cv-auto").forEach((n) => ro.observe(n));
+    const stop = () => {
+      ro.disconnect();
+      html.classList.remove("cv-off");
+      ["wheel", "touchstart", "keydown"].forEach((t) => window.removeEventListener(t, stop));
+    };
+    ["wheel", "touchstart", "keydown"].forEach((t) => window.addEventListener(t, stop, { passive: true }));
+    window.setTimeout(stop, 3000);
+  };
   if (!smooth || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     set(target());
     settle();
@@ -110,6 +126,32 @@ export function OfferCta({
     <CtaLink href={href} size={size} block={block} className={className} onClick={onClick}>
       {children}
     </CtaLink>
+  );
+}
+
+/** Link simples para uma seção da página que chega certinho no lugar (mesma correção do OfferCta). */
+export function JumpLink({
+  to,
+  className,
+  children,
+}: {
+  to: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={`#${to}`}
+      className={className}
+      onClick={(e) => {
+        if (!document.getElementById(to)) return;
+        e.preventDefault();
+        history.replaceState(null, "", `#${to}`);
+        goTo(to);
+      }}
+    >
+      {children}
+    </a>
   );
 }
 

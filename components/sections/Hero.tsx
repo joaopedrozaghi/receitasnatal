@@ -3,6 +3,7 @@ import { copy } from "@/content/copy.ptBR";
 import { t } from "@/lib/offer";
 import { ArchPhoto, ChefAvatar } from "@/components/chef/ChefPhotos";
 import { CtaLink } from "@/components/ui/CtaButton";
+import { JumpLink } from "@/components/offer/OfferBits";
 import { IPhone } from "@/components/phone/IPhone";
 import { HomeScreen } from "@/components/phone/Screens";
 import { OrangeSlice, Sprig, Star } from "@/components/decor/Ornaments";
@@ -68,6 +69,23 @@ export function Hero() {
             objectPosition="50% 35%"
             className="ml-auto aspect-[4/5] w-[78%] ring-4 ring-gold/30"
           />
+          {/* à direita do celular, que cobre o canto de baixo à esquerda */}
+          <JumpLink
+            to="roseli"
+            className="ml-auto mt-3 flex w-[54%] items-center justify-center gap-1 whitespace-nowrap text-center text-[13px] text-snow/75 underline decoration-gold/60 underline-offset-4 transition-colors hover:text-gold sm:text-sm"
+          >
+            {h.chefLink}
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              aria-hidden="true"
+            >
+              <path d="M12 5v14M6 13l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </JumpLink>
           <IPhone
             label="Tela inicial do app Especial de Natal"
             className="absolute -bottom-10 left-0 w-[46%] -rotate-[5deg] motion-safe:animate-float"

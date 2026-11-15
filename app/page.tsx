@@ -60,11 +60,11 @@ function ChefHome() {
 const below = [
   Gallery,
   AppShowcase,
-  ChefHome,
   Bonus,
   Audience,
   Testimonials,
   Offer,
+  ChefHome,
   Guarantee,
   Faq,
   FinalCta,

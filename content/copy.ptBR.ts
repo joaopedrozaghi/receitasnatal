@@ -29,6 +29,7 @@ export const copy = {
     priceLineWithoutAnchor: "**R$ {{price}}** · pagamento único",
     trust: ["Acesso imediato", "Funciona no celular, sem baixar nada", "{{guaranteeDays}} dias de garantia"],
     floatingCard: { title: "Panetone Clássico", meta: "Passo 4 de 8 · timer 12:00" },
+    chefLink: "Conheça a história da Rô",
   },
 
   marquee: [
