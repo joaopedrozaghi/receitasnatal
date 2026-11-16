@@ -196,10 +196,10 @@ export const rawConfig = {
     currency: "BRL",
     anchorPrice: 97,
     phases: [
-      { id: "natal", label: "Oferta de Natal", price: 24.9, until: "2026-12-25T23:59:00-03:00" },
+      { id: "natal", label: "Oferta de Natal", price: 14.9, until: "2026-12-25T23:59:00-03:00" },
       { id: "cheio", label: "Preço cheio", price: 97, until: null },
     ],
-    // igual ao checkout: 3x de R$ 9,22 (juros da plataforma). Se o checkout mudar, ajuste a taxa
+    // igual ao checkout: com R$ 24,90 dava 3x de R$ 9,22 (juros da plataforma). Se o checkout mudar, ajuste a taxa
     // até a parcela bater (ex.: npx vitest run tests/pricing.test.ts mostra o valor calculado).
     installments: { max: 3, interestFreeUpTo: 1, monthlyInterestRate: 0.054 },
     timezone: "America/Sao_Paulo",
@@ -213,9 +213,9 @@ export const rawConfig = {
   basicPlan: {
     enabled: true,
     name: "Só Panetones",
-    price: 14.9,
+    price: 9.9,
     recipesCount: 16, // receitas da categoria panetones (content/recipes/panetones.ts)
-    url: "https://pay.cakto.com.br/uajq5ug_1313139", // checkout da Cakto do plano de R$ 14,90
+    url: "https://pay.cakto.com.br/uajq5ug_1313139", // checkout da Cakto do plano de R$ 9,90
   },
 
   bump: {
