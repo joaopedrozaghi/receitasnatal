@@ -169,7 +169,7 @@ export function Faq() {
   return (
     <section id="faq" className="section bg-white">
       <div className="container-page grid gap-10 lg:grid-cols-12">
-        <div className="lg:col-span-4">
+        <div className="text-center lg:col-span-4 lg:text-left">
           <Kicker>{c.kicker}</Kicker>
           <Title text={c.title} className="h2 mt-5" />
           <Sprig className="mt-8 hidden w-40 lg:block" />

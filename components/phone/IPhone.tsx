@@ -10,6 +10,7 @@ export function IPhone({
   className = "",
   dark = false,
   overlayStatus = false,
+  screenClassName,
   label,
 }: {
   children: ReactNode;
@@ -18,6 +19,8 @@ export function IPhone({
   dark?: boolean;
   /** a tela começa embaixo da barra de status (ex.: foto no topo); barra fica clara por cima */
   overlayStatus?: boolean;
+  /** cor de fundo da tela (padrão: marfim, ou verde-escuro com `dark`) */
+  screenClassName?: string;
   /** descrição acessível da tela */
   label: string;
 }) {
@@ -45,7 +48,7 @@ export function IPhone({
       <div
         aria-hidden="true"
         data-screen
-        className={`relative h-full w-full overflow-hidden rounded-[13.2%/6.2%] ${dark ? "bg-pine-deep" : "bg-ivory"}`}
+        className={`relative h-full w-full overflow-hidden rounded-[13.2%/6.2%] ${screenClassName ?? (dark ? "bg-pine-deep" : "bg-ivory")}`}
         style={{ containerType: "inline-size" }}
       >
         <div className="relative flex h-full flex-col" style={{ fontSize: "4.6cqw" }}>

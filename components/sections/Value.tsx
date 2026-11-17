@@ -116,7 +116,7 @@ export function Audience() {
     <section className="section">
       <div className="container-page grid gap-6 lg:grid-cols-2">
         <Reveal className="card p-7 sm:p-9">
-          <h2 className="text-3xl">{c.forTitle}</h2>
+          <h2 className="text-center text-3xl lg:text-left">{c.forTitle}</h2>
           <ul className="mt-6 space-y-4">
             {c.forItems.map((item) => (
               <li key={item} className="flex gap-3 text-[17px] leading-snug">
@@ -129,7 +129,7 @@ export function Audience() {
           </ul>
         </Reveal>
         <Reveal className="rounded-3xl bg-ivory-deep p-7 ring-1 ring-cocoa/5 sm:p-9" delay={0.06}>
-          <h2 className="text-3xl">{c.notTitle}</h2>
+          <h2 className="text-center text-3xl lg:text-left">{c.notTitle}</h2>
           <ul className="mt-6 space-y-4">
             {c.notItems.map((item) => (
               <li key={item} className="flex gap-3 text-[17px] leading-snug">

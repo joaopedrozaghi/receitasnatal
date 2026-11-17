@@ -160,6 +160,72 @@ export const copy = {
     cta: "QUERO O CARDÁPIO COMPLETO",
   },
 
+  /** Topo da página de vendas com a VSL */
+  heroVsl: {
+    edition: "{{edition}} {{year}}",
+    title: "Panetone de confeitaria, *feito em casa*",
+    sub: "Dê o play e veja o app da Rô por dentro: mais de {{recipesCount}} receitas de Natal, passo a passo e em gramas.",
+    videoLabel: "Vídeo mostrando o app Receitinhas da Rô por dentro",
+    cta: "QUERO O ESPECIAL DE NATAL",
+  },
+
+  /** Provas com fotos, logo abaixo da VSL */
+  proof: {
+    title: "Da cozinha da Rô *para o seu celular*",
+    sub: "As receitas que a Rô faz em casa, explicadas do jeito que ela explicaria ao seu lado, e as telas que você vai usar do primeiro passo ao panetone pronto.",
+    galleryTitle: "Panetones que você aprende a fazer",
+    gallerySub:
+      "São 16 receitas de panetone e chocotone no app, do clássico de frutas aos recheados. Algumas delas:",
+    gallery: [
+      { src: "/images/receitas/panetones/trufado-chocolate.webp", name: "Panetone Trufado de Chocolate" },
+      { src: "/images/receitas/panetones/doce-de-leite.webp", name: "Recheado de Doce de Leite" },
+      { src: "/images/receitas/panetones/creme-avela.webp", name: "Panetone de Creme de Avelã" },
+      { src: "/images/receitas/panetones/classico-frutas.webp", name: "Panetone Clássico de Frutas" },
+      { src: "/images/receitas/panetones/chocotone.webp", name: "Chocotone" },
+      { src: "/images/receitas/panetones/pistache.webp", name: "Panetone de Pistache" },
+      { src: "/images/receitas/panetones/trufado-leite-em-po.webp", name: "Trufado de Leite em Pó" },
+      {
+        src: "/images/receitas/panetones/laranja-chocolate-branco.webp",
+        name: "Laranja com Chocolate Branco",
+      },
+    ],
+    galleryNote: "Imagens ilustrativas.",
+    screensTitle: "As telas que você vai usar",
+    screensSub: "É o app de verdade, aberto no celular: nada para baixar, funciona direto do navegador.",
+    screens: [
+      {
+        src: "/images/app/telas/inicio.webp",
+        alt: "Tela inicial do app com busca e categorias",
+        caption: "Início com todas as categorias",
+      },
+      {
+        src: "/images/app/telas/receita.webp",
+        alt: "Ingredientes da receita em gramas com ajuste de rendimento",
+        caption: "Ingredientes em gramas",
+      },
+      {
+        src: "/images/app/telas/cozinhar.webp",
+        alt: "Modo cozinha com timer e explicação do passo",
+        caption: "Modo cozinha com timer",
+      },
+      {
+        src: "/images/app/telas/lista.webp",
+        alt: "Lista de compras com as quantidades somadas",
+        caption: "Lista de compras pronta",
+      },
+      {
+        src: "/images/app/telas/calculadora.webp",
+        alt: "Calculadora com o preço sugerido por unidade",
+        caption: "Calculadora de preço",
+      },
+      {
+        src: "/images/app/telas/sos.webp",
+        alt: "Guia SOS mostrando o que fazer quando a massa não cresce",
+        caption: "Guia SOS do panetone",
+      },
+    ],
+  },
+
   app: {
     kicker: "Por dentro do app",
     title: "Não é um PDF esquecido no celular. *É um app que cozinha com você.*",

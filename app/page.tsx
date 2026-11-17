@@ -4,9 +4,9 @@ import { siteUrl } from "@/lib/seo";
 import { copy } from "@/content/copy.ptBR";
 import { OfferShell } from "@/components/offer/OfferShell";
 import { HashScrollFix, StickyCta } from "@/components/offer/OfferBits";
-import { Hero } from "@/components/sections/Hero";
-import { AppShowcase, Gallery, Marquee } from "@/components/sections/Body";
-import { Audience, Bonus, Testimonials } from "@/components/sections/Value";
+import { HeroVsl } from "@/components/sections/HeroVsl";
+import { Proof } from "@/components/sections/Proof";
+import { Audience, Testimonials } from "@/components/sections/Value";
 import { Faq, FinalCta, Footer, Guarantee, Offer, getFaqItems } from "@/components/sections/Closing";
 
 // Página estática regenerada a cada minuto (a fase de preço também é recalculada no navegador).
@@ -51,15 +51,15 @@ function JsonLd() {
   );
 }
 
-const below = [Gallery, AppShowcase, Bonus, Audience, Testimonials, Offer, Guarantee, Faq, FinalCta];
+// Página de vendas centrada na VSL: vídeo no topo, provas com fotos, depois a oferta.
+const below = [Proof, Testimonials, Offer, Guarantee, Audience, Faq, FinalCta];
 
 export default function Home() {
   return (
     <OfferShell>
       <JsonLd />
       <main id="conteudo">
-        <Hero />
-        <Marquee />
+        <HeroVsl />
         {below.map((Section, i) => (
           <div key={i} className="cv-auto">
             <Section />
