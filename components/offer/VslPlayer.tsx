@@ -55,7 +55,7 @@ export function VslPlayer({ src, poster, label }: { src: string; poster: string;
             </svg>
           </span>
           <span className="absolute left-1/2 top-5 -translate-x-1/2 whitespace-nowrap rounded-full bg-pine-deep/80 px-4 py-2 text-sm font-semibold text-snow backdrop-blur">
-            ▶ Assista com som · 1min27
+            ▶ Assista com som · 1min21
           </span>
         </button>
       )}
